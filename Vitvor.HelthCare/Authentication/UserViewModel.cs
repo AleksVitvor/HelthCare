@@ -44,9 +44,11 @@ namespace Vitvor.HelthCare
                         if (user != null)
                         {
                             SqlCommand sqlCommand = new SqlCommand();
-                            sqlCommand.CommandText = $"select * from PATIENTS where id={user.UserName}";
+                            user.Password = MainWindow.PassBox.Password;
+                            sqlCommand.CommandText = $"select * from PATIENTS where id={user.UserName} and password={user.Password}";
                             MainWindow.Authentication.Visibility = Visibility.Hidden;
                             MainWindow.BaseMainAdmin.Visibility = Visibility.Visible;
+                            MainWindow.ConfirmEnter.Visibility = Visibility.Hidden;
                         }
                     }));
             }

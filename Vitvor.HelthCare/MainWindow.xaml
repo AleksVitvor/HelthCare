@@ -19,7 +19,7 @@
             <Label HorizontalAlignment="Center">Password</Label>
             <PasswordBox x:Name="PassBox"></PasswordBox>
         </StackPanel>
-        <Button Command="{Binding Enter}" CommandParameter="{Binding User}" Margin="0,130,0,0" Width="100" Height="20">Подтвердить</Button>
+        <Button x:Name="ConfirmEnter" Command="{Binding Enter}" CommandParameter="{Binding User}" Margin="0,130,0,0" Width="100" Height="20">Подтвердить</Button>
         <StackPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
             <Button>Добавить медучреждение</Button>
         </StackPanel>

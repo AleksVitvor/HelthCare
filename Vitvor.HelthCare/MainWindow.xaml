@@ -1,0 +1,25 @@
+﻿<Window x:Class="Vitvor.HelthCare.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Vitvor.HelthCare"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label>User</Label>
+            <TextBox></TextBox>
+            <Label>Password</Label>
+            <PasswordBox></PasswordBox>
+            <Button Click="{Binding}" Margin="0,10,0,0">Подтвердить</Button>
+        </StackPanel>
+        <StackPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
+            <Button Click="{Binding}">Добавить медучреждение</Button>
+            <Button Click="{Binding}">Добавить болезнь</Button>
+            <Button Click="{Binding}">Удалить медучреждение</Button>
+            <Button Click="{Binding}">Изменить болезнь</Button>
+            <Button Click="{Binding}">Удалить медучреждение</Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -23,12 +23,12 @@ namespace Vitvor.HelthCare
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = "";
+            SingletonForSqlConnection.getInstance();
+            DataContext = new UserViewModel(this);
         }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+            SingletonForSqlConnection.Close();
         }
     }
 }

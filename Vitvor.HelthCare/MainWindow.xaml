@@ -5,21 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vitvor.HelthCare"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
-    <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Label>User</Label>
-            <TextBox></TextBox>
-            <Label>Password</Label>
-            <PasswordBox></PasswordBox>
-            <Button Click="{Binding}" Margin="0,10,0,0">Подтвердить</Button>
+        Title="Helth Care" Height="450" Width="800" Closing="Window_Closing" Background="#639787">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#60838F"></Setter>
+            <Setter Property="FontFamily" Value="Impact"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="baseMainAdmin">
+        <StackPanel x:Name="Authentication" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" DataContext="{Binding User}">
+            <Label HorizontalAlignment="Center">User</Label>
+            <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Label HorizontalAlignment="Center">Password</Label>
+            <PasswordBox x:Name="PassBox"></PasswordBox>
         </StackPanel>
+        <Button Command="{Binding Enter}" CommandParameter="{Binding User}" Margin="0,130,0,0" Width="100" Height="20">Подтвердить</Button>
         <StackPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-            <Button Click="{Binding}">Добавить медучреждение</Button>
-            <Button Click="{Binding}">Добавить болезнь</Button>
-            <Button Click="{Binding}">Удалить медучреждение</Button>
-            <Button Click="{Binding}">Изменить болезнь</Button>
-            <Button Click="{Binding}">Удалить медучреждение</Button>
+            <Button>Добавить медучреждение</Button>
         </StackPanel>
     </Grid>
 </Window>

@@ -55,9 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="RelayCommand.cs" />
-    <Compile Include="SingletonForSqlConnection.cs" />
-    <Compile Include="ViewModel.cs" />
+    <Compile Include="BaseOfMVVM\RelayCommand.cs" />
+    <Compile Include="SqlConnection\SingletonForSqlConnection.cs" />
+    <Compile Include="Authentication\User.cs" />
+    <Compile Include="Authentication\UserViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,5 +98,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

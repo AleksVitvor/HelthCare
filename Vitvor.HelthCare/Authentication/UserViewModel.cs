@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,10 +45,26 @@ namespace Vitvor.HelthCare
                         if (user != null)
                         {
                             SqlCommand sqlCommand = new SqlCommand();
+                            Regex regex = new Regex("[0-9]*");
                             user.Password = MainWindow.PassBox.Password;
-                            sqlCommand.CommandText = $"select * from PATIENTS where id={user.UserName} and password={user.Password}";
+                            if (Regex.IsMatch(user.UserName, @"\d"))
+                            {
+                                sqlCommand.CommandText = $"select * from PATIENTS where id={user.UserName} and password={user.Password}";
+                            }
+                            else if(Regex.IsMatch(user.UserName,@"mainAdministrator(\w*)"))
+                            {
+                                sqlCommand.CommandText = $"select * from ADMINS where id={user.UserName} and password={user.Password}";
+                                MainWindow.BaseMainAdmin.Visibility = Visibility.Visible;
+                            }
+                            else if(Regex.IsMatch(user.UserName, @"Administrator(\w*)"))
+                            {
+                                sqlCommand.CommandText= $"select* from ADMINS where id ={ user.UserName} and password = { user.Password }";
+                            }
+                            else
+                            {
+                                sqlCommand.CommandText = $"select * from DOCTORS where id={user.UserName} and password={user.Password}";
+                            }                            
                             MainWindow.Authentication.Visibility = Visibility.Hidden;
-                            MainWindow.BaseMainAdmin.Visibility = Visibility.Visible;
                             MainWindow.ConfirmEnter.Visibility = Visibility.Hidden;
                         }
                     }));

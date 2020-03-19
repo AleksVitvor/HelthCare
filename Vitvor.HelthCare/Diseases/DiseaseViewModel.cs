@@ -24,6 +24,11 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Disease");
             }
         }
+        public DiseaseViewModel(MainWindow mainWindow)
+        {
+            Disease = new Disease();
+            MainWindow = mainWindow;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

@@ -70,6 +70,19 @@ namespace Vitvor.HelthCare
                     }));
             }
         }
+        private RelayCommand addMI;
+        public RelayCommand AddMI
+        {
+            get
+            {
+                return addMI ??
+                    (addMI = new RelayCommand(obj =>
+                      {
+                          MainWindow.DataContext = new MedicalInstitutionViewModel(MainWindow);
+                          MainWindow.MedicalInstitutionDescription.Visibility = Visibility.Visible;
+                      }));
+            }
+        }
         public UserViewModel(MainWindow mainWindow)
         {
             User = new User();

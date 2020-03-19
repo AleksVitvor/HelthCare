@@ -10,6 +10,19 @@ namespace Vitvor.HelthCare
 {
     class Disease : INotifyPropertyChanged
     {
+        private string _diseaseName;
+        public string DiseaseName
+        {
+            get
+            {
+                return _diseaseName;
+            }
+            set
+            {
+                _diseaseName = value;
+                OnPropertyChanged("DiseaseName");
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

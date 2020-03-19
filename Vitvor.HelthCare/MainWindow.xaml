@@ -27,10 +27,18 @@
         </StackPanel>
         <!--Работа с интерфейсом разработчика-->
         <StackPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed">
-            <Button>Добавить медучреждение</Button>
+            <Button Command="{Binding AddMI}">Добавить медучреждение</Button>
             <Button>Удалить медучреждение</Button>
             <Button>Добавить болезнь</Button>
             <Button>Изменить болезнь</Button>
+        </StackPanel>
+        <StackPanel x:Name="MedicalInstitutionDescription" Orientation="Vertical" Margin="0,30,0,0" Visibility="Hidden" DataContext="{Binding MedicalInstitution}">
+            <Label>Название</Label>
+            <TextBox></TextBox>
+            <Label>AdminUsername</Label>
+            <TextBox></TextBox>
+            <Label>AdminPassword</Label>
+            <PasswordBox></PasswordBox>
         </StackPanel>
     </Grid>
 </Window>

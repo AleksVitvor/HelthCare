@@ -10,30 +10,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Vitvor.HelthCare
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для MainAdminWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainAdminWindow : Window
     {
-        static bool flag = true;
-        public MainWindow()
+        MainWindow _mainWindow;
+        public MainAdminWindow(MainWindow mainWindow)
         {
+            _mainWindow = mainWindow;
             InitializeComponent();
-            if (flag)
-            {
-                SingletonForSqlConnection.getInstance();
-                flag = false;
-            }
-            DataContext = new UserViewModel(this);
+            DataContext = new ViewModelControl(this);
         }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SingletonForSqlConnection.Close();
+            _mainWindow.Show();
         }
     }
 }

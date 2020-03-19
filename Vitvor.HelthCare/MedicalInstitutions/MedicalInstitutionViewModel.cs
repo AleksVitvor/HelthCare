@@ -6,12 +6,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Vitvor.HelthCare
 {
     class MedicalInstitutionViewModel : INotifyPropertyChanged
     {
-        public MainWindow MainWindow { get; set; }
+        public MainAdminWindow MainAdminWindow { get; set; }
         private MedicalInstitution _medicalInstitution;
         public MedicalInstitution SelectedMedicalInstitution
         {
@@ -37,9 +38,10 @@ namespace Vitvor.HelthCare
                         if (medicalInstitution != null) 
                         {
                             SqlCommand sqlCommand = new SqlCommand();
-                            medicalInstitution.AdminPassword = MainWindow.MedicalInstitutionPassBox.Password;
+                            medicalInstitution.AdminPassword = MainAdminWindow.MedicalInstitutionPassBox.Password;
                             sqlCommand.CommandText = $"insert into MEDICALINSTITUTION value ({medicalInstitution.MedicalInstitutionName}, " +
                             $"{medicalInstitution.AdminUsername}, {medicalInstitution.AdminPassword})";
+                            Hide();
                         }
                     }));
             }
@@ -56,17 +58,27 @@ namespace Vitvor.HelthCare
                           if(medicalInstitution!=null)
                           {
                               SqlCommand sqlCommand = new SqlCommand();
-                              medicalInstitution.AdminPassword = MainWindow.MedicalInstitutionPassBox.Password;
+                              medicalInstitution.AdminPassword = MainAdminWindow.MedicalInstitutionPassBox.Password;
                               sqlCommand.CommandText = $"delete from MEDICALINSTITUTION where MEDICALINSTITUTION.PASSWORD={medicalInstitution.AdminPassword} and" +
                               $"MEDICALINSTITUTION.NAME={medicalInstitution.MedicalInstitutionName} and MEDICALINSTITUTION.ADMINUSERNAME={medicalInstitution.AdminUsername}";
+                              Hide();
                           }
                       }));
             }
         }
-        public MedicalInstitutionViewModel(MainWindow mainWindow)
+        private void Hide()
+        {
+            MainAdminWindow.DataContext = new ViewModelControl(MainAdminWindow);
+            MainAdminWindow.MedicalInstitutionDescription.Visibility = Visibility.Collapsed;
+            MainAdminWindow.ConfirmAddDisease.Visibility = Visibility.Collapsed;
+            MainAdminWindow.ConfirmAddMI.Visibility = Visibility.Collapsed;
+            MainAdminWindow.ConfirmChangeDisease.Visibility = Visibility.Collapsed;
+            MainAdminWindow.ConfirmDeleteMI.Visibility = Visibility.Collapsed;
+        }
+        public MedicalInstitutionViewModel(MainAdminWindow mainAdminWindow)
         {
             SelectedMedicalInstitution = new MedicalInstitution();
-            MainWindow = mainWindow;
+            MainAdminWindow = mainAdminWindow;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

@@ -56,13 +56,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BaseOfMVVM\RelayCommand.cs" />
+    <Compile Include="ControlOfVMFormainAdministrator\ViewModelControl.cs" />
     <Compile Include="Diseases\Disease.cs" />
     <Compile Include="Diseases\DiseaseViewModel.cs" />
+    <Compile Include="MainAdminWindow.xaml.cs">
+      <DependentUpon>MainAdminWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MedicalInstitutions\MedicalInstitution.cs" />
     <Compile Include="MedicalInstitutions\MedicalInstitutionViewModel.cs" />
     <Compile Include="SqlConnection\SingletonForSqlConnection.cs" />
     <Compile Include="Authentication\User.cs" />
     <Compile Include="Authentication\UserViewModel.cs" />
+    <Page Include="MainAdminWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

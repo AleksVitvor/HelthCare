@@ -14,6 +14,7 @@ namespace Vitvor.HelthCare
 {
     class UserViewModel : INotifyPropertyChanged
     {
+        public MainAdminWindow _adminWindow { get; set; }
         private MainWindow _mainWindow;
         public MainWindow MainWindow
         {
@@ -53,7 +54,9 @@ namespace Vitvor.HelthCare
                             else if(Regex.IsMatch(user.UserName,@"mainAdministrator(\w*)"))
                             {
                                 sqlCommand.CommandText = $"select * from ADMINS where id={user.UserName} and password={user.Password}";
-                                MainWindow.BaseMainAdmin.Visibility = Visibility.Visible;
+                                MainAdminWindow mainAdminWindow = new MainAdminWindow(MainWindow);
+                                _adminWindow = mainAdminWindow;
+                                mainAdminWindow.Show();                                                               
                             }
                             else if(Regex.IsMatch(user.UserName, @"Administrator(\w*)"))
                             {
@@ -63,36 +66,10 @@ namespace Vitvor.HelthCare
                             {
                                 sqlCommand.CommandText = $"select * from DOCTORS where id={user.UserName} and password={user.Password}";
                             }
-                            MainWindow.AuthenticationAndRegistration.Visibility = Visibility.Hidden;
+                            MainWindow.Hide();
+                            MainWindow.PassBox.Clear();
+                            MainWindow.UserNameBox.Clear();
                         }
-                    }));
-            }
-        }
-        private RelayCommand addMI;
-        public RelayCommand AddMI
-        {
-            get
-            {
-                return addMI ??
-                    (addMI = new RelayCommand(obj =>
-                      {
-                          MainWindow.DataContext = new MedicalInstitutionViewModel(MainWindow);
-                          MainWindow.MedicalInstitutionDescription.Visibility = Visibility.Visible;
-                          MainWindow.ConfirmAddMI.Visibility = Visibility.Visible;
-                      }));
-            }
-        }
-        private RelayCommand deleteMI;
-        public RelayCommand DeleteMI
-        {
-            get
-            {
-                return deleteMI ??
-                    (deleteMI = new RelayCommand(obj =>
-                    {
-                        MainWindow.DataContext = new MedicalInstitutionViewModel(MainWindow);
-                        MainWindow.MedicalInstitutionDescription.Visibility = Visibility.Visible;
-                        MainWindow.ConfirmDeleteMI.Visibility = Visibility.Visible;
                     }));
             }
         }

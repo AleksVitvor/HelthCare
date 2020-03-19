@@ -19,35 +19,12 @@
         <StackPanel x:Name="AuthenticationAndRegistration" VerticalAlignment="Center">
             <StackPanel x:Name="Authentication" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" DataContext="{Binding User}">
                 <Label HorizontalAlignment="Center">User</Label>
-                <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox x:Name="UserNameBox" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <Label HorizontalAlignment="Center">Password</Label>
                 <PasswordBox x:Name="PassBox"></PasswordBox>
             </StackPanel>
             <Button x:Name="ConfirmEnter" Command="{Binding Enter}" CommandParameter="{Binding User}" Margin="0,5,0,0" Width="100">Подтвердить</Button>
             <Button x:Name="Registrate" Margin="0,5,0,0" Width="100" Height="20" Background="#34C6CD" BorderBrush="#34C6CD">Регистрация</Button>
-        </StackPanel>
-        <!--Работа с интерфейсом разработчика-->
-        <StackPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Hidden">
-            <Button Command="{Binding AddMI}">Добавить медучреждение</Button>
-            <Button Command="{Binding DeleteMI}">Удалить медучреждение</Button>
-            <Button>Добавить болезнь</Button>
-            <Button>Изменить болезнь</Button>
-        </StackPanel>
-        <!--Описание медучреждения-->
-        <StackPanel x:Name="MedicalInstitutionDescription" Orientation="Vertical" Margin="0,30,0,0" Visibility="Hidden" DataContext="{Binding SelectedMedicalInstitution}">
-            <Label>Название</Label>
-            <TextBox Text="{Binding MedicalInstitutionName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label>AdminUsername</Label>
-            <TextBox Text="{Binding AdminUsername, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label>AdminPassword</Label>
-            <PasswordBox x:Name="MedicalInstitutionPassBox"></PasswordBox>
-        </StackPanel>
-        <!--Все операции для работы с медучреждениями и болезнями-->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <Button x:Name="ConfirmAddMI" Visibility="Collapsed" Command="{Binding AddMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}">Подтвердить</Button>
-            <Button x:Name="ConfirmDeleteMI" Visibility="Collapsed" Command="{Binding DeleteMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}">Подтвердить</Button>
-            <Button x:Name="ConfirmAddDisease" Visibility="Collapsed">Подтвердить</Button>
-            <Button x:Name="ConfirmChangeDisease" Visibility="Collapsed">Подтвердить</Button>
         </StackPanel>
     </Grid>
 </Window>

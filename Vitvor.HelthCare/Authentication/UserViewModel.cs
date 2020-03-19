@@ -70,13 +70,13 @@ namespace Vitvor.HelthCare
                     }));
             }
         }
-        private RelayCommand addMI;
-        public RelayCommand AddMI
+        private RelayCommand workWithMI;
+        public RelayCommand WorkWithMI
         {
             get
             {
-                return addMI ??
-                    (addMI = new RelayCommand(obj =>
+                return workWithMI ??
+                    (workWithMI = new RelayCommand(obj =>
                       {
                           MainWindow.DataContext = new MedicalInstitutionViewModel(MainWindow);
                           MainWindow.MedicalInstitutionDescription.Visibility = Visibility.Visible;

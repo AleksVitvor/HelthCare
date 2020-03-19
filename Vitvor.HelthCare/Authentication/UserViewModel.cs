@@ -45,7 +45,6 @@ namespace Vitvor.HelthCare
                         if (user != null)
                         {
                             SqlCommand sqlCommand = new SqlCommand();
-                            Regex regex = new Regex("[0-9]*");
                             user.Password = MainWindow.PassBox.Password;
                             if (Regex.IsMatch(user.UserName, @"\d"))
                             {
@@ -63,24 +62,38 @@ namespace Vitvor.HelthCare
                             else
                             {
                                 sqlCommand.CommandText = $"select * from DOCTORS where id={user.UserName} and password={user.Password}";
-                            }                            
-                            MainWindow.Authentication.Visibility = Visibility.Hidden;
-                            MainWindow.ConfirmEnter.Visibility = Visibility.Hidden;
+                            }
+                            MainWindow.AuthenticationAndRegistration.Visibility = Visibility.Hidden;
                         }
                     }));
             }
         }
-        private RelayCommand workWithMI;
-        public RelayCommand WorkWithMI
+        private RelayCommand addMI;
+        public RelayCommand AddMI
         {
             get
             {
-                return workWithMI ??
-                    (workWithMI = new RelayCommand(obj =>
+                return addMI ??
+                    (addMI = new RelayCommand(obj =>
                       {
                           MainWindow.DataContext = new MedicalInstitutionViewModel(MainWindow);
                           MainWindow.MedicalInstitutionDescription.Visibility = Visibility.Visible;
+                          MainWindow.ConfirmAddMI.Visibility = Visibility.Visible;
                       }));
+            }
+        }
+        private RelayCommand deleteMI;
+        public RelayCommand DeleteMI
+        {
+            get
+            {
+                return deleteMI ??
+                    (deleteMI = new RelayCommand(obj =>
+                    {
+                        MainWindow.DataContext = new MedicalInstitutionViewModel(MainWindow);
+                        MainWindow.MedicalInstitutionDescription.Visibility = Visibility.Visible;
+                        MainWindow.ConfirmDeleteMI.Visibility = Visibility.Visible;
+                    }));
             }
         }
         public UserViewModel(MainWindow mainWindow)

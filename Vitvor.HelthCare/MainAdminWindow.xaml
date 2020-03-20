@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vitvor.HelthCare"
         mc:Ignorable="d"
-        Title="HelthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing" ResizeMode="CanMinimize">
+        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing" ResizeMode="CanMinimize">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#FF7E67"></Setter>

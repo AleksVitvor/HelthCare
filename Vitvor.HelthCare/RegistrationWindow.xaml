@@ -1,0 +1,65 @@
+﻿<Window x:Class="Vitvor.HelthCare.RegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Vitvor.HelthCare"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing" ResizeMode="CanMinimize">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF7E67"></Setter>
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" DataContext="{Binding UserRegistration}">
+            <StackPanel x:Name="NameAndSurname">
+                <Label>Фамилия</Label>
+                <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Label>Имя</Label>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Label>Отчество</Label>
+                <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Label>Пароль</Label>
+                <PasswordBox x:Name="RegistrationPassword"></PasswordBox>
+            </StackPanel>
+            <StackPanel x:Name="SpecificInformation" Visibility="Collapsed">
+                <Label>Дата рождение</Label>
+                <DatePicker x:Name="DateOfBirth"></DatePicker>
+                <StackPanel x:Name="Gender">
+                    <Label>Пол</Label>
+                    <RadioButton x:Name="Male">Мужской</RadioButton>
+                    <RadioButton x:Name="Female">Женский
+                    </RadioButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel x:Name="ContactInformation" Visibility="Collapsed">
+                <Label>Номер телефона</Label>
+                <xctk:MaskedTextBox Mask="+999(99)999-99-99" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></xctk:MaskedTextBox>
+                <Label>Email</Label>
+                <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <StackPanel x:Name="AfterNameAndSurnameInfo" Orientation="Horizontal">
+                <Button Command="{Binding AfterNameAndSurnameInfo}">Далее-></Button>
+            </StackPanel>
+
+            <StackPanel x:Name="AfterSpecificInformaton" Orientation="Horizontal" Visibility="Collapsed">
+                <Button Command="{Binding ToContactInformation}">Далее-></Button>
+                <Button Command="{Binding BackToNameAndSurname}">Назад</Button>
+            </StackPanel>
+
+            <StackPanel x:Name="AfterContackInformation" Orientation="Horizontal" Visibility="Collapsed">
+                <Button Command="{Binding Ready}" CommandParameter="{Binding UserRegistration}">Готово</Button>
+                <Button Command="{Binding BackToSpecificInformation}">Назад</Button>
+            </StackPanel>
+            <Button Command="{Binding Cancel}">Отмена</Button>
+        </StackPanel>
+    </Grid>
+</Window>

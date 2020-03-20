@@ -73,6 +73,21 @@ namespace Vitvor.HelthCare
                     }));
             }
         }
+        private RelayCommand _registrate;
+        public RelayCommand Registrate
+        {
+            get
+            {
+                return _registrate ??
+                    (
+                    _registrate=new RelayCommand(obj=>
+                        {
+                            RegistrationWindow registrationWindow = new RegistrationWindow(_mainWindow);
+                            registrationWindow.Show();
+                            _mainWindow.Hide();
+                    }));
+            }
+        }
         public UserViewModel(MainWindow mainWindow)
         {
             User = new User();

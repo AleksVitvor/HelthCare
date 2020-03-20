@@ -118,9 +118,20 @@ namespace Vitvor.HelthCare
                           }
                           userRegistration.Password = _registrationWindow.RegistrationPassword.Password;
                           SqlCommand sqlCommand = new SqlCommand();
-                          sqlCommand.CommandText = $"insert into PATIENTS value ({UserRegistration})";
-                          sqlCommand.CommandText = $"select from PATIENTS where PATIENTS.NAME={UserRegistration.Name}";
-                          MessageBox.Show("Id для входа:");
+                          sqlCommand.CommandText = $"insert into PATIENTS values ('{userRegistration.Surname}'," +
+                          $"'{userRegistration.Name}','{userRegistration.Patronymic}','{userRegistration.DateOfBirth}'," +
+                          $"'{userRegistration.Gender}', '{userRegistration.Email}', '{userRegistration.PhoneNumber}', " +
+                          $"'{userRegistration.Password}')";
+                          sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                          sqlCommand.ExecuteNonQuery();
+                          sqlCommand.CommandText = $"select PATIENTS.id, PATIENTS.Name, PATIENTS.Patronymic from PATIENTS where PATIENTS.Name='{userRegistration.Name}' " +
+                          $"and PATIENTS.Surname='{userRegistration.Surname}' and " +
+                          $"PATIENTS.Patronymic='{userRegistration.Patronymic}' and PATIENTS.Password='{userRegistration.Password}'";
+                          SqlDataReader reader = sqlCommand.ExecuteReader();
+                          foreach(var i in reader)
+                          {
+                              MessageBox.Show($"Id для входа: {reader.GetInt32(0)}", $"Здравствуйте, {reader.GetString(1)} {reader.GetString(2)}");
+                          }
                           _registrationWindow.Close();
                       }));
             }

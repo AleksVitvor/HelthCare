@@ -49,7 +49,15 @@ namespace Vitvor.HelthCare
                             user.Password = MainWindow.PassBox.Password;
                             if (Regex.IsMatch(user.UserName, @"\d"))
                             {
-                                sqlCommand.CommandText = $"select * from PATIENTS where id={user.UserName} and password={user.Password}";
+                                sqlCommand.CommandText = $"select * from PATIENTS where PATIENTS.id='{user.UserName}' and PATIENTS.Password='{user.Password}'";
+                                sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                                SqlDataReader reader = sqlCommand.ExecuteReader();
+                                if(reader!=null && reader.NextResult()==false)
+                                {
+                                    PatientWindow patientWindow = new PatientWindow(MainWindow);
+                                    MainWindow.Hide();
+                                    patientWindow.Show();
+                                }
                             }
                             else if(Regex.IsMatch(user.UserName,@"mainAdministrator(\w*)"))
                             {

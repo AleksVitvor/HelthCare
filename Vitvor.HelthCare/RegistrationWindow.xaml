@@ -34,13 +34,12 @@
                 <StackPanel x:Name="Gender">
                     <Label>Пол</Label>
                     <RadioButton x:Name="Male">Мужской</RadioButton>
-                    <RadioButton x:Name="Female">Женский
-                    </RadioButton>
+                    <RadioButton x:Name="Female">Женский</RadioButton>
                 </StackPanel>
             </StackPanel>
             <StackPanel x:Name="ContactInformation" Visibility="Collapsed">
                 <Label>Номер телефона</Label>
-                <xctk:MaskedTextBox Mask="+999(99)999-99-99" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></xctk:MaskedTextBox>
+                <xctk:MaskedTextBox Mask="+999(99)999-99-99" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"></xctk:MaskedTextBox>
                 <Label>Email</Label>
                 <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>

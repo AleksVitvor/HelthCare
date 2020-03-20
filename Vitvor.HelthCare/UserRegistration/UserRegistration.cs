@@ -62,6 +62,16 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Email");
             }
         }
+        private string _phoneNumber;
+        public string PhoneNumber
+        {
+            get { return _phoneNumber; }
+            set
+            {
+                _phoneNumber = value;
+                OnPropertyChanged("PhoneNumber");
+            }
+        }
         private string _password;
         public string Password
         {

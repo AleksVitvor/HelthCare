@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vitvor.HelthCare"
         mc:Ignorable="d"
-        Title="MainAdminWindow" Height="450" Width="800" Background="#34C6CD" MinHeight="450" MinWidth="800" Closing="Window_Closing">
+        Title="HelthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing" ResizeMode="CanMinimize">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#FF7E67"></Setter>
@@ -33,10 +33,12 @@
         </StackPanel>
         <!--Все операции для работы с медучреждениями и болезнями-->
         <StackPanel x:Name="ControlmainAdminOperation" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <Button x:Name="ConfirmAddMI" Visibility="Collapsed" Command="{Binding AddMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}">Подтвердить</Button>
-            <Button x:Name="ConfirmDeleteMI" Visibility="Collapsed" Command="{Binding DeleteMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}">Подтвердить</Button>
-            <Button x:Name="ConfirmAddDisease" Visibility="Collapsed">Подтвердить</Button>
-            <Button x:Name="ConfirmChangeDisease" Visibility="Collapsed">Подтвердить</Button>
+            <Button x:Name="BackFromMI" Visibility="Collapsed" Command="{Binding BackFromMI}" Width="100">Назад</Button>
+            <Button x:Name="ConfirmAddMI" Visibility="Collapsed" Command="{Binding AddMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}" Width="100">Подтвердить</Button>
+            <Button x:Name="ConfirmDeleteMI" Visibility="Collapsed" Command="{Binding DeleteMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}" Width="100">Подтвердить</Button>
+            <Button x:Name="BackFromDisease" Visibility="Collapsed" Command="{Binding BackFromDisease}" Width="100">Назад</Button>
+            <Button x:Name="ConfirmAddDisease" Visibility="Collapsed" Width="100">Подтвердить</Button>
+            <Button x:Name="ConfirmChangeDisease" Visibility="Collapsed" Width="100">Подтвердить</Button>
         </StackPanel>
     </Grid>
 </Window>

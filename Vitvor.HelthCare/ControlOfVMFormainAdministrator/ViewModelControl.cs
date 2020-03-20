@@ -21,8 +21,10 @@ namespace Vitvor.HelthCare
                     (addMI = new RelayCommand(obj =>
                     {
                         MainAdminWindow.DataContext = new MedicalInstitutionViewModel(MainAdminWindow);
+                        MainAdminWindow.BaseMainAdmin.IsEnabled = false;
                         MainAdminWindow.MedicalInstitutionDescription.Visibility = Visibility.Visible;
                         MainAdminWindow.ConfirmAddMI.Visibility = Visibility.Visible;
+                        MainAdminWindow.BackFromMI.Visibility = Visibility.Visible;
                     }));
             }
         }
@@ -35,8 +37,10 @@ namespace Vitvor.HelthCare
                     (deleteMI = new RelayCommand(obj =>
                     {
                         MainAdminWindow.DataContext = new MedicalInstitutionViewModel(MainAdminWindow);
+                        MainAdminWindow.BaseMainAdmin.IsEnabled = false;
                         MainAdminWindow.MedicalInstitutionDescription.Visibility = Visibility.Visible;
                         MainAdminWindow.ConfirmDeleteMI.Visibility = Visibility.Visible;
+                        MainAdminWindow.BackFromMI.Visibility = Visibility.Visible;
                     }));
             }
         }

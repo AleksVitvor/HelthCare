@@ -66,14 +66,28 @@ namespace Vitvor.HelthCare
                       }));
             }
         }
+        private RelayCommand _backFromMI;
+        public RelayCommand BackFromMI
+        {
+            get
+            {
+                return _backFromMI ??
+                    (_backFromMI = new RelayCommand(obj =>
+                    {
+                        Hide();
+                    }));
+            }
+        }
         private void Hide()
         {
             MainAdminWindow.DataContext = new ViewModelControl(MainAdminWindow);
+            MainAdminWindow.BaseMainAdmin.IsEnabled = true;
             MainAdminWindow.MedicalInstitutionDescription.Visibility = Visibility.Collapsed;
             MainAdminWindow.ConfirmAddDisease.Visibility = Visibility.Collapsed;
             MainAdminWindow.ConfirmAddMI.Visibility = Visibility.Collapsed;
             MainAdminWindow.ConfirmChangeDisease.Visibility = Visibility.Collapsed;
             MainAdminWindow.ConfirmDeleteMI.Visibility = Visibility.Collapsed;
+            MainAdminWindow.BackFromMI.Visibility = Visibility.Collapsed;
         }
         public MedicalInstitutionViewModel(MainAdminWindow mainAdminWindow)
         {

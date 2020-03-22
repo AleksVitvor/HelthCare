@@ -47,7 +47,7 @@ namespace Vitvor.HelthCare
                         {
                             SqlCommand sqlCommand = new SqlCommand();
                             user.Password = MainWindow.PassBox.Password;
-                            if (Regex.IsMatch(user.UserName, @"\d"))
+                            if (Regex.IsMatch(user.UserName, @"^[0-9]"))
                             {
                                 sqlCommand.CommandText = $"select * from PATIENTS where PATIENTS.id='{user.UserName}' and PATIENTS.Password='{user.Password}'";
                                 sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
@@ -59,16 +59,30 @@ namespace Vitvor.HelthCare
                                     patientWindow.Show();
                                 }
                             }
-                            else if(Regex.IsMatch(user.UserName,@"mainAdministrator(\w*)"))
+                            else if(Regex.IsMatch(user.UserName,@"Admin(\w*)"))
                             {
-                                sqlCommand.CommandText = $"select * from ADMINS where id={user.UserName} and password={user.Password}";
-                                MainAdminWindow mainAdminWindow = new MainAdminWindow(MainWindow);
-                                _adminWindow = mainAdminWindow;
-                                mainAdminWindow.Show();                                                               
-                            }
-                            else if(Regex.IsMatch(user.UserName, @"Administrator(\w*)"))
-                            {
-                                sqlCommand.CommandText= $"select* from ADMINS where id ={ user.UserName} and password = { user.Password }";
+                                sqlCommand.CommandText = $"select ADMINS.AdminStatus from ADMINS where ADMINS.AdminUserName='{user.UserName}' and ADMINS.AdminPassword='{user.Password}'";
+                                sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                                SqlDataReader reader= sqlCommand.ExecuteReader();
+                                if (reader.HasRows)
+                                {
+                                    reader.Read();
+
+                                    if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("main") && reader.NextResult() == false)
+                                    {
+                                        MainAdminWindow mainAdminWindow = new MainAdminWindow(MainWindow);
+                                        _adminWindow = mainAdminWindow;
+                                        mainAdminWindow.Show();
+                                    }
+                                    else if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("MI") && reader.NextResult() == false)
+                                    {
+                                        MessageBox.Show("Вход как администратор");
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Проверьте введённые данные");
+                                }
                             }
                             else
                             {

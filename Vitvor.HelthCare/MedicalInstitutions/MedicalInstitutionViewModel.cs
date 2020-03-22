@@ -39,8 +39,10 @@ namespace Vitvor.HelthCare
                         {
                             SqlCommand sqlCommand = new SqlCommand();
                             medicalInstitution.AdminPassword = MainAdminWindow.MedicalInstitutionPassBox.Password;
-                            sqlCommand.CommandText = $"insert into MEDICALINSTITUTION value ({medicalInstitution.MedicalInstitutionName}, " +
-                            $"{medicalInstitution.AdminUsername}, {medicalInstitution.AdminPassword})";
+                            sqlCommand.CommandText = $"insert into ADMINS values ('{medicalInstitution.MedicalInstitutionName}', " +
+                            $"'{medicalInstitution.AdminUsername}', '{medicalInstitution.AdminPassword}', 'MI')";
+                            sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                            sqlCommand.ExecuteNonQuery();
                             Hide();
                         }
                     }));

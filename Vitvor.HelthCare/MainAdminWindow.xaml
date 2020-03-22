@@ -19,11 +19,11 @@
         <StackPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Button Command="{Binding AddMI}">Добавить медучреждение</Button>
             <Button Command="{Binding DeleteMI}">Удалить медучреждение</Button>
-            <Button>Добавить болезнь</Button>
-            <Button>Изменить болезнь</Button>
+            <Button Command="{Binding AddDisease}">Добавить болезнь</Button>
+            <Button Command="{Binding UpdateDisease}">Изменить болезнь</Button>
         </StackPanel>
         <!--Описание медучреждения-->
-        <StackPanel x:Name="MedicalInstitutionDescription" Orientation="Vertical" Margin="0,30,0,0" Visibility="Hidden" DataContext="{Binding SelectedMedicalInstitution}">
+        <StackPanel x:Name="MedicalInstitutionDescription" Orientation="Vertical" Margin="0,30,0,0" Visibility="Collapsed" DataContext="{Binding SelectedMedicalInstitution}">
             <Label>Название</Label>
             <TextBox Text="{Binding MedicalInstitutionName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>AdminUsername</Label>
@@ -31,14 +31,23 @@
             <Label>AdminPassword</Label>
             <PasswordBox x:Name="MedicalInstitutionPassBox"></PasswordBox>
         </StackPanel>
+        <!--Описание болезни-->
+        <StackPanel x:Name="DiseaseDescription" Orientation="Vertical" Margin="0,30,0,0" Visibility="Collapsed" DataContext="{Binding SelectedDisease}">
+            <Label>Название болезни</Label>
+            <TextBox Text="{Binding DiseaseName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Label>Симптомы</Label>
+            <TextBox Text="{Binding Symptoms, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
         <!--Все операции для работы с медучреждениями и болезнями-->
         <StackPanel x:Name="ControlmainAdminOperation" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <!--Работа с медучреждениями-->
             <Button x:Name="BackFromMI" Visibility="Collapsed" Command="{Binding BackFromMI}" Width="100">Назад</Button>
             <Button x:Name="ConfirmAddMI" Visibility="Collapsed" Command="{Binding AddMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}" Width="100">Подтвердить</Button>
             <Button x:Name="ConfirmDeleteMI" Visibility="Collapsed" Command="{Binding DeleteMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}" Width="100">Подтвердить</Button>
+            <!--Работа с болезнями-->
             <Button x:Name="BackFromDisease" Visibility="Collapsed" Command="{Binding BackFromDisease}" Width="100">Назад</Button>
-            <Button x:Name="ConfirmAddDisease" Visibility="Collapsed" Width="100">Подтвердить</Button>
-            <Button x:Name="ConfirmChangeDisease" Visibility="Collapsed" Width="100">Подтвердить</Button>
+            <Button x:Name="ConfirmAddDisease" Visibility="Collapsed" Width="100" Command="{Binding AddDisease}">Подтвердить</Button>
+            <Button x:Name="ConfirmChangeDisease" Visibility="Collapsed" Width="100" Command="{Binding ChangeDisease}">Подтвердить</Button>
         </StackPanel>
     </Grid>
 </Window>

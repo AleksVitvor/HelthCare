@@ -61,8 +61,8 @@ namespace Vitvor.HelthCare
                           {
                               SqlCommand sqlCommand = new SqlCommand();
                               medicalInstitution.AdminPassword = MainAdminWindow.MedicalInstitutionPassBox.Password;
-                              sqlCommand.CommandText = $"delete from MEDICALINSTITUTION where MEDICALINSTITUTION.PASSWORD={medicalInstitution.AdminPassword} and" +
-                              $"MEDICALINSTITUTION.NAME={medicalInstitution.MedicalInstitutionName} and MEDICALINSTITUTION.ADMINUSERNAME={medicalInstitution.AdminUsername}";
+                              sqlCommand.CommandText = $"delete from ADMINS where ADMINS.AdminPassword='{medicalInstitution.AdminPassword}' and" +
+                              $"ADMINS.Name='{medicalInstitution.MedicalInstitutionName}' and ADMINS.AdminUsername='{medicalInstitution.AdminUsername}'";
                               Hide();
                           }
                       }));

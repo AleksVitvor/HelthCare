@@ -44,6 +44,38 @@ namespace Vitvor.HelthCare
                     }));
             }
         }
+        private RelayCommand _addDisease;
+        public RelayCommand AddDisease
+        {
+            get
+            {
+                return _addDisease ??
+                    (_addDisease = new RelayCommand(obj =>
+                      {
+                          MainAdminWindow.DataContext = new DiseaseViewModel(MainAdminWindow);
+                          MainAdminWindow.BaseMainAdmin.IsEnabled = false;
+                          MainAdminWindow.DiseaseDescription.Visibility = Visibility.Visible;
+                          MainAdminWindow.ConfirmAddDisease.Visibility = Visibility.Visible;
+                          MainAdminWindow.BackFromDisease.Visibility = Visibility.Visible;
+                      }));
+            }
+        }
+        private RelayCommand _changeDisease;
+        public RelayCommand ChangeDisease
+        {
+            get
+            {
+                return _changeDisease ??
+                    (_changeDisease = new RelayCommand(obj =>
+                      {
+                          MainAdminWindow.DataContext = new DiseaseViewModel(MainAdminWindow);
+                          MainAdminWindow.BaseMainAdmin.IsEnabled = false;
+                          MainAdminWindow.DiseaseDescription.Visibility = Visibility.Visible;
+                          MainAdminWindow.ConfirmChangeDisease.Visibility = Visibility.Visible;
+                          MainAdminWindow.BackFromDisease.Visibility = Visibility.Visible;
+                      }));
+            }
+        }
         public ViewModelControl(MainAdminWindow adminWindow)
         {
             MainAdminWindow = adminWindow;

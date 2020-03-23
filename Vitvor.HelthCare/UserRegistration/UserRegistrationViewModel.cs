@@ -127,10 +127,12 @@ namespace Vitvor.HelthCare
                           sqlCommand.CommandText = $"select PATIENTS.id, PATIENTS.Name, PATIENTS.Patronymic from PATIENTS where PATIENTS.Name='{userRegistration.Name}' " +
                           $"and PATIENTS.Surname='{userRegistration.Surname}' and " +
                           $"PATIENTS.Patronymic='{userRegistration.Patronymic}' and PATIENTS.Password='{userRegistration.Password}'";
-                          SqlDataReader reader = sqlCommand.ExecuteReader();
-                          foreach(var i in reader)
+                          using (SqlDataReader reader = sqlCommand.ExecuteReader())
                           {
-                              MessageBox.Show($"Id для входа: {reader.GetInt32(0)}", $"Здравствуйте, {reader.GetString(1)} {reader.GetString(2)}");
+                              foreach (var i in reader)
+                              {
+                                  MessageBox.Show($"Id для входа: {reader.GetInt32(0)}", $"Здравствуйте, {reader.GetString(1)} {reader.GetString(2)}");
+                              }
                           }
                           _registrationWindow.Close();
                       }));

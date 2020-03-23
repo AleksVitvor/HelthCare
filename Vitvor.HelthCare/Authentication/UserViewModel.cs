@@ -51,37 +51,41 @@ namespace Vitvor.HelthCare
                             {
                                 sqlCommand.CommandText = $"select * from PATIENTS where PATIENTS.id='{user.UserName}' and PATIENTS.Password='{user.Password}'";
                                 sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
-                                SqlDataReader reader = sqlCommand.ExecuteReader();
-                                if(reader!=null && reader.NextResult()==false)
+                                using (SqlDataReader reader = sqlCommand.ExecuteReader())
                                 {
-                                    PatientWindow patientWindow = new PatientWindow(MainWindow);
-                                    MainWindow.Hide();
-                                    patientWindow.Show();
+                                    if (reader != null && reader.NextResult() == false)
+                                    {
+                                        PatientWindow patientWindow = new PatientWindow(MainWindow);
+                                        MainWindow.Hide();
+                                        patientWindow.Show();
+                                    }
                                 }
                             }
                             else if(Regex.IsMatch(user.UserName,@"Admin(\w*)"))
                             {
                                 sqlCommand.CommandText = $"select ADMINS.AdminStatus from ADMINS where ADMINS.AdminUserName='{user.UserName}' and ADMINS.AdminPassword='{user.Password}'";
                                 sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
-                                SqlDataReader reader= sqlCommand.ExecuteReader();
-                                if (reader.HasRows)
+                                using (SqlDataReader reader = sqlCommand.ExecuteReader())
                                 {
-                                    reader.Read();
+                                    if (reader.HasRows)
+                                    {
+                                        reader.Read();
 
-                                    if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("main") && reader.NextResult() == false)
-                                    {
-                                        MainAdminWindow mainAdminWindow = new MainAdminWindow(MainWindow);
-                                        _adminWindow = mainAdminWindow;
-                                        mainAdminWindow.Show();
+                                        if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("main") && reader.NextResult() == false)
+                                        {
+                                            MainAdminWindow mainAdminWindow = new MainAdminWindow(MainWindow);
+                                            _adminWindow = mainAdminWindow;
+                                            mainAdminWindow.Show();
+                                        }
+                                        else if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("MI") && reader.NextResult() == false)
+                                        {
+                                            MessageBox.Show("Вход как администратор");
+                                        }
                                     }
-                                    else if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("MI") && reader.NextResult() == false)
+                                    else
                                     {
-                                        MessageBox.Show("Вход как администратор");
+                                        MessageBox.Show("Проверьте введённые данные");
                                     }
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Проверьте введённые данные");
                                 }
                             }
                             else

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vitvor.HelthCare"
         mc:Ignorable="d"
-        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing" ResizeMode="CanMinimize">
+        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#FF7E67"></Setter>
@@ -16,14 +16,24 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <StackPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+        </Grid.RowDefinitions>
+        <WrapPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" Grid.ColumnSpan="3" Grid.Row="0" VerticalAlignment="Top">
             <Button Command="{Binding AddMI}">Добавить медучреждение</Button>
             <Button Command="{Binding DeleteMI}">Удалить медучреждение</Button>
             <Button Command="{Binding AddDisease}">Добавить болезнь</Button>
             <Button Command="{Binding UpdateDisease}">Изменить болезнь</Button>
-        </StackPanel>
+        </WrapPanel>
         <!--Описание медучреждения-->
-        <StackPanel x:Name="MedicalInstitutionDescription" Orientation="Vertical" Margin="0,30,0,0" Visibility="Collapsed" DataContext="{Binding SelectedMedicalInstitution}">
+        <StackPanel x:Name="MedicalInstitutionDescription" Orientation="Vertical" Grid.ColumnSpan="3" Grid.Row="1" Visibility="Collapsed" DataContext="{Binding SelectedMedicalInstitution}">
             <Label>Название</Label>
             <TextBox Text="{Binding MedicalInstitutionName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>AdminUsername</Label>
@@ -32,14 +42,14 @@
             <PasswordBox x:Name="MedicalInstitutionPassBox"></PasswordBox>
         </StackPanel>
         <!--Описание болезни-->
-        <StackPanel x:Name="DiseaseDescription" Orientation="Vertical" Margin="0,30,0,0" Visibility="Collapsed" DataContext="{Binding SelectedDisease}">
+        <StackPanel x:Name="DiseaseDescription" Orientation="Vertical" Grid.ColumnSpan="3" Grid.Row="1" Visibility="Collapsed" DataContext="{Binding SelectedDisease}">
             <Label>Название болезни</Label>
             <TextBox Text="{Binding DiseaseName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Симптомы</Label>
             <TextBox Text="{Binding Symptoms, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>
         <!--Все операции для работы с медучреждениями и болезнями-->
-        <StackPanel x:Name="ControlmainAdminOperation" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+        <StackPanel x:Name="ControlmainAdminOperation" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Bottom">
             <!--Работа с медучреждениями-->
             <Button x:Name="BackFromMI" Visibility="Collapsed" Command="{Binding BackFromMI}" Width="100">Назад</Button>
             <Button x:Name="ConfirmAddMI" Visibility="Collapsed" Command="{Binding AddMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}" Width="100">Подтвердить</Button>

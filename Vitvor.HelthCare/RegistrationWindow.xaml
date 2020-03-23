@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Vitvor.HelthCare"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing" ResizeMode="CanMinimize">
+        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#FF7E67"></Setter>
@@ -44,21 +44,21 @@
                 <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <StackPanel x:Name="AfterNameAndSurnameInfo" Orientation="Horizontal">
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <WrapPanel x:Name="AfterNameAndSurnameInfo" Orientation="Horizontal">
                 <Button Command="{Binding AfterNameAndSurnameInfo}">Далее-></Button>
-            </StackPanel>
+            </WrapPanel>
 
-            <StackPanel x:Name="AfterSpecificInformaton" Orientation="Horizontal" Visibility="Collapsed">
+            <WrapPanel x:Name="AfterSpecificInformaton" Orientation="Horizontal" Visibility="Collapsed">
                 <Button Command="{Binding ToContactInformation}">Далее-></Button>
                 <Button Command="{Binding BackToNameAndSurname}">Назад</Button>
-            </StackPanel>
+            </WrapPanel>
 
-            <StackPanel x:Name="AfterContackInformation" Orientation="Horizontal" Visibility="Collapsed">
+            <WrapPanel x:Name="AfterContackInformation" Orientation="Horizontal" Visibility="Collapsed">
                 <Button Command="{Binding Ready}" CommandParameter="{Binding UserRegistration}">Готово</Button>
                 <Button Command="{Binding BackToSpecificInformation}">Назад</Button>
-            </StackPanel>
+            </WrapPanel>
             <Button Command="{Binding Cancel}">Отмена</Button>
-        </StackPanel>
+        </WrapPanel>
     </Grid>
 </Window>

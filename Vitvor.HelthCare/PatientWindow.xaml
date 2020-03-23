@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vitvor.HelthCare"
         mc:Ignorable="d"
-        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing" ResizeMode="CanMinimize">
+        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#FF7E67"></Setter>
@@ -17,9 +17,19 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <WrapPanel Orientation="Horizontal" VerticalAlignment="Top" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center">
             <Button>Просмотреть историю болезней</Button>
             <Button>Записаться к врачу</Button>
-        </StackPanel>
+        </WrapPanel>
     </Grid>
 </Window>

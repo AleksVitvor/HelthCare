@@ -34,7 +34,55 @@ namespace Vitvor.HelthCare
                 return _changeDisease ??
                     (_changeDisease = new RelayCommand(obj =>
                       {
+                          SqlCommand command = new SqlCommand();
+                          command.Connection = SingletonForSqlConnection.SqlConnection;
+                          command.CommandText= $"select DISEASES.id from DISEASES where DISEASES.Name='{SelectedDisease.DiseaseName.ToLower()}'";
+                          using(SqlDataReader reader=command.ExecuteReader())
+                          {
+                              if(reader.HasRows)
+                              {
+                                  reader.Read();
+                                  int diseaseid = reader.GetInt32(0);
+                                  reader.Close();
+                                  foreach(string i in SelectedDisease.Symptoms.Split(','))
+                                  {
+                                      command.CommandText = $"select SYMPTOMS.id from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
+                                      using(SqlDataReader checkSymptoms=command.ExecuteReader())
+                                      {
+                                          if(checkSymptoms.HasRows)
+                                          {
+                                              checkSymptoms.Read();
+                                              int symptomid = checkSymptoms.GetInt32(0);
+                                              checkSymptoms.Close();
+                                              command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{symptomid})";
+                                              command.ExecuteNonQuery();
+                                          }
+                                          else
+                                          {
+                                              checkSymptoms.Close();
+                                              command.CommandText = $"insert into SYMPTOMS values ('{i.ToLower().TrimStart(' ')}')";
+                                              command.ExecuteNonQuery();
+                                              command.CommandText = $"select SYMPTOMS.id from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
+                                              using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                              {
+                                                  getSymptomId.Read();
+                                                  int symptomid = getSymptomId.GetInt32(0);
+                                                  getSymptomId.Close();
+                                                  command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{symptomid})";
+                                                  command.ExecuteNonQuery();
+                                              }
+                                          }
+                                      }
+                                  }
 
+                              }
+                              else
+                              {
+                                  MessageBox.Show("Попытка изменения несуществующей болезни");
+                                  Hide();
+                              }
+                          }
+                          Hide();
                       }));
             }
         }
@@ -68,8 +116,7 @@ namespace Vitvor.HelthCare
                                       int diseaseid = getDiseaseId.GetInt32(0);
                                       foreach (string i in SelectedDisease.Symptoms.Split(','))
                                       {
-                                          i.TrimStart(' ');
-                                          command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower()}'";
+                                          command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
                                           getDiseaseId.Close();
                                           using (SqlDataReader checkSymptoms = command.ExecuteReader())
                                           {
@@ -84,9 +131,9 @@ namespace Vitvor.HelthCare
                                               else
                                               {
                                                   checkSymptoms.Close();
-                                                  command.CommandText = $"insert into SYMPTOMS values ('{i}')";
+                                                  command.CommandText = $"insert into SYMPTOMS values ('{i.ToLower().TrimStart(' ')}')";
                                                   command.ExecuteNonQuery();
-                                                  command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower()}'";  
+                                                  command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";  
                                                   using (SqlDataReader getSymptomId = command.ExecuteReader())
                                                   {
                                                       getSymptomId.Read();

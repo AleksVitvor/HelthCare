@@ -14,7 +14,6 @@ namespace Vitvor.HelthCare
 {
     class UserViewModel : INotifyPropertyChanged
     {
-        public MainAdminWindow _adminWindow { get; set; }
         private MainWindow _mainWindow;
         public MainWindow MainWindow
         {
@@ -63,23 +62,25 @@ namespace Vitvor.HelthCare
                             }
                             else if(Regex.IsMatch(user.UserName,@"Admin(\w*)"))
                             {
-                                sqlCommand.CommandText = $"select ADMINS.AdminStatus from ADMINS where ADMINS.AdminUserName='{user.UserName}' and ADMINS.AdminPassword='{user.Password}'";
+                                sqlCommand.CommandText = $"select ADMINS.AdminStatus, ADMINS.id from ADMINS where ADMINS.AdminUserName='{user.UserName}' and ADMINS.AdminPassword='{user.Password}'";
                                 sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
                                 using (SqlDataReader reader = sqlCommand.ExecuteReader())
                                 {
                                     if (reader.HasRows)
                                     {
                                         reader.Read();
-
+                                        int id = reader.GetInt32(1);
                                         if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("main") && reader.NextResult() == false)
                                         {
                                             MainAdminWindow mainAdminWindow = new MainAdminWindow(MainWindow);
-                                            _adminWindow = mainAdminWindow;
                                             mainAdminWindow.Show();
+                                            MainWindow.Hide();
                                         }
                                         else if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("MI") && reader.NextResult() == false)
                                         {
-                                            MessageBox.Show("Вход как администратор");
+                                            AdminWindow adminWindow = new AdminWindow(MainWindow, id);
+                                            adminWindow.Show();
+                                            MainWindow.Hide();
                                         }
                                     }
                                     else
@@ -92,7 +93,6 @@ namespace Vitvor.HelthCare
                             {
                                 sqlCommand.CommandText = $"select * from DOCTORS where id={user.UserName} and password={user.Password}";
                             }
-                            MainWindow.Hide();
                             MainWindow.PassBox.Clear();
                             MainWindow.UserNameBox.Clear();
                         }

@@ -70,6 +70,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdminWindow.xaml.cs">
+      <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdminWork\Doctor.cs" />
+    <Compile Include="AdminWork\DoctorViewModel.cs" />
     <Compile Include="BaseOfMVVM\RelayCommand.cs" />
     <Compile Include="ControlOfVMFormainAdministrator\ViewModelControl.cs" />
     <Compile Include="Diseases\Disease.cs" />
@@ -90,6 +95,10 @@
     <Compile Include="Authentication\UserViewModel.cs" />
     <Compile Include="UserRegistration\UserRegistration.cs" />
     <Compile Include="UserRegistration\UserRegistrationViewModel.cs" />
+    <Page Include="AdminWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainAdminWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

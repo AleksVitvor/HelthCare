@@ -1,0 +1,72 @@
+﻿<Window x:Class="Vitvor.HelthCare.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Vitvor.HelthCare" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="HealthCare" Width="800" Height="500" Background="#34C6CD" Closing="Window_Closing">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF7E67"></Setter>
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <WrapPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center">
+            <Button Command="{Binding AddDoctor}">Добавить врача</Button>
+            <Button Command="{Binding ChangeDoctor}">Изменить врача</Button>
+            <Button Command="{Binding DeleteDoctor}">Удалить врача</Button>
+            <Button Command="{Binding LookAllWorkDoctors}">Просмотреть работающих врачей</Button>
+        </WrapPanel>
+        <StackPanel x:Name="DoctorDescription" Orientation="Vertical" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" DataContext="{Binding SelectedDoctor}">
+            <StackPanel x:Name="BaseDescription" Visibility="Collapsed">
+                <Label>Фамилия</Label>
+                <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Label>Имя</Label>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Label>Отчество</Label>
+                <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Label>Специальность</Label>
+                <TextBox Text="{Binding Specialty, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <StackPanel x:Name="date">
+                    <Label>Дата рождение</Label>
+                    <DatePicker x:Name="DateOfBirth"></DatePicker>
+                </StackPanel>
+                <Label>Номер телефона</Label>
+                <xctk:MaskedTextBox Mask="+999(99)999-99-99" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"></xctk:MaskedTextBox>
+                <StackPanel x:Name="direction">
+                    <Label>Направление</Label>
+                    <RadioButton x:Name="GeneralDirection">Общее направление</RadioButton>
+                    <RadioButton x:Name="NarrowDirection">Узкое направление</RadioButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel x:Name="DoctorUsername" Visibility="Collapsed">
+                <Label>Username</Label>
+                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            </StackPanel>
+            <StackPanel x:Name="PasswordDescription" Visibility="Collapsed">
+                <Label>Password</Label>
+                <PasswordBox x:Name="PasswordBox"></PasswordBox>
+            </StackPanel>
+        </StackPanel>
+        <WrapPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button x:Name="ConfirmAdd" Visibility="Collapsed" Command="{Binding ConfirmAddDoctor}">Подтвердить</Button>
+            <Button x:Name="ConfirmChange" Visibility="Collapsed" Command="{Binding ConfirmChangeDoctor}">Подтвердить</Button>
+            <Button x:Name="ConfirmDelete" Visibility="Collapsed" Command="{Binding ConfirmDeleteDoctor}">Подтвердить</Button>
+            <Button x:Name="BackToMenu" Visibility="Collapsed" Command="{Binding BackToMenu}">Назад</Button>
+        </WrapPanel>
+    </Grid>
+</Window>

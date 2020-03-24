@@ -60,13 +60,13 @@ namespace Vitvor.HelthCare
                       }));
             }
         }
-        private RelayCommand _changeDisease;
-        public RelayCommand ChangeDisease
+        private RelayCommand _updateDisease;
+        public RelayCommand UpdateDisease
         {
             get
             {
-                return _changeDisease ??
-                    (_changeDisease = new RelayCommand(obj =>
+                return _updateDisease ??
+                    (_updateDisease = new RelayCommand(obj =>
                       {
                           MainAdminWindow.DataContext = new DiseaseViewModel(MainAdminWindow);
                           MainAdminWindow.BaseMainAdmin.IsEnabled = false;

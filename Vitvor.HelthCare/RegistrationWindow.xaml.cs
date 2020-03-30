@@ -24,6 +24,7 @@ namespace Vitvor.HelthCare
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+            _mainWindow.Hide();
             DataContext = new UserRegistrationViewModel(this);
         }
 

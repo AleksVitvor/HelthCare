@@ -22,15 +22,15 @@
             <Button>Справка</Button>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,20,0,0">
-            <StackPanel x:Name="AllInfo" Visibility="Collapsed">
+            <StackPanel x:Name="AllInfo" Visibility="Collapsed" DataContext="{Binding SelectedPatient}">
                 <Label>Фамилия</Label>
-                <TextBox></TextBox>
+                <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <Label>Имя</Label>
-                <TextBox></TextBox>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <Label>Отчество</Label>
-                <TextBox></TextBox>
+                <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <Label>Симптомы</Label>
-                <TextBox></TextBox>
+                <TextBox Text="{Binding Symptoms, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             <StackPanel x:Name="OnlyID" Visibility="Collapsed">
                 <Label>ID</Label>

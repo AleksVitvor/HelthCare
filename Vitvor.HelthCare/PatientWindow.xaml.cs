@@ -22,8 +22,9 @@ namespace Vitvor.HelthCare
         MainWindow _mainWindow;
         public PatientWindow(MainWindow mainWindow)
         {
-            InitializeComponent();
             _mainWindow = mainWindow;
+            _mainWindow.Hide();
+            InitializeComponent();
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

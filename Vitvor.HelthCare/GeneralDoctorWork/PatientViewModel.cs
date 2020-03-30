@@ -34,6 +34,7 @@ namespace Vitvor.HelthCare
                 return _inspection ??
                     (_inspection = new RelayCommand(obj =>
                       {
+                          Hide();
                           while (true)
                           {
                               MessageBoxResult result = MessageBox.Show("Первый приём?",
@@ -42,13 +43,13 @@ namespace Vitvor.HelthCare
                                   MessageBoxImage.Question,
                                   MessageBoxResult.Yes,
                                   MessageBoxOptions.DefaultDesktopOnly);
-                              if (result == MessageBoxResult.Yes)
+                              if (result == MessageBoxResult.No)
                               {
                                   _doctorWindow.OnlyID.Visibility = Visibility.Visible;
                                   _doctorWindow.SearchPatient.Visibility = Visibility.Visible;
                                   break;
                               }
-                              else if (result == MessageBoxResult.No)
+                              else if (result == MessageBoxResult.Yes)
                               {
                                   _doctorWindow.AllInfo.Visibility = Visibility.Visible;
                                   break;
@@ -57,6 +58,12 @@ namespace Vitvor.HelthCare
                           
                       }));
             }
+        }
+        private void Hide()
+        {
+            _doctorWindow.OnlyID.Visibility = Visibility.Collapsed;
+            _doctorWindow.SearchPatient.Visibility = Visibility.Collapsed;
+            _doctorWindow.AllInfo.Visibility = Visibility.Collapsed;
         }
         private RelayCommand _search;
         public RelayCommand Search
@@ -68,11 +75,14 @@ namespace Vitvor.HelthCare
                       {
                           SqlCommand command = new SqlCommand();
                           command.Connection = SingletonForSqlConnection.SqlConnection;
-                          command.CommandText = $"select PATIENTS.Surname, PATIENTS.Name, PATIENTS.Patronymic from PATIENTS where PATIENTS.id={_doctorWindow.PatientID.Text}";
+                          command.CommandText = $"select PATIENTS.Surname, PATIENTS.Name, PATIENTS.Patronymic, PATIENTS.id from PATIENTS where PATIENTS.id={_doctorWindow.PatientID.Text}";
                           using (SqlDataReader reader= command.ExecuteReader())
                           {
                               reader.Read();
-                              SelectedPatient = new Patient();
+                              SelectedPatient = new Patient(reader.GetInt32(3));
+                              SelectedPatient.Surname = reader.GetString(0);
+                              SelectedPatient.Name = reader.GetString(1);
+                              SelectedPatient.Patronymic = reader.GetString(2);
                               _doctorWindow.AllInfo.Visibility = Visibility.Visible;
                               _doctorWindow.OnlyID.Visibility = Visibility.Collapsed;
                               _doctorWindow.SearchPatient.Visibility = Visibility.Collapsed;

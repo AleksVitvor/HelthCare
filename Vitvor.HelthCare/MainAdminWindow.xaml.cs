@@ -23,6 +23,7 @@ namespace Vitvor.HelthCare
         public MainAdminWindow(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
+            _mainWindow.Hide();
             InitializeComponent();
             DataContext = new ViewModelControl(this);
         }

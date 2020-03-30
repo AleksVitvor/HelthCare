@@ -23,6 +23,7 @@ namespace Vitvor.HelthCare
         public GeneralDoctorWindow(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
+            _mainWindow.Hide();
             InitializeComponent();
             DataContext = new PatientViewModel(this);
         }

@@ -55,8 +55,11 @@ namespace Vitvor.HelthCare
                                     if (reader != null && reader.NextResult() == false)
                                     {
                                         PatientWindow patientWindow = new PatientWindow(MainWindow);
-                                        MainWindow.Hide();
                                         patientWindow.Show();
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Проверьте введённые данные", "Предупреждение");
                                     }
                                 }
                             }
@@ -74,24 +77,49 @@ namespace Vitvor.HelthCare
                                         {
                                             MainAdminWindow mainAdminWindow = new MainAdminWindow(MainWindow);
                                             mainAdminWindow.Show();
-                                            MainWindow.Hide();
                                         }
                                         else if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("MI") && reader.NextResult() == false)
                                         {
                                             AdminWindow adminWindow = new AdminWindow(MainWindow, id);
                                             adminWindow.Show();
-                                            MainWindow.Hide();
                                         }
                                     }
                                     else
                                     {
-                                        MessageBox.Show("Проверьте введённые данные");
+                                        MessageBox.Show("Проверьте введённые данные", "Предупреждение"); ;
                                     }
                                 }
                             }
                             else
                             {
-                                sqlCommand.CommandText = $"select * from DOCTORS where id={user.UserName} and password={user.Password}";
+                                sqlCommand.CommandText = $"SELECT [Name]," +
+                                $"[Patronymic]," +
+                                $"[Direction] from DOCTORS where Username='{user.UserName}' and Password='{user.Password}'";
+                                sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                                using (SqlDataReader reader=sqlCommand.ExecuteReader())
+                                {
+                                    if (reader.HasRows)
+                                    {
+                                        reader.Read();
+                                        if (reader.GetString(2).Equals("Медсестра"))
+                                        {
+                                            MessageBox.Show("Вход как медсестра");
+                                        }
+                                        else if (reader.GetString(2).Equals("Узкое направление"))
+                                        {
+                                            MessageBox.Show("Врач узкого направления");
+                                        }
+                                        else if (reader.GetString(2).Equals("Общее направление"))
+                                        {
+                                            GeneralDoctorWindow generalDoctor = new GeneralDoctorWindow(_mainWindow);
+                                            generalDoctor.Show();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Проверьте введённые данные", "Предупреждение");
+                                    }
+                                }
                             }
                             MainWindow.PassBox.Clear();
                             MainWindow.UserNameBox.Clear();

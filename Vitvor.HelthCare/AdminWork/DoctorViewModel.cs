@@ -112,7 +112,7 @@ namespace Vitvor.HelthCare
                       {
                           SqlCommand command = new SqlCommand();
                           command.Connection = SingletonForSqlConnection.SqlConnection;
-                          SelestedDoctorFinish();
+                          SelectedDoctorFinish();
                           command.CommandText = $"select DOCTORS.id from DOCTORS where DOCTORS.Username='{SelectedDoctor.Username}'";
                           using (SqlDataReader reader = command.ExecuteReader())
                           {
@@ -193,7 +193,7 @@ namespace Vitvor.HelthCare
                       }));
             }
         }
-        private void SelestedDoctorFinish()
+        private void SelectedDoctorFinish()
         {
             SelectedDoctor.Password = _adminWindow.PasswordBox.Password;
             SelectedDoctor._dateOfBirth = (DateTime)_adminWindow.DateOfBirth.SelectedDate;
@@ -204,6 +204,10 @@ namespace Vitvor.HelthCare
             else if ((bool)_adminWindow.NarrowDirection.IsChecked)
             {
                 SelectedDoctor._direction = _adminWindow.NarrowDirection.Content.ToString();
+            }
+            else if((bool)_adminWindow.Nurse.IsChecked)
+            {
+                SelectedDoctor._direction = _adminWindow.Nurse.Content.ToString();
             }
         }
         private void Hide()

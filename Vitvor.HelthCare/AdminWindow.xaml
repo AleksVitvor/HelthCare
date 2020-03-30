@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vitvor.HelthCare" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="HealthCare" Width="800" Height="500" Background="#34C6CD" Closing="Window_Closing">
+        Title="HealthCare" Width="800" Height="550" Background="#34C6CD" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#FF7E67"></Setter>
@@ -51,6 +51,7 @@
                     <Label>Направление</Label>
                     <RadioButton x:Name="GeneralDirection">Общее направление</RadioButton>
                     <RadioButton x:Name="NarrowDirection">Узкое направление</RadioButton>
+                    <RadioButton x:Name="Nurse">Медсестра</RadioButton>
                 </StackPanel>
             </StackPanel>
             <StackPanel x:Name="DoctorUsername" Visibility="Collapsed">

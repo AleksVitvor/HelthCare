@@ -23,6 +23,7 @@ namespace Vitvor.HelthCare
         public AdminWindow(MainWindow mainWindow, int adminid)
         {
             _mainWindow = mainWindow;
+            _mainWindow.Hide();
             InitializeComponent();
             DataContext = new DoctorViewModel(this, adminid);
         }

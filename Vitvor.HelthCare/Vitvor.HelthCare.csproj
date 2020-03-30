@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -79,6 +80,11 @@
     <Compile Include="ControlOfVMFormainAdministrator\ViewModelControl.cs" />
     <Compile Include="Diseases\Disease.cs" />
     <Compile Include="Diseases\DiseaseViewModel.cs" />
+    <Compile Include="GeneralDoctorWindow.xaml.cs">
+      <DependentUpon>GeneralDoctorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GeneralDoctorWork\Patient.cs" />
+    <Compile Include="GeneralDoctorWork\PatientViewModel.cs" />
     <Compile Include="MainAdminWindow.xaml.cs">
       <DependentUpon>MainAdminWindow.xaml</DependentUpon>
     </Compile>
@@ -96,6 +102,10 @@
     <Compile Include="UserRegistration\UserRegistration.cs" />
     <Compile Include="UserRegistration\UserRegistrationViewModel.cs" />
     <Page Include="AdminWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GeneralDoctorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

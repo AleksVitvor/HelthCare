@@ -22,6 +22,10 @@ namespace Vitvor.HelthCare
             }
             set
             {
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.CommandText = $"update PATIENTS set Surname='{value}' where id={this.patientid}";
+                sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                sqlCommand.ExecuteNonQuery();
                 _surname = value;
                 OnPropertyChanged("Surname");
             }
@@ -35,6 +39,10 @@ namespace Vitvor.HelthCare
             }
             set
             {
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.CommandText = $"update PATIENTS set Name='{value}' where id={this.patientid}";
+                sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                sqlCommand.ExecuteNonQuery();
                 _name = value;
                 OnPropertyChanged("Name");
             }
@@ -48,6 +56,10 @@ namespace Vitvor.HelthCare
             }
             set
             {
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.CommandText = $"update PATIENTS set Patronymic='{value}' where id={this.patientid}";
+                sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                sqlCommand.ExecuteNonQuery();
                 _patronymic = value;
                 OnPropertyChanged("Patronymic");
             }
@@ -64,7 +76,7 @@ namespace Vitvor.HelthCare
                 _symptoms = value;
                 if (_symptoms.Length != 0)
                 {
-                    if (_symptoms[_symptoms.Length - 1] == ',')
+                    if (_symptoms[_symptoms.Length - 1] == ',' || _symptoms[_symptoms.Length - 1] == ';')
                     {
                         string[] symptoms = Symptoms.Split(',');
                         symptoms[symptoms.Length - 2] = symptoms[symptoms.Length - 2].Trim(' ').ToLower();
@@ -80,9 +92,9 @@ namespace Vitvor.HelthCare
                                 checkSymptoms.Close();
                                 command.CommandText = $"select * from PATIENTSANDSYMPTOMS where PATIENTSANDSYMPTOMS.patientid='{patientid}' and " +
                                     $"PATIENTSANDSYMPTOMS.symptomid='{id}' and PATIENTSANDSYMPTOMS.dateofexhibiting='{DateTime.Today}'";
-                                using(SqlDataReader checkdata =command.ExecuteReader())
+                                using (SqlDataReader checkdata = command.ExecuteReader())
                                 {
-                                    if(!checkdata.HasRows)
+                                    if (!checkdata.HasRows)
                                     {
                                         checkdata.Close();
                                         command.CommandText = $"insert into PATIENTSANDSYMPTOMS values ({patientid},{id},'{DateTime.Today}')";

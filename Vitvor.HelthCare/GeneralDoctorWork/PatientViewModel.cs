@@ -35,6 +35,11 @@ namespace Vitvor.HelthCare
                     (_inspection = new RelayCommand(obj =>
                       {
                           Hide();
+                          SqlCommand command = new SqlCommand();
+                          command.Connection = SingletonForSqlConnection.SqlConnection;
+                          command.CommandText= "delete from PATIENTS where PATIENTS.Surname='' and " +
+                                  $"PATIENTS.Name=''";
+                          command.ExecuteNonQuery();
                           while (true)
                           {
                               MessageBoxResult result = MessageBox.Show("Первый приём?",
@@ -47,11 +52,28 @@ namespace Vitvor.HelthCare
                               {
                                   _doctorWindow.OnlyID.Visibility = Visibility.Visible;
                                   _doctorWindow.SearchPatient.Visibility = Visibility.Visible;
+                                  _doctorWindow.GeneralInfo.IsEnabled = false;
                                   break;
                               }
                               else if (result == MessageBoxResult.Yes)
                               {
                                   _doctorWindow.AllInfo.Visibility = Visibility.Visible;
+                                  SqlCommand add = new SqlCommand();
+                                  add.Connection = SingletonForSqlConnection.SqlConnection;
+                                  add.CommandText = $"insert into PATIENTS(Surname, Name, Patronymic) values ('','','')";
+                                  add.ExecuteNonQuery();
+                                  add.CommandText = $"select PATIENTS.id from PATIENTS where PATIENTS.Surname='' and " +
+                                  $"PATIENTS.Name=''";
+                                  int patientid = 0;
+                                  using(SqlDataReader reader=add.ExecuteReader())
+                                  {
+                                      reader.Read();
+                                      patientid = reader.GetInt32(0);
+                                      reader.Close();
+                                  }
+                                  SelectedPatient = new Patient(patientid);
+                                  SelectedPatient.Name = "Имя";
+                                  MessageBox.Show($"Номер карточки для входа:{patientid}");
                                   break;
                               }
                           }

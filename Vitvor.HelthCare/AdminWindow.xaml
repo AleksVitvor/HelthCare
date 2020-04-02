@@ -26,7 +26,6 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <WrapPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center">
-            <!--Написать бота-->
             <Button Command="{Binding CreateTimeTable}">Сформировать расписание</Button>
             <Button Command="{Binding AddDoctor}">Добавить врача</Button>
             <Button Command="{Binding ChangeDoctor}">Изменить врача</Button>

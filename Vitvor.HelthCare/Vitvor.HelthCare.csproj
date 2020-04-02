@@ -80,6 +80,7 @@
     <Compile Include="ControlOfVMFormainAdministrator\ViewModelControl.cs" />
     <Compile Include="Diseases\Disease.cs" />
     <Compile Include="Diseases\DiseaseViewModel.cs" />
+    <Compile Include="EmailPassword\Password.cs" />
     <Compile Include="GeneralDoctorWindow.xaml.cs">
       <DependentUpon>GeneralDoctorWindow.xaml</DependentUpon>
     </Compile>

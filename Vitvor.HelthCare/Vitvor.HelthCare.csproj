@@ -90,6 +90,11 @@
     </Compile>
     <Compile Include="MedicalInstitutions\MedicalInstitution.cs" />
     <Compile Include="MedicalInstitutions\MedicalInstitutionViewModel.cs" />
+    <Compile Include="NarrowDoctorWindow.xaml.cs">
+      <DependentUpon>NarrowDoctorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NarrowDoctorWork\NarrowPatient.cs" />
+    <Compile Include="NarrowDoctorWork\NarrowPatientViewModel.cs" />
     <Compile Include="PatientWindow.xaml.cs">
       <DependentUpon>PatientWindow.xaml</DependentUpon>
     </Compile>
@@ -125,6 +130,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NarrowDoctorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PatientWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -219,7 +219,132 @@ namespace Vitvor.HelthCare
             _adminWindow.ConfirmAdd.Visibility = Visibility.Collapsed;
             _adminWindow.ConfirmChange.Visibility = Visibility.Collapsed;
             _adminWindow.ConfirmDelete.Visibility = Visibility.Collapsed;
+            _adminWindow.Timetable.Visibility = Visibility.Collapsed;
             _adminWindow.PasswordBox.Clear();
+        }
+        private RelayCommand _createTimeTable;
+        public RelayCommand CreateTimeTable
+        {
+            get
+            {
+                return _createTimeTable ??
+                    (_createTimeTable = new RelayCommand(obj =>
+                      {
+                          Hide();
+                          SqlCommand searchDoctors = new SqlCommand();
+                          searchDoctors.Connection = SingletonForSqlConnection.SqlConnection;
+                          searchDoctors.CommandText = $"select DOCTORS.Surname, " +
+                          $"DOCTORS.Name, " +
+                          $"DOCTORS.Patronymic " +
+                          $"from DOCTORS inner join ADMINS " +
+                          $"on DOCTORS.MedicalInstitutionid = ADMINS.id " +
+                          $"	where ADMINS.id=1 and " +
+                          $"(DOCTORS.Direction = 'Узкое направление' " +
+                          $"or DOCTORS.Direction = 'Общее направление')";
+                          using(SqlDataReader reader=searchDoctors.ExecuteReader())
+                          {
+                              while(reader.Read())
+                              {
+                                  _adminWindow.Doctors.Items.Add($"{reader.GetString(0)} {reader.GetString(1)} {reader.GetString(2)}");
+                              }
+                          }
+                          _adminWindow.Timetable.Visibility = Visibility.Visible;
+                          _adminWindow.Create.Visibility = Visibility.Visible;
+                      }));
+            }
+        }
+        private RelayCommand _create;
+        public RelayCommand Create
+        {
+            get
+            {
+                return _create ??
+                    (_create = new RelayCommand(obj =>
+                      {
+                          CreateTimetable();
+                          _adminWindow.SelectedTime.SelectedIndex = -1;
+                          _adminWindow.EvenOrNot.SelectedIndex = -1;
+                          _adminWindow.Doctors.UnSelectAll();
+                      }));
+            }
+        }
+        private void CreateTimetable()
+        {
+            SqlCommand searchDoctors = new SqlCommand();
+            searchDoctors.Connection = SingletonForSqlConnection.SqlConnection;
+            string[] FIO;
+            foreach (var i in _adminWindow.Doctors.SelectedItems)
+            {
+                FIO = i.ToString().Split(' ');
+                searchDoctors.CommandText = $"select DOCTORS.id " +
+                $"from DOCTORS " +
+                $"where DOCTORS.Surname='{FIO[0]}' and " +
+                $"DOCTORS.Name='{FIO[1]}' and " +
+                $"DOCTORS.Patronymic='{FIO[2]}'";
+                int id = 0;
+                using (SqlDataReader reader = searchDoctors.ExecuteReader())
+                {
+                    reader.Read();
+                    id = reader.GetInt32(0);
+                }
+                SqlCommand searchLastDate = new SqlCommand();
+                searchLastDate.Connection = SingletonForSqlConnection.SqlConnection;
+                searchLastDate.CommandText = $"select top(1) TIMETABLE.date from TIMETABLE where TIMETABLE.doctorid={id} order by TIMETABLE.date desc";
+                DateTime date = new DateTime();
+                using (SqlDataReader reader1 = searchLastDate.ExecuteReader())
+                {
+                    if (reader1.HasRows)
+                    {
+                        reader1.Read();
+                        date = reader1.GetDateTime(0);
+                    }
+                    else
+                    {
+                        date = DateTime.Today;
+                    }
+                }
+                for (DateTime dateTime = date; dateTime < _adminWindow.SelectedDate.SelectedDate; dateTime = dateTime.AddDays(1))
+                {
+                    if (dateTime.DayOfWeek == DayOfWeek.Saturday || dateTime.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        continue;
+                    }
+                    DateTime endtime = new DateTime();
+                    string[] times = _adminWindow.SelectedTime.SelectedItem.ToString().Split('-');
+                    times[0] = times[0].Remove(0, 39).Trim('(', ')');
+                    times[1] = times[1].Trim('(', ')');
+                    SqlCommand addintoTimetable = new SqlCommand();
+                    addintoTimetable.Connection = SingletonForSqlConnection.SqlConnection;
+                    if ((dateTime.Date.Day % 2 == 0 && _adminWindow.EvenOrNot.SelectedIndex == 1) || (dateTime.Date.Day % 2 == 1 && _adminWindow.EvenOrNot.SelectedIndex == 0))
+                    {
+                        endtime = Convert.ToDateTime(times[1]);
+                        for (DateTime starttime = Convert.ToDateTime(times[0]); starttime < endtime; starttime = starttime.AddMinutes(15))
+                        {
+                            addintoTimetable.CommandText = $"insert into TIMETABLE values({id}, '{starttime}', '{dateTime}', NULL)";
+                            addintoTimetable.ExecuteNonQuery();
+                        }
+                    }
+                    else if ((dateTime.Date.Day % 2 == 0 && _adminWindow.EvenOrNot.SelectedIndex == 0) || (dateTime.Date.Day % 2 == 1 && _adminWindow.EvenOrNot.SelectedIndex == 1))
+                    {
+                        int save = _adminWindow.SelectedTime.SelectedIndex;
+                        if (_adminWindow.SelectedTime.SelectedIndex == 0)
+                            _adminWindow.SelectedTime.SelectedIndex = 1;
+                        else if (_adminWindow.SelectedTime.SelectedIndex == 1)
+                            _adminWindow.SelectedTime.SelectedIndex = 0;
+                        string[] times1 = _adminWindow.SelectedTime.SelectedItem.ToString().Split('-');
+                        times1[0] = times1[0].Remove(0, 39).Trim('(', ')');
+                        times1[1] = times1[1].Trim('(', ')');
+                        endtime = Convert.ToDateTime(times1[1]);
+                        for (DateTime starttime = Convert.ToDateTime(times1[0]); starttime < endtime; starttime = starttime.AddMinutes(15))
+                        {
+                            addintoTimetable.CommandText = $"insert into TIMETABLE values({id}, '{starttime}', '{dateTime}', NULL)";
+                            addintoTimetable.ExecuteNonQuery();
+                        }
+                        _adminWindow.SelectedTime.SelectedIndex = save;
+                    }
+
+                }
+            }
         }
         public DoctorViewModel(AdminWindow adminWindow, int MIid)
         {

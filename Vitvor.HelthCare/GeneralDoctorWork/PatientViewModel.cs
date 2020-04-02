@@ -73,7 +73,7 @@ namespace Vitvor.HelthCare
                                   }
                                   SelectedPatient = new Patient(patientid);
                                   SelectedPatient.Name = "Имя";
-                                  MessageBox.Show($"Номер карточки для входа:{patientid}");
+                                  MessageBox.Show($"Номер карточки для входа: {patientid}");
                                   break;
                               }
                           }

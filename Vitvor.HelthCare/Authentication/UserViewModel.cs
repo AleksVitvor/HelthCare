@@ -107,7 +107,8 @@ namespace Vitvor.HelthCare
                                         }
                                         else if (reader.GetString(2).Equals("Узкое направление"))
                                         {
-                                            MessageBox.Show("Врач узкого направления");
+                                            NarrowDoctorWindow narrowDoctorWindow = new NarrowDoctorWindow(_mainWindow);
+                                            narrowDoctorWindow.Show();
                                         }
                                         else if (reader.GetString(2).Equals("Общее направление"))
                                         {

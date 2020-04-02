@@ -26,11 +26,30 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <WrapPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center">
+            <!--Написать бота-->
+            <Button Command="{Binding CreateTimeTable}">Сформировать расписание</Button>
             <Button Command="{Binding AddDoctor}">Добавить врача</Button>
             <Button Command="{Binding ChangeDoctor}">Изменить врача</Button>
             <Button Command="{Binding DeleteDoctor}">Удалить врача</Button>
             <Button Command="{Binding LookAllWorkDoctors}">Просмотреть работающих врачей</Button>
         </WrapPanel>
+        <StackPanel x:Name="Timetable" Orientation="Vertical" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" Visibility="Collapsed">
+            <Label>Введите дату, до которой нужно сформировать расписание</Label>
+            <DatePicker x:Name="SelectedDate"></DatePicker>
+            <Label>Выберите врачей</Label>
+            <xctk:CheckListBox x:Name="Doctors"></xctk:CheckListBox>
+            <Label>Выберите смену</Label>
+            <ComboBox x:Name="SelectedTime">
+                <Label>Утренняя(10:00-14:00)</Label>
+                <Label>Вечерняя(16:00-20:00)</Label>
+            </ComboBox>
+            <Label>Выберите чётные или нечётные дни</Label>
+            <ComboBox x:Name="EvenOrNot">
+                <Label>Нечётные</Label>
+                <Label>Чётные</Label>
+            </ComboBox>
+        </StackPanel>
+        <Button x:Name="Create" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="2" Height="20" Width="150" Visibility="Collapsed" Command="{Binding Create}">Сформировать</Button>
         <StackPanel x:Name="DoctorDescription" Orientation="Vertical" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" DataContext="{Binding SelectedDoctor}">
             <StackPanel x:Name="BaseDescription" Visibility="Collapsed">
                 <Label>Фамилия</Label>

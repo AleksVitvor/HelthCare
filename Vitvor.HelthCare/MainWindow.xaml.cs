@@ -30,6 +30,7 @@ namespace Vitvor.HelthCare
                 flag = false;
             }
             DataContext = new UserViewModel(this);
+            Password.getInstance();
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

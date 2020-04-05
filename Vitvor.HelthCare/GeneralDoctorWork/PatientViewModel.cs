@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,13 +75,26 @@ namespace Vitvor.HelthCare
                                   }
                                   SelectedPatient = new Patient(patientid);
                                   SelectedPatient.Name = "Имя";
-                                  MessageBox.Show($"Номер карточки для входа: {patientid}");
+                                  SendEmailAsync(patientid).GetAwaiter();
                                   break;
                               }
                           }
                           
                       }));
             }
+        }
+        private static async Task SendEmailAsync(int id)
+        {
+            MailAddress from = new MailAddress("healthcaresupbelstu@gmail.com", "Aleks");
+            MailAddress to = new MailAddress("avitvor@gmail.com");
+            MailMessage m = new MailMessage(from, to);
+            m.Subject = "Тест";
+            m.Body = $"Номер карточки для вас: {id}";
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.Credentials = new NetworkCredential("healthcaresupbelstu@gmail.com", $"{Password.getInstance().myCredential.Password}");
+            smtp.EnableSsl = true;
+            await smtp.SendMailAsync(m);
+            MessageBox.Show("Письмо отправлено");
         }
         private void Hide()
         {

@@ -85,16 +85,31 @@ namespace Vitvor.HelthCare
         }
         private static async Task SendEmailAsync(int id)
         {
-            MailAddress from = new MailAddress("healthcaresupbelstu@gmail.com", "Aleks");
+            MailAddress from = new MailAddress("healthcaresupbelstu@gmail.com", "Ministry of Health by BelSTU");
+
             MailAddress to = new MailAddress("avitvor@gmail.com");
             MailMessage m = new MailMessage(from, to);
-            m.Subject = "Тест";
+            m.Subject = "Первое посещение";
             m.Body = $"Номер карточки для вас: {id}";
             SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
             smtp.Credentials = new NetworkCredential("healthcaresupbelstu@gmail.com", $"{Password.getInstance().myCredential.Password}");
             smtp.EnableSsl = true;
             await smtp.SendMailAsync(m);
             MessageBox.Show("Письмо отправлено");
+        }
+        private bool isValid(string email)
+        {
+            string pattern = "[.\\-_a-z0-9]+@([a-z0-9][\\-a-z0-9]+\\.)+[a-z]{2,6}";
+            Match isMatch = Regex.Match(email, pattern, RegexOptions.IgnoreCase);
+
+            if (isMatch.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         private void Hide()
         {

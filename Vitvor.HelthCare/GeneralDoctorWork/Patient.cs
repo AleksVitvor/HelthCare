@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -116,6 +117,7 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Symptoms");
             }
         }
+
         public Patient(int id)
         {
             patientid = id;

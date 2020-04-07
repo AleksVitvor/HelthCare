@@ -65,6 +65,23 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Patronymic");
             }
         }
+        private string _email;
+        public string Email
+        {
+            get
+            {
+                return _email;
+            }
+            set
+            {
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.CommandText = $"update PATIENTS set Email='{value}' where id={this.patientid}";
+                sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                sqlCommand.ExecuteNonQuery();
+                _email = value;
+                OnPropertyChanged("Email");
+            }
+        }
         private string _symptoms;
         public string Symptoms
         {

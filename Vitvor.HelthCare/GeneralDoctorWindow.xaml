@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Vitvor.HelthCare"
+        xmlns:local="clr-namespace:Vitvor.HelthCare" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing">
     <Window.Resources>
@@ -18,8 +19,28 @@
     <Grid>
         <StackPanel Orientation="Horizontal" MaxHeight="40" VerticalAlignment="Top" HorizontalAlignment="Center">
             <Button Command="{Binding Inspection}">Осмотр</Button>
-            <Button>Запись</Button>
+            <Button Command="{Binding Appointment}" Content="Запись"></Button>
             <Button>Справка</Button>
+        </StackPanel>
+        <StackPanel x:Name="Appointment" Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
+            <StackPanel>
+                <Label HorizontalContentAlignment="Center" Content="Доктор"></Label>
+                <ComboBox x:Name="Doctors" Height="20" Width="150">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding SelectDoctor}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel x:Name="SelectDate" Margin="5,0,0,0" Visibility="Collapsed">
+                <Label HorizontalContentAlignment="Center">Дата</Label>
+                <ComboBox x:Name="Dates" Height="20" Width="150"></ComboBox>
+            </StackPanel>
+            <StackPanel x:Name="SelectTime" Margin="5,0,0,0" Visibility="Collapsed">
+                <Label HorizontalContentAlignment="Center">Время</Label>
+                <ComboBox x:Name="Times" Height="20" Width="150"></ComboBox>
+            </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,20,0,0">
             <StackPanel x:Name="AllInfo" Visibility="Collapsed" DataContext="{Binding SelectedPatient}">
@@ -30,6 +51,8 @@
                     <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Label>Отчество</Label>
                     <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Label>Email</Label>
+                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 </StackPanel>
                 <Label>Симптомы</Label>
                 <TextBox Text="{Binding Symptoms, UpdateSourceTrigger=PropertyChanged}"></TextBox>
@@ -40,5 +63,6 @@
             </StackPanel>
         </StackPanel>
         <Button x:Name="SearchPatient" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Search}">Поиск</Button>
+        <Button x:Name="SendInfoPatient" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding SendEmail}" CommandParameter="{Binding SelectedPatient}">Подтвердить</Button>
     </Grid>
 </Window>

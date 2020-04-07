@@ -94,7 +94,7 @@ namespace Vitvor.HelthCare
                             {
                                 sqlCommand.CommandText = $"SELECT [Name]," +
                                 $"[Patronymic]," +
-                                $"[Direction] from DOCTORS where Username='{user.UserName}' and Password='{user.Password}'";
+                                $"[Direction], [MedicalInstitutionid] from DOCTORS where Username='{user.UserName}' and Password='{user.Password}'";
                                 sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
                                 using (SqlDataReader reader=sqlCommand.ExecuteReader())
                                 {
@@ -112,7 +112,7 @@ namespace Vitvor.HelthCare
                                         }
                                         else if (reader.GetString(2).Equals("Общее направление"))
                                         {
-                                            GeneralDoctorWindow generalDoctor = new GeneralDoctorWindow(_mainWindow);
+                                            GeneralDoctorWindow generalDoctor = new GeneralDoctorWindow(_mainWindow, reader.GetInt32(3));
                                             generalDoctor.Show();
                                         }
                                     }

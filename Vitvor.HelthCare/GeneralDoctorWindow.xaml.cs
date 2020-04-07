@@ -20,12 +20,12 @@ namespace Vitvor.HelthCare
     public partial class GeneralDoctorWindow : Window
     {
         private MainWindow _mainWindow;
-        public GeneralDoctorWindow(MainWindow mainWindow)
+        public GeneralDoctorWindow(MainWindow mainWindow, int idofMI)
         {
             _mainWindow = mainWindow;
             _mainWindow.Hide();
             InitializeComponent();
-            DataContext = new PatientViewModel(this);
+            DataContext = new PatientViewModel(this, idofMI);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

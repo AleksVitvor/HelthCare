@@ -25,9 +25,9 @@
         <StackPanel x:Name="Appointment" Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
             <StackPanel>
                 <Label HorizontalContentAlignment="Center" Content="Доктор"></Label>
-                <ComboBox x:Name="Doctors" Height="20" Width="150">
+                <ComboBox x:Name="Doctors" Height="25" Width="250">
                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding SelectDoctor}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
@@ -35,11 +35,23 @@
             </StackPanel>
             <StackPanel x:Name="SelectDate" Margin="5,0,0,0" Visibility="Collapsed">
                 <Label HorizontalContentAlignment="Center">Дата</Label>
-                <ComboBox x:Name="Dates" Height="20" Width="150"></ComboBox>
+                <ComboBox x:Name="Dates" Height="25" Width="100">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectDate}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
             </StackPanel>
             <StackPanel x:Name="SelectTime" Margin="5,0,0,0" Visibility="Collapsed">
                 <Label HorizontalContentAlignment="Center">Время</Label>
-                <ComboBox x:Name="Times" Height="20" Width="150"></ComboBox>
+                <ComboBox x:Name="Times" Height="25" Width="100">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectTime}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,20,0,0">
@@ -64,5 +76,6 @@
         </StackPanel>
         <Button x:Name="SearchPatient" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Search}">Поиск</Button>
         <Button x:Name="SendInfoPatient" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding SendEmail}" CommandParameter="{Binding SelectedPatient}">Подтвердить</Button>
+        <Button x:Name="SendInfoAboutAppointment" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding SendInfoAboutAppointment}">Подтвердить</Button>
     </Grid>
 </Window>

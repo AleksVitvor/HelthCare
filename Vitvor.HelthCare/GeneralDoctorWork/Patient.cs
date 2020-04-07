@@ -141,6 +141,13 @@ namespace Vitvor.HelthCare
         }
         public Patient()
         { }
+        public Patient(string surname, string name, string patronymic, string email)
+        {
+            _surname = surname;
+            _name = name;
+            _patronymic = patronymic;
+            _email = email;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

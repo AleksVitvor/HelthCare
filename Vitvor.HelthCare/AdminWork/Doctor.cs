@@ -14,8 +14,21 @@ namespace Vitvor.HelthCare
     {
         private bool isChanging;
         public int MIid { get; private set; }
-        public DateTime _dateOfBirth { get; set; }
+
         public string _direction { get; set; }
+        private DateTime _dateOfBirth = DateTime.Now;
+        public DateTime DateOfBirth
+        {
+            get
+            {
+                return _dateOfBirth;
+            }
+            set
+            {
+                _dateOfBirth = value;
+                OnPropertyChanged("DateOfBirth");
+            }
+        }
         private string _surname;
         public string Surname
         {

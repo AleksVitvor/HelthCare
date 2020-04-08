@@ -61,7 +61,7 @@
                 <TextBox Text="{Binding Specialty, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <StackPanel x:Name="date">
                     <Label>Дата рождение</Label>
-                    <DatePicker x:Name="DateOfBirth"></DatePicker>
+                    <DatePicker x:Name="DateOfBirth" SelectedDate="{Binding DateOfBirth}"></DatePicker>
                 </StackPanel>
                 <Label>Номер телефона</Label>
                 <xctk:MaskedTextBox Mask="+999(99)999-99-99" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"></xctk:MaskedTextBox>

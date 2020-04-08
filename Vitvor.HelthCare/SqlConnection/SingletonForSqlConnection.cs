@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Vitvor.HelthCare
 {
@@ -14,7 +15,14 @@ namespace Vitvor.HelthCare
         private SingletonForSqlConnection()
         {
             SqlConnection = new SqlConnection("Data Source=ALEKS;Initial Catalog=CourseProject;Integrated Security=True");
-            SqlConnection.Open();
+            try
+            {
+                SqlConnection.Open();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show($"{e.Message}");
+            }
         }
         public static SingletonForSqlConnection getInstance()
         {

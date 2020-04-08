@@ -30,6 +30,11 @@ namespace Vitvor.HelthCare
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            UserRegistrationViewModel registrationViewModel = DataContext as UserRegistrationViewModel;
+            if(registrationViewModel.UserRegistration.isUpdating)
+            {
+
+            }
             _mainWindow.Show();
         }
     }

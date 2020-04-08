@@ -125,7 +125,7 @@ namespace Vitvor.HelthCare
                                   reader.Close();
                                   command.CommandText = $"insert into DOCTORS values ({SelectedDoctor.MIid}," +
                                   $"'{SelectedDoctor.Surname}','{SelectedDoctor.Name}','{SelectedDoctor.Patronymic}'," +
-                                  $"'{SelectedDoctor._dateOfBirth}','{SelectedDoctor.Specialty}', '{SelectedDoctor._direction}'," +
+                                  $"'{SelectedDoctor.DateOfBirth}','{SelectedDoctor.Specialty}', '{SelectedDoctor._direction}'," +
                                   $"'{SelectedDoctor.Username}','{SelectedDoctor.Password}', '{SelectedDoctor.PhoneNumber}')";
                                   command.ExecuteNonQuery();
                               }
@@ -196,7 +196,6 @@ namespace Vitvor.HelthCare
         private void SelectedDoctorFinish()
         {
             SelectedDoctor.Password = _adminWindow.PasswordBox.Password;
-            SelectedDoctor._dateOfBirth = (DateTime)_adminWindow.DateOfBirth.SelectedDate;
             if ((bool)_adminWindow.GeneralDirection.IsChecked)
             {
                 SelectedDoctor._direction = _adminWindow.GeneralDirection.Content.ToString();

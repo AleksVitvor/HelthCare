@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vitvor.HelthCare"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing">
     <Window.Resources>
@@ -18,6 +18,10 @@
     </Window.Resources>
     <Grid>
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" DataContext="{Binding UserRegistration}">
+            <StackPanel x:Name="CardNumber" Visibility="Collapsed">
+                <Label >Номер карты</Label>
+                <TextBox x:Name="CardNumberInfo"></TextBox>
+            </StackPanel>
             <StackPanel x:Name="NameAndSurname">
                 <Label>Фамилия</Label>
                 <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"></TextBox>
@@ -25,26 +29,46 @@
                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <Label>Отчество</Label>
                 <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <Label>Пароль</Label>
-                <PasswordBox x:Name="RegistrationPassword"></PasswordBox>
+            </StackPanel>
+            <StackPanel x:Name="Pass">
+                <Label x:Name="PassLabel">Пароль</Label>
+                <PasswordBox x:Name="RegistrationPassword">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PasswordChanged">
+                            <i:InvokeCommandAction Command="{Binding PasswordChanged}" CommandParameter="{Binding ElementName=RegistrationPassword}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </PasswordBox>
             </StackPanel>
             <StackPanel x:Name="SpecificInformation" Visibility="Collapsed">
                 <Label>Дата рождение</Label>
-                <DatePicker x:Name="DateOfBirth"></DatePicker>
+                <DatePicker x:Name="DateOfBirth" SelectedDate="{Binding DateOfBirth}"></DatePicker>
                 <StackPanel x:Name="Gender">
                     <Label>Пол</Label>
-                    <RadioButton x:Name="Male">Мужской</RadioButton>
-                    <RadioButton x:Name="Female">Женский</RadioButton>
+                    <RadioButton x:Name="Male" Content="Мужской">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding Checked}" CommandParameter="Мужской"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                    <RadioButton x:Name="Female" Content="Женский">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding Checked}" CommandParameter="Женский"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
                 </StackPanel>
             </StackPanel>
             <StackPanel x:Name="ContactInformation" Visibility="Collapsed">
                 <Label>Номер телефона</Label>
                 <xctk:MaskedTextBox Mask="+999(99)999-99-99" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"></xctk:MaskedTextBox>
-                <Label>Email</Label>
-                <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Label x:Name="EmailLabel">Email</Label>
+                <TextBox x:Name="EmailTextBox" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
         </StackPanel>
-        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <WrapPanel x:Name="Commands" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <WrapPanel x:Name="AfterNameAndSurnameInfo" Orientation="Horizontal">
                 <Button Command="{Binding AfterNameAndSurnameInfo}">Далее-></Button>
             </WrapPanel>
@@ -60,5 +84,6 @@
             </WrapPanel>
             <Button Command="{Binding Cancel}">Отмена</Button>
         </WrapPanel>
+        <Button x:Name="Search" Content="Поиск" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Search}"/>
     </Grid>
 </Window>

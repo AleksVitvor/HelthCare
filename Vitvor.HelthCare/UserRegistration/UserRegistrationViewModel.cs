@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -12,6 +15,7 @@ namespace Vitvor.HelthCare
 {
     class UserRegistrationViewModel : INotifyPropertyChanged
     {
+        private RegistrationWindow _registrationWindow;
         private UserRegistration _userRegistration;
         public UserRegistration UserRegistration
         {
@@ -24,12 +28,6 @@ namespace Vitvor.HelthCare
                 _userRegistration = value;
                 OnPropertyChanged("UserRegistration");
             }
-        }
-        private RegistrationWindow _registrationWindow;
-        public UserRegistrationViewModel(RegistrationWindow registrationWindow)
-        {
-            UserRegistration = new UserRegistration();
-            _registrationWindow = registrationWindow;
         }
         private RelayCommand _afterNameAndSurnameInfo;
         public RelayCommand AfterNameAndSurnameInfo
@@ -138,6 +136,33 @@ namespace Vitvor.HelthCare
                       }));
             }
         }
+        private RelayCommand _search;
+        public RelayCommand Search
+        {
+            get
+            {
+                return _search ??
+                    (_search = new RelayCommand(obj =>
+                      {
+                          SqlCommand searchPatient = new SqlCommand();
+                          searchPatient.Connection = SingletonForSqlConnection.SqlConnection;
+                          searchPatient.CommandText = $"select PATIENTS.id, PATIENTS.Email, PATIENTS.Name, PATIENTS.Patronymic from PATIENTS where PATIENTS.id={_registrationWindow.CardNumberInfo.Text}";
+                          using(SqlDataReader reader=searchPatient.ExecuteReader())
+                          {
+                              if(reader.HasRows)
+                              {
+                                  reader.Read();
+                                  UserRegistration = new UserRegistration(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                                  ShowAfterRegistration();
+                              }
+                              else
+                              {
+                                  MessageBox.Show("Проверьте введённые параметры");
+                              }    
+                          }
+                      }));
+            }
+        }
         private void ShowContackInformation()
         {
             _registrationWindow.AfterSpecificInformaton.Visibility = Visibility.Collapsed;
@@ -150,6 +175,7 @@ namespace Vitvor.HelthCare
             _registrationWindow.ContactInformation.Visibility = Visibility.Collapsed;
             _registrationWindow.AfterContackInformation.Visibility = Visibility.Collapsed;
             _registrationWindow.NameAndSurname.Visibility = Visibility.Collapsed;
+            _registrationWindow.Pass.Visibility = Visibility.Collapsed;
             _registrationWindow.SpecificInformation.Visibility = Visibility.Visible;
             _registrationWindow.AfterNameAndSurnameInfo.Visibility = Visibility.Collapsed;
             _registrationWindow.AfterSpecificInformaton.Visibility = Visibility.Visible;
@@ -157,9 +183,88 @@ namespace Vitvor.HelthCare
         private void ShowNameAndSurname()
         {
             _registrationWindow.NameAndSurname.Visibility = Visibility.Visible;
+            _registrationWindow.Pass.Visibility = Visibility.Visible;
             _registrationWindow.SpecificInformation.Visibility = Visibility.Collapsed;
             _registrationWindow.AfterNameAndSurnameInfo.Visibility = Visibility.Visible;
             _registrationWindow.AfterSpecificInformaton.Visibility = Visibility.Collapsed;
+        }
+        private void ShowAfterRegistration()
+        {
+            _registrationWindow.Search.Visibility = Visibility.Collapsed;
+            _registrationWindow.CardNumber.Visibility = Visibility.Collapsed;
+            _registrationWindow.NameAndSurname.Visibility = Visibility.Collapsed;
+            _registrationWindow.Pass.Visibility = Visibility.Visible;
+            _registrationWindow.SpecificInformation.Visibility = Visibility.Visible;
+            _registrationWindow.ContactInformation.Visibility = Visibility.Visible;
+            _registrationWindow.EmailLabel.Visibility = Visibility.Collapsed;
+            _registrationWindow.EmailTextBox.Visibility = Visibility.Collapsed;
+        }
+        private void ShowCardNumberAndSearch()
+        {
+            _registrationWindow.NameAndSurname.Visibility = Visibility.Collapsed;
+            _registrationWindow.Pass.Visibility = Visibility.Collapsed;
+            _registrationWindow.CardNumber.Visibility = Visibility.Visible;
+            _registrationWindow.Commands.Visibility = Visibility.Collapsed;
+            _registrationWindow.Search.Visibility = Visibility.Visible;
+        }
+        public void SendEmailAboutUpdate()
+        {
+            string message = $"Здравствуйте, {UserRegistration.Name} {UserRegistration.Patronymic}, наш центр благодарит вас за завершение регистрации в нашей системе. Полную функциональность вы сможете изучить, войдя " +
+                $"в систему на начальном окне.\nТакже с помощью этого окна вы сможете изменить свой пароль.";
+            string sub = "Завершение регистрации";
+            SendEmailAsync(UserRegistration, message, sub).GetAwaiter();
+        }
+        private static async Task SendEmailAsync(UserRegistration user, string message, string sub)
+        {
+            MailAddress from = new MailAddress("healthcaresupbelstu@gmail.com", "Ministry of Health by BelSTU");
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                MessageBox.Show("Отсутствует или ограниченно физическое подключение к сети\nПроверьте настройки вашего сетевого подключения");
+            }
+            else if (isValid(user.Email))
+            {
+                MailAddress to = new MailAddress(user.Email);
+                MailMessage m = new MailMessage(from, to);
+                m.Subject = sub;
+                m.Body = message;
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                smtp.Credentials = new NetworkCredential("healthcaresupbelstu@gmail.com", $"{Password.getInstance().myCredential.Password}");
+                smtp.EnableSsl = true;
+                await smtp.SendMailAsync(m);
+            }
+            else
+            {
+                MessageBox.Show("Проверьте введённую электронную почту");
+            }
+        }
+        private static bool isValid(string email)
+        {
+            string pattern = "[.\\-_a-z0-9]+@([a-z0-9][\\-a-z0-9]+\\.)+[a-z]{2,6}";
+            Match isMatch = Regex.Match(email, pattern, RegexOptions.IgnoreCase);
+
+            if (isMatch.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public UserRegistrationViewModel(RegistrationWindow registrationWindow)
+        {
+            UserRegistration = new UserRegistration();
+            _registrationWindow = registrationWindow;
+            MessageBoxResult result = MessageBox.Show("Вы уже имеете зарегистрированную карту?",
+                                  "Сообщение",
+                                  MessageBoxButton.YesNo,
+                                  MessageBoxImage.Question,
+                                  MessageBoxResult.Yes,
+                                  MessageBoxOptions.DefaultDesktopOnly);
+            if (result == MessageBoxResult.Yes)
+            {
+                ShowCardNumberAndSearch();
+            }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

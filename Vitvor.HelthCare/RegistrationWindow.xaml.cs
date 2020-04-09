@@ -33,7 +33,7 @@ namespace Vitvor.HelthCare
             UserRegistrationViewModel registrationViewModel = DataContext as UserRegistrationViewModel;
             if(registrationViewModel.UserRegistration.isUpdating)
             {
-
+                registrationViewModel.SendEmailAboutUpdate();
             }
             _mainWindow.Show();
         }

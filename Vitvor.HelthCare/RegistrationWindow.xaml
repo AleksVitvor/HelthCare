@@ -22,6 +22,10 @@
                 <Label >Номер карты</Label>
                 <TextBox x:Name="CardNumberInfo"></TextBox>
             </StackPanel>
+            <StackPanel x:Name="Check" Visibility="Collapsed">
+                <Label>Строка из Email</Label>
+                <TextBox x:Name="CheckPass"></TextBox>
+            </StackPanel>
             <StackPanel x:Name="NameAndSurname">
                 <Label>Фамилия</Label>
                 <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"></TextBox>
@@ -85,5 +89,6 @@
             <Button Command="{Binding Cancel}">Отмена</Button>
         </WrapPanel>
         <Button x:Name="Search" Content="Поиск" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Search}"/>
+        <Button x:Name="Confirm" Content="Поиск" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Confirm}"/>
     </Grid>
 </Window>

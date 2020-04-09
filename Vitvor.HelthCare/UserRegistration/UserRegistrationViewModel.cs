@@ -8,6 +8,7 @@ using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -127,9 +128,13 @@ namespace Vitvor.HelthCare
                           $"PATIENTS.Patronymic='{userRegistration.Patronymic}' and PATIENTS.Password='{userRegistration.Password}'";
                           using (SqlDataReader reader = sqlCommand.ExecuteReader())
                           {
-                              foreach (var i in reader)
+                              if(reader.HasRows)
                               {
-                                  MessageBox.Show($"Id для входа: {reader.GetInt32(0)}", $"Здравствуйте, {reader.GetString(1)} {reader.GetString(2)}");
+                                  reader.Read();
+                                  string message = $"Здравствуйте, {UserRegistration.Name} {UserRegistration.Patronymic}. Номер вашей карточки для входа: {reader.GetInt32(0)}. Для продолжения работы " +
+                                  $"вернитесь на начальный экран и произведите вход в систему";
+                                  string sub = "Регистрация";
+                                  SendEmailAsync(UserRegistration, message, sub).GetAwaiter();
                               }
                           }
                           _registrationWindow.Close();
@@ -153,13 +158,57 @@ namespace Vitvor.HelthCare
                               {
                                   reader.Read();
                                   UserRegistration = new UserRegistration(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
-                                  ShowAfterRegistration();
+                                  string alphabet = "ABSDEFGHIJKLMNOPQRSTVUWXYZabsdefghijklmnopqrstvuwxyz0123456789";
+                                  char[] letters = alphabet.ToCharArray();
+                                  string resultstr = "";
+                                  Random random = new Random();
+                                  for (int i = 0; i < 10; i++) 
+                                  {
+                                      resultstr += letters[random.Next(0, letters.Length - 1)];
+                                      Thread.Sleep(100);
+                                  }
+                                  reader.Close();
+                                  SqlCommand command = new SqlCommand();
+                                  command.Connection = SingletonForSqlConnection.SqlConnection;
+                                  UserRegistration.Password = resultstr;
+                                  command.CommandText = $"update PATIENTS set PATIENTS.Password='{UserRegistration.Password}' where PATIENTS.id={UserRegistration.id}";
+                                  command.ExecuteNonQuery();
+                                  string message = $"Здравствуйте, {UserRegistration.Name} {UserRegistration.Patronymic}, для подтверждения уточнения данных введите данную строку\n{UserRegistration.Password}\n в поле, которое у вас отобразилось сейчас.";
+                                  string sub = $"Уточнение данных";
+                                  SendEmailAsync(UserRegistration, message, sub).GetAwaiter();
+                                  ShowCheckingPass();
                               }
                               else
                               {
                                   MessageBox.Show("Проверьте введённые параметры");
                               }    
                           }
+                      }));
+            }
+        }
+        private RelayCommand _confirm;
+        public RelayCommand Confirm
+        {
+            get
+            {
+                return _confirm ??
+                    (_confirm = new RelayCommand(obj =>
+                      {
+                          SqlCommand check = new SqlCommand();
+                          check.Connection = SingletonForSqlConnection.SqlConnection;
+                          check.CommandText = $"select PATIENTS.id from PATIENTS where PATIENTS.id={UserRegistration.id} and PATIENTS.Password='{_registrationWindow.CheckPass.Text.Trim(' ')}'";
+                          using(SqlDataReader reader=check.ExecuteReader())
+                          {
+                              if(reader.HasRows)
+                              {
+                                  ShowAfterRegistration();
+                              }
+                              else
+                              {
+                                  MessageBox.Show("Проверьте введённые данные");
+                              }
+                          }
+
                       }));
             }
         }
@@ -190,6 +239,8 @@ namespace Vitvor.HelthCare
         }
         private void ShowAfterRegistration()
         {
+            _registrationWindow.Confirm.Visibility = Visibility.Collapsed;
+            _registrationWindow.Check.Visibility = Visibility.Collapsed;
             _registrationWindow.Search.Visibility = Visibility.Collapsed;
             _registrationWindow.CardNumber.Visibility = Visibility.Collapsed;
             _registrationWindow.NameAndSurname.Visibility = Visibility.Collapsed;
@@ -207,9 +258,16 @@ namespace Vitvor.HelthCare
             _registrationWindow.Commands.Visibility = Visibility.Collapsed;
             _registrationWindow.Search.Visibility = Visibility.Visible;
         }
+        private void ShowCheckingPass()
+        {
+            _registrationWindow.Search.Visibility = Visibility.Collapsed;
+            _registrationWindow.CardNumber.Visibility = Visibility.Collapsed;
+            _registrationWindow.Check.Visibility = Visibility.Visible;
+            _registrationWindow.Confirm.Visibility = Visibility.Visible;
+        }
         public void SendEmailAboutUpdate()
         {
-            string message = $"Здравствуйте, {UserRegistration.Name} {UserRegistration.Patronymic}, наш центр благодарит вас за завершение регистрации в нашей системе. Полную функциональность вы сможете изучить, войдя " +
+            string message = $"Здравствуйте, {UserRegistration.Name} {UserRegistration.Patronymic}, наш центр благодарит вас за уточнение информации о Вас. Полную функциональность вы сможете изучить, войдя " +
                 $"в систему на начальном окне.\nТакже с помощью этого окна вы сможете изменить свой пароль.";
             string sub = "Завершение регистрации";
             SendEmailAsync(UserRegistration, message, sub).GetAwaiter();

@@ -76,6 +76,7 @@
         </StackPanel>
         <Button x:Name="SearchPatient" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Search}">Поиск</Button>
         <Button x:Name="SendInfoPatient" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding SendEmail}" CommandParameter="{Binding SelectedPatient}">Подтвердить</Button>
+        <Button x:Name="FinishInspection" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding FinishInspection}" CommandParameter="{Binding SelectedPatient}">Подтвердить</Button>
         <Button x:Name="SendInfoAboutAppointment" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding SendInfoAboutAppointment}">Подтвердить</Button>
     </Grid>
 </Window>

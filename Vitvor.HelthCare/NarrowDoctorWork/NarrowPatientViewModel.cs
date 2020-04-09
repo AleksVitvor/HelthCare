@@ -5,12 +5,26 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Vitvor.HelthCare
 {
     class NarrowPatientViewModel : INotifyPropertyChanged
     {
         private NarrowDoctorWindow _narrowDoctorWindow;
+        private NarrowPatient _narrowPatient;
+        public NarrowPatient NarrowPatient
+        {
+            get
+            {
+                return _narrowPatient;
+            }
+            set
+            {
+                _narrowPatient = value;
+                OnPropertyChanged("NarrowPatient");
+            }
+        }
         public NarrowPatientViewModel(NarrowDoctorWindow narrowDoctorWindow)
         {
             _narrowDoctorWindow = narrowDoctorWindow;

@@ -98,6 +98,7 @@ namespace Vitvor.HelthCare
                           Patient patient = obj as Patient;
                           if (patient != null)
                           {
+                              AddSymptoms(patient);
                               string message= $"Здравствуйте, {patient.Name} {patient.Patronymic}. Очень рады, что вы выбрали нашу сеть медицинских центров. Для дальнейшего полноценного использования всех " +
                               $"возможностей приложения нашего центра введите свои данные при первом входе в приложение, перейдя по кнопке регистрация и выберите уточнение данных.\nНомер карточки для вас: {patient.patientid}";
                               string sub = "Первое посещение";
@@ -153,12 +154,57 @@ namespace Vitvor.HelthCare
             _doctorWindow.AllInfo.Visibility = Visibility.Collapsed;
             _doctorWindow.Appointment.Visibility = Visibility.Collapsed;
             _doctorWindow.SendInfoAboutAppointment.Visibility = Visibility.Collapsed;
+            _doctorWindow.AllInfo.IsEnabled = true;
+            _doctorWindow.FinishInspection.Visibility = Visibility.Collapsed;
         }
         private void Clear()
         {
             _doctorWindow.Doctors.Items.Clear();
             _doctorWindow.Dates.Items.Clear();
             _doctorWindow.Times.Items.Clear();
+        }
+        private void AddSymptoms(Patient patient)
+        {
+            SqlCommand command = new SqlCommand();
+            command.Connection = SingletonForSqlConnection.SqlConnection;
+            string[] symptoms = patient.Symptoms.Split(',');
+            foreach (var i in symptoms)
+            {
+                string s = i.Trim(' ').ToLower();
+                if (!s.Equals(""))
+                {
+                    command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{s}'";
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            int id = reader.GetInt32(0);
+                            reader.Close();
+                            command.CommandText = $"select * from PATIENTSANDSYMPTOMS where PATIENTSANDSYMPTOMS.patientid='{patient.patientid}' and " +
+                                $"PATIENTSANDSYMPTOMS.symptomid='{id}' and PATIENTSANDSYMPTOMS.dateofexhibiting='{DateTime.Today}'";
+                            using (SqlDataReader checkdata = command.ExecuteReader())
+                            {
+                                if (!checkdata.HasRows)
+                                {
+                                    checkdata.Close();
+                                    command.CommandText = $"insert into PATIENTSANDSYMPTOMS values ({patient.patientid},{id},'{DateTime.Today}')";
+                                    command.ExecuteNonQuery();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Такие данные уже добавлены");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Данный симптом будет добавлен позже");
+                        }
+                    }
+                }
+            }
+            Hide();
         }
         private RelayCommand _search;
         public RelayCommand Search
@@ -170,17 +216,39 @@ namespace Vitvor.HelthCare
                       {
                           SqlCommand command = new SqlCommand();
                           command.Connection = SingletonForSqlConnection.SqlConnection;
-                          command.CommandText = $"select PATIENTS.Surname, PATIENTS.Name, PATIENTS.Patronymic, PATIENTS.id from PATIENTS where PATIENTS.id={_doctorWindow.PatientID.Text}";
+                          command.CommandText = $"select PATIENTS.Surname, PATIENTS.Name, PATIENTS.Patronymic, PATIENTS.id, PATIENTS.Email from PATIENTS where PATIENTS.id={_doctorWindow.PatientID.Text}";
                           using (SqlDataReader reader= command.ExecuteReader())
                           {
-                              reader.Read();
-                              SelectedPatient = new Patient(reader.GetInt32(3));
-                              SelectedPatient.Surname = reader.GetString(0);
-                              SelectedPatient.Name = reader.GetString(1);
-                              SelectedPatient.Patronymic = reader.GetString(2);
-                              _doctorWindow.AllInfo.Visibility = Visibility.Visible;
-                              _doctorWindow.OnlyID.Visibility = Visibility.Collapsed;
-                              _doctorWindow.SearchPatient.Visibility = Visibility.Collapsed;
+                              if (reader.HasRows)
+                              {
+                                  reader.Read();
+                                  SelectedPatient = new Patient(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(4));
+                                  SelectedPatient.patientid = reader.GetInt32(3);
+                                  _doctorWindow.AllInfo.Visibility = Visibility.Visible;
+                                  _doctorWindow.OnlyID.Visibility = Visibility.Collapsed;
+                                  _doctorWindow.SearchPatient.Visibility = Visibility.Collapsed;
+                                  _doctorWindow.FinishInspection.Visibility = Visibility.Visible;
+                              }
+                              else
+                              {
+                                  MessageBox.Show("Пациент с таким номером карты не зарегистрирован");
+                              }
+                          }
+                      }));
+            }
+        }
+        private RelayCommand _finishInspection;
+        public RelayCommand FinishInspection
+        {
+            get
+            {
+                return _finishInspection ??
+                    (_finishInspection = new RelayCommand(obj =>
+                      {
+                          Patient patient = obj as Patient;
+                          if(patient!=null)
+                          {
+                              AddSymptoms(patient);
                           }
                       }));
             }

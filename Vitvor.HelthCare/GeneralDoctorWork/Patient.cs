@@ -92,45 +92,6 @@ namespace Vitvor.HelthCare
             set
             {
                 _symptoms = value;
-                if (_symptoms.Length != 0)
-                {
-                    if (_symptoms[_symptoms.Length - 1] == ',' || _symptoms[_symptoms.Length - 1] == ';')
-                    {
-                        string[] symptoms = Symptoms.Split(',');
-                        symptoms[symptoms.Length - 2] = symptoms[symptoms.Length - 2].Trim(' ').ToLower();
-                        SqlCommand command = new SqlCommand();
-                        command.Connection = SingletonForSqlConnection.SqlConnection;
-                        command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{symptoms[symptoms.Length - 2]}'";
-                        using (SqlDataReader checkSymptoms = command.ExecuteReader())
-                        {
-                            if (checkSymptoms.HasRows)
-                            {
-                                checkSymptoms.Read();
-                                int id = checkSymptoms.GetInt32(0);
-                                checkSymptoms.Close();
-                                command.CommandText = $"select * from PATIENTSANDSYMPTOMS where PATIENTSANDSYMPTOMS.patientid='{patientid}' and " +
-                                    $"PATIENTSANDSYMPTOMS.symptomid='{id}' and PATIENTSANDSYMPTOMS.dateofexhibiting='{DateTime.Today}'";
-                                using (SqlDataReader checkdata = command.ExecuteReader())
-                                {
-                                    if (!checkdata.HasRows)
-                                    {
-                                        checkdata.Close();
-                                        command.CommandText = $"insert into PATIENTSANDSYMPTOMS values ({patientid},{id},'{DateTime.Today}')";
-                                        command.ExecuteNonQuery();
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Такие данные уже добавлены");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show("Данный симптом будет добавлен позже, приносим свои извинения");
-                            }
-                        }
-                    }
-                }
                 OnPropertyChanged("Symptoms");
             }
         }

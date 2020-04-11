@@ -20,12 +20,12 @@ namespace Vitvor.HelthCare
     public partial class NarrowDoctorWindow : Window
     {
         private MainWindow _mainWindow;
-        public NarrowDoctorWindow(MainWindow mainWindow)
+        public NarrowDoctorWindow(MainWindow mainWindow, int doctorid)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
             _mainWindow.Hide();
-            DataContext = new NarrowPatientViewModel(this);
+            DataContext = new NarrowPatientViewModel(this, doctorid);
 
         }
 

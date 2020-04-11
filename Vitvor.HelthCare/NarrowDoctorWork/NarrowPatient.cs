@@ -23,6 +23,32 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("ID");
             }
         }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                OnPropertyChanged("ID");
+            }
+        }
+        private string _patronymic;
+        public string Patronymic
+        {
+            get
+            {
+                return _patronymic;
+            }
+            set
+            {
+                _patronymic = value;
+                OnPropertyChanged("ID");
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

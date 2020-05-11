@@ -78,6 +78,10 @@ namespace Vitvor.HelthCare
                           {
                               if(searchDiseasis.HasRows)
                               {
+                                  for(int i=0; i<_narrowDoctorWindow.Diagnoses.Items.Count-1;i++)
+                                  {
+                                      _narrowDoctorWindow.Diagnoses.Items.RemoveAt(i);
+                                  }
                                   while (searchDiseasis.Read())
                                   {
                                       _narrowDoctorWindow.Diagnoses.Items.Insert(0, searchDiseasis.GetString(0));
@@ -94,6 +98,7 @@ namespace Vitvor.HelthCare
         public NarrowPatientViewModel(NarrowDoctorWindow narrowDoctorWindow, int doctorid)
         {
             _narrowDoctorWindow = narrowDoctorWindow;
+            NarrowPatient = new NarrowPatient();
             this.doctorid = doctorid;
         }
         public event PropertyChangedEventHandler PropertyChanged;

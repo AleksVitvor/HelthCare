@@ -35,6 +35,7 @@ namespace Vitvor.HelthCare
                 return _addDoctor ??
                     (_addDoctor = new RelayCommand(obj =>
                       {
+                          Hide();
                           SelectedDoctor = new Doctor(MedicalInstitutionId);
                           Show();
                           _adminWindow.ConfirmAdd.Visibility = Visibility.Visible;
@@ -49,6 +50,7 @@ namespace Vitvor.HelthCare
                 return _changeDoctor ??
                     (_changeDoctor = new RelayCommand(obj =>
                       {
+                          Hide();
                           SelectedDoctor = new Doctor(MedicalInstitutionId);
                           _adminWindow.BackToMenu.Visibility = Visibility.Visible;
                           _adminWindow.DoctorUsername.Visibility = Visibility.Visible;
@@ -71,6 +73,7 @@ namespace Vitvor.HelthCare
                 return _deleteDoctor ??
                     (_deleteDoctor = new RelayCommand(obj =>
                       {
+                          Hide();
                           SelectedDoctor = new Doctor(MedicalInstitutionId);
                           _adminWindow.BackToMenu.Visibility = Visibility.Visible;
                           _adminWindow.DoctorUsername.Visibility = Visibility.Visible;
@@ -162,6 +165,7 @@ namespace Vitvor.HelthCare
                                   MessageBox.Show("Попытка изменения несуществующей учётной записи");
                               }
                           }
+                          Hide();
                       }));
             }
         }
@@ -219,6 +223,7 @@ namespace Vitvor.HelthCare
             _adminWindow.ConfirmChange.Visibility = Visibility.Collapsed;
             _adminWindow.ConfirmDelete.Visibility = Visibility.Collapsed;
             _adminWindow.Timetable.Visibility = Visibility.Collapsed;
+            _adminWindow.Create.Visibility = Visibility.Collapsed;
             _adminWindow.PasswordBox.Clear();
         }
         private RelayCommand _createTimeTable;
@@ -264,6 +269,7 @@ namespace Vitvor.HelthCare
                           _adminWindow.SelectedTime.SelectedIndex = -1;
                           _adminWindow.EvenOrNot.SelectedIndex = -1;
                           _adminWindow.Doctors.UnSelectAll();
+                          Hide();
                       }));
             }
         }

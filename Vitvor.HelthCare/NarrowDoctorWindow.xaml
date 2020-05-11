@@ -62,10 +62,10 @@
         </Grid.RowDefinitions>
         <Button x:Name="PatientExamination" Grid.Column="7" Grid.Row="0" Grid.ColumnSpan="2">Осмотр</Button>
         <Button x:Name="Certificate" Grid.Column="9" Grid.Row="0" Grid.ColumnSpan="2">Справка</Button>
-        <StackPanel x:Name="MainInfo" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="18" Grid.RowSpan="9" DataContext="{Binding NarrowPatient}">
+        <StackPanel x:Name="MainInfo" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="18" Grid.RowSpan="15" DataContext="{Binding NarrowPatient}">
             <StackPanel x:Name="ID">
                 <Label>ID</Label>
-                <TextBox Text="{Binding ID}"></TextBox>
+                <TextBox Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             <StackPanel x:Name="NameAndPatronymicAndDiagnosis" Visibility="Collapsed">
                 <Label>Имя</Label>

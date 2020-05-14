@@ -6,18 +6,36 @@
         xmlns:local="clr-namespace:Vitvor.HelthCare"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing">
-    <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#FF7E67"></Setter>
-            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
-        </Style>
-    </Window.Resources>
+        Title="HealthCare" MinHeight="300" MinWidth="300" Width="400" Height="350" MaxHeight="400" MaxWidth="450" Closing="Window_Closing">
+    <Window.Background>
+        <ImageBrush ImageSource="background.png"/>
+    </Window.Background>
     <Grid>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Top" DataContext="{Binding UserRegistration}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" Grid.RowSpan="9" DataContext="{Binding UserRegistration}">
             <StackPanel x:Name="CardNumber" Visibility="Collapsed">
                 <Label >Номер карты</Label>
                 <TextBox x:Name="CardNumberInfo"></TextBox>
@@ -67,28 +85,26 @@
             </StackPanel>
             <StackPanel x:Name="ContactInformation" Visibility="Collapsed">
                 <Label>Номер телефона</Label>
-                <xctk:MaskedTextBox Mask="+999(99)999-99-99" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"></xctk:MaskedTextBox>
+                <xctk:MaskedTextBox Mask="+999(99)999-99-99" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}"></xctk:MaskedTextBox>
                 <Label x:Name="EmailLabel">Email</Label>
                 <TextBox x:Name="EmailTextBox" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
         </StackPanel>
-        <WrapPanel x:Name="Commands" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <WrapPanel x:Name="AfterNameAndSurnameInfo" Orientation="Horizontal">
+        <WrapPanel x:Name="Commands" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="10">
+            <WrapPanel x:Name="AfterNameAndSurnameInfo" Grid.Row="10" Grid.Column="7" Grid.ColumnSpan="3">
                 <Button Command="{Binding AfterNameAndSurnameInfo}">Далее-></Button>
             </WrapPanel>
-
-            <WrapPanel x:Name="AfterSpecificInformaton" Orientation="Horizontal" Visibility="Collapsed">
+            <WrapPanel x:Name="AfterSpecificInformaton" Visibility="Collapsed" Grid.Row="10" Grid.Column="7" Grid.ColumnSpan="3">
                 <Button Command="{Binding ToContactInformation}">Далее-></Button>
                 <Button Command="{Binding BackToNameAndSurname}">Назад</Button>
             </WrapPanel>
-
-            <WrapPanel x:Name="AfterContackInformation" Orientation="Horizontal" Visibility="Collapsed">
+            <WrapPanel x:Name="AfterContackInformation" Visibility="Collapsed" Grid.Row="10" Grid.Column="7" Grid.ColumnSpan="3">
                 <Button Command="{Binding Ready}" CommandParameter="{Binding UserRegistration}">Готово</Button>
                 <Button Command="{Binding BackToSpecificInformation}">Назад</Button>
             </WrapPanel>
             <Button Command="{Binding Cancel}">Отмена</Button>
         </WrapPanel>
-        <Button x:Name="Search" Content="Поиск" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Search}"/>
-        <Button x:Name="Confirm" Content="Поиск" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Confirm}"/>
+        <Button x:Name="Search" Content="Поиск" Visibility="Collapsed" Command="{Binding Search}" Grid.Column="7" Grid.ColumnSpan="3" Grid.Row="10"/>
+        <Button x:Name="Confirm" Content="Поиск" Visibility="Collapsed" Command="{Binding Confirm}" Grid.Column="7" Grid.ColumnSpan="3" Grid.Row="10"/>
     </Grid>
 </Window>

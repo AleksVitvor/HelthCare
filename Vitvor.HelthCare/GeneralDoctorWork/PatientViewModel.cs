@@ -156,6 +156,7 @@ namespace Vitvor.HelthCare
             _doctorWindow.SendInfoAboutAppointment.Visibility = Visibility.Collapsed;
             _doctorWindow.AllInfo.IsEnabled = true;
             _doctorWindow.FinishInspection.Visibility = Visibility.Collapsed;
+            _doctorWindow.SendInfoPatient.Visibility = Visibility.Collapsed;
         }
         private void Clear()
         {

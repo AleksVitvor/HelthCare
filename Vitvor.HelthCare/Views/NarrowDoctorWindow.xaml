@@ -4,19 +4,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="NarrowDoctorWindow" Height="450" Width="800" Background="#34C6CD" Closing="Window_Closing">
-    <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#FF7E67"></Setter>
-            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
-        </Style>
-        <Style TargetType="xctk:CheckListBox">
-            <Setter Property="Background" Value="#34C6CD"/>
-        </Style>
-    </Window.Resources>
+        Title="NarrowDoctorWindow" Height="450" Width="800" Closing="Window_Closing">
+    <Window.Background>
+        <ImageBrush ImageSource="background.png"/>
+    </Window.Background>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -53,34 +44,28 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button x:Name="PatientExamination" Grid.Column="7" Grid.Row="0" Grid.ColumnSpan="2">Осмотр</Button>
-        <Button x:Name="Certificate" Grid.Column="9" Grid.Row="0" Grid.ColumnSpan="2">Справка</Button>
+        <Button x:Name="PatientExamination" Grid.Column="7" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource ButtonStyle}">Осмотр</Button>
+        <Button x:Name="Certificate" Grid.Column="9" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource ButtonStyle}">Справка</Button>
         <StackPanel x:Name="MainInfo" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="18" Grid.RowSpan="15" DataContext="{Binding NarrowPatient}">
             <StackPanel x:Name="ID">
-                <Label>ID</Label>
-                <TextBox Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Label Style="{DynamicResource LabelStyle}">ID</Label>
+                <TextBox Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}"></TextBox>
             </StackPanel>
             <StackPanel x:Name="NameAndPatronymicAndDiagnosis" Visibility="Collapsed">
-                <Label>Имя</Label>
-                <TextBox></TextBox>
-                <Label>Отчество</Label>
-                <TextBox></TextBox>
-                <Label>Симптомы</Label>
-                <Label x:Name="Symptoms"></Label>
-                <Label>Возможные диагнозы</Label>
+                <Label Style="{DynamicResource LabelStyle}">Имя</Label>
+                <TextBox Style="{DynamicResource TextBoxStyle}"></TextBox>
+                <Label Style="{DynamicResource LabelStyle}">Отчество</Label>
+                <TextBox Style="{DynamicResource TextBoxStyle}"></TextBox>
+                <Label Style="{DynamicResource LabelStyle}">Симптомы</Label>
+                <Label x:Name="Symptoms" Style="{DynamicResource LabelStyle}"></Label>
+                <Label Style="{DynamicResource LabelStyle}">Возможные диагнозы</Label>
                 <xctk:CheckListBox x:Name="Diagnoses" Margin="0,5,0,0">
-                    <TextBox MinWidth="50"></TextBox>
+                    <TextBox MinWidth="50" Style="{DynamicResource TextBoxStyle}"></TextBox>
                 </xctk:CheckListBox>
             </StackPanel>
         </StackPanel>
-        <Button Grid.Column="15" Grid.Row="19" Command="{Binding Search}">Поиск</Button>
-        <Button Grid.Column="16" Grid.ColumnSpan="2" Grid.Row="19">Отмена</Button>
+        <Button Grid.Column="14" Grid.Row="19" Grid.ColumnSpan="2" Command="{Binding Search}" Style="{DynamicResource ButtonStyle}">Поиск</Button>
+        <Button Grid.Column="16" Grid.ColumnSpan="2" Grid.Row="19" Style="{DynamicResource ButtonStyle}">Отмена</Button>
     </Grid>
 </Window>

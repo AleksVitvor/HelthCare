@@ -57,41 +57,42 @@ namespace Vitvor.HelthCare
                                   NarrowPatient.Patronymic = reader.GetString(1);
                                   _narrowDoctorWindow.ID.Visibility = Visibility.Collapsed;
                                   _narrowDoctorWindow.NameAndPatronymicAndDiagnosis.Visibility = Visibility.Visible;
+                                  search.CommandText = $"select checked.Name from " +
+                                  $"(select COUNT(*) as COUNTER, DISEASES.Name from " +
+                                  $"DISEASES inner join " +
+                                  $"(select DISEASESSYMPTOMS.diseaseid " +
+                                  $"from DISEASESSYMPTOMS inner join " +
+                                  $"(select symptomid from PATIENTSANDSYMPTOMS " +
+                                  $"where PATIENTSANDSYMPTOMS.patientid = {NarrowPatient.ID}) sympt " +
+                                  $"on DISEASESSYMPTOMS.symptomid = sympt.symptomid) des " +
+                                  $"on DISEASES.id = des.diseaseid " +
+                                  $"group by DISEASES.Name) checked " +
+                                  $"where checked.COUNTER >= 2";
+                                  using (SqlDataReader searchDiseasis = search.ExecuteReader())
+                                  {
+                                      if (searchDiseasis.HasRows)
+                                      {
+                                          for (int i = 0; i < _narrowDoctorWindow.Diagnoses.Items.Count - 1; i++)
+                                          {
+                                              _narrowDoctorWindow.Diagnoses.Items.RemoveAt(i);
+                                          }
+                                          while (searchDiseasis.Read())
+                                          {
+                                              _narrowDoctorWindow.Diagnoses.Items.Insert(0, searchDiseasis.GetString(0));
+                                          }
+                                      }
+                                      else
+                                      {
+                                          MessageBox.Show("Данных в базе недостаточно для выставления возможных диагнозов");
+                                      }
+                                  }
                               }
                               else
                               {
                                   MessageBox.Show("У данного пациента нет записи на сегодня");
                               }
                           }
-                          search.CommandText = $"select checked.Name from " +
-                          $"(select COUNT(*) as COUNTER, DISEASES.Name from " +
-                          $"DISEASES inner join " +
-                          $"(select DISEASESSYMPTOMS.diseaseid " +
-                          $"from DISEASESSYMPTOMS inner join " +
-                          $"(select symptomid from PATIENTSANDSYMPTOMS " +
-                          $"where PATIENTSANDSYMPTOMS.patientid = {NarrowPatient.ID}) sympt " +
-                          $"on DISEASESSYMPTOMS.symptomid = sympt.symptomid) des " +
-                          $"on DISEASES.id = des.diseaseid " +
-                          $"group by DISEASES.Name) checked " +
-                          $"where checked.COUNTER >= 2";
-                          using(SqlDataReader searchDiseasis=search.ExecuteReader())
-                          {
-                              if(searchDiseasis.HasRows)
-                              {
-                                  for(int i=0; i<_narrowDoctorWindow.Diagnoses.Items.Count-1;i++)
-                                  {
-                                      _narrowDoctorWindow.Diagnoses.Items.RemoveAt(i);
-                                  }
-                                  while (searchDiseasis.Read())
-                                  {
-                                      _narrowDoctorWindow.Diagnoses.Items.Insert(0, searchDiseasis.GetString(0));
-                                  }
-                              }
-                              else
-                              {
-                                  MessageBox.Show("Данных в базе недостаточно для выставления возможных диагнозов");
-                              }
-                          }
+                          
                       }));
             }
         }

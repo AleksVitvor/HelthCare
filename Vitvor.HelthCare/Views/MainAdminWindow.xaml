@@ -1,0 +1,75 @@
+﻿<Window x:Class="Vitvor.HelthCare.MainAdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Vitvor.HelthCare"
+        mc:Ignorable="d"
+        Title="HealthCare" MinHeight="400" MinWidth="690" Width="800" Height="450" Closing="Window_Closing">
+    <Window.Background>
+        <ImageBrush ImageSource="background.png"/>
+    </Window.Background>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <WrapPanel x:Name="BaseMainAdmin" Orientation="Horizontal" HorizontalAlignment="Center" Grid.ColumnSpan="12" Grid.Row="0">
+            <Button Command="{Binding AddMI}">Добавить медучреждение</Button>
+            <Button Command="{Binding DeleteMI}">Удалить медучреждение</Button>
+            <Button Command="{Binding AddDisease}">Добавить болезнь</Button>
+            <Button Command="{Binding UpdateDisease}">Изменить болезнь</Button>
+        </WrapPanel>
+        <!--Описание медучреждения-->
+        <StackPanel x:Name="MedicalInstitutionDescription" Orientation="Vertical" Visibility="Collapsed" Grid.ColumnSpan="10" Grid.Row="1" Grid.Column="1" Grid.RowSpan="10" DataContext="{Binding SelectedMedicalInstitution}">
+            <Label>Название</Label>
+            <TextBox Text="{Binding MedicalInstitutionName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Label>AdminUsername</Label>
+            <TextBox Text="{Binding AdminUsername, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Label>AdminPassword</Label>
+            <PasswordBox x:Name="MedicalInstitutionPassBox"></PasswordBox>
+        </StackPanel>
+        <!--Описание болезни-->
+        <StackPanel x:Name="DiseaseDescription" Orientation="Vertical" Grid.ColumnSpan="10" Grid.Row="1" Grid.Column="1" Grid.RowSpan="10" Visibility="Collapsed" DataContext="{Binding SelectedDisease}">
+            <Label>Название болезни</Label>
+            <TextBox Text="{Binding DiseaseName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Label>Симптомы</Label>
+            <TextBox Text="{Binding Symptoms, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <!--Все операции для работы с медучреждениями и болезнями-->
+        <StackPanel x:Name="ControlmainAdminOperation" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="11" Grid.ColumnSpan="4" Grid.Column="4" VerticalAlignment="Bottom">
+            <!--Работа с медучреждениями-->
+            <Button x:Name="BackFromMI" Visibility="Collapsed" Command="{Binding BackFromMI}">Назад</Button>
+            <Button x:Name="ConfirmAddMI" Visibility="Collapsed" Command="{Binding AddMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}">Подтвердить</Button>
+            <Button x:Name="ConfirmDeleteMI" Visibility="Collapsed" Command="{Binding DeleteMedicalInstitution}" CommandParameter="{Binding SelectedMedicalInstitution}">Подтвердить</Button>
+            <!--Работа с болезнями-->
+            <Button x:Name="BackFromDisease" Visibility="Collapsed" Command="{Binding BackFromDisease}">Назад</Button>
+            <Button x:Name="ConfirmAddDisease" Visibility="Collapsed" Command="{Binding AddDisease}">Подтвердить</Button>
+            <Button x:Name="ConfirmChangeDisease" Visibility="Collapsed" Command="{Binding ChangeDisease}">Подтвердить</Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -6,26 +6,49 @@
         xmlns:local="clr-namespace:Vitvor.HelthCare" 
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="HealthCare" Width="800" Height="450" Background="#34C6CD" Closing="Window_Closing">
-    <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#FF7E67"></Setter>
-            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
-        </Style>
-    </Window.Resources>
+        Title="HealthCare" MinHeight="400" MinWidth="710" Width="800" Height="450" Closing="Window_Closing">
+    <Window.Background>
+        <ImageBrush ImageSource="background.png"/>
+    </Window.Background>
     <Grid>
-        <StackPanel Orientation="Horizontal" MaxHeight="40" VerticalAlignment="Top" HorizontalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="4">
             <Button Command="{Binding Inspection}">Осмотр</Button>
             <Button Command="{Binding Appointment}" Content="Запись"></Button>
             <Button>Справка</Button>
         </StackPanel>
-        <StackPanel x:Name="Appointment" Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
+        <StackPanel x:Name="Appointment" Orientation="Vertical" Visibility="Collapsed" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="8" Grid.RowSpan="10">
             <StackPanel>
                 <Label HorizontalContentAlignment="Center" Content="Доктор"></Label>
-                <ComboBox x:Name="Doctors" Height="25" Width="250">
+                <ComboBox x:Name="Doctors" MinWidth="100">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding SelectDoctor}"/>
@@ -35,7 +58,7 @@
             </StackPanel>
             <StackPanel x:Name="SelectDate" Margin="5,0,0,0" Visibility="Collapsed">
                 <Label HorizontalContentAlignment="Center">Дата</Label>
-                <ComboBox x:Name="Dates" Height="25" Width="100">
+                <ComboBox x:Name="Dates" MinWidth="100">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding SelectDate}"/>
@@ -45,7 +68,7 @@
             </StackPanel>
             <StackPanel x:Name="SelectTime" Margin="5,0,0,0" Visibility="Collapsed">
                 <Label HorizontalContentAlignment="Center">Время</Label>
-                <ComboBox x:Name="Times" Height="25" Width="100">
+                <ComboBox x:Name="Times" MinWidth="100">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding SelectTime}"/>
@@ -54,8 +77,8 @@
                 </ComboBox>
             </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Margin="0,20,0,0">
-            <StackPanel x:Name="AllInfo" Visibility="Collapsed" DataContext="{Binding SelectedPatient}">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="10">
+            <StackPanel x:Name="AllInfo" Visibility="Collapsed"  DataContext="{Binding SelectedPatient}">
                 <StackPanel x:Name="GeneralInfo">
                     <Label>Фамилия</Label>
                     <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"></TextBox>
@@ -74,9 +97,9 @@
                 <TextBox x:Name="PatientID"></TextBox>
             </StackPanel>
         </StackPanel>
-        <Button x:Name="SearchPatient" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding Search}">Поиск</Button>
-        <Button x:Name="SendInfoPatient" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding SendEmail}" CommandParameter="{Binding SelectedPatient}">Подтвердить</Button>
-        <Button x:Name="FinishInspection" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding FinishInspection}" CommandParameter="{Binding SelectedPatient}">Подтвердить</Button>
-        <Button x:Name="SendInfoAboutAppointment" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Command="{Binding SendInfoAboutAppointment}">Подтвердить</Button>
+        <Button x:Name="SearchPatient" Visibility="Collapsed" Grid.Column="11" Grid.Row="11" Grid.ColumnSpan="2" Command="{Binding Search}">Поиск</Button>
+        <Button x:Name="SendInfoPatient" Visibility="Collapsed" Grid.Column="11" Grid.Row="11" Grid.ColumnSpan="2" Command="{Binding SendEmail}" CommandParameter="{Binding SelectedPatient}">Подтвердить</Button>
+        <Button x:Name="FinishInspection" Visibility="Collapsed" Grid.Column="11" Grid.Row="11" Grid.ColumnSpan="2" Command="{Binding FinishInspection}" CommandParameter="{Binding SelectedPatient}">Подтвердить</Button>
+        <Button x:Name="SendInfoAboutAppointment" Visibility="Collapsed" Grid.Column="11" Grid.Row="11" Grid.ColumnSpan="2" Command="{Binding SendInfoAboutAppointment}">Подтвердить</Button>
     </Grid>
 </Window>

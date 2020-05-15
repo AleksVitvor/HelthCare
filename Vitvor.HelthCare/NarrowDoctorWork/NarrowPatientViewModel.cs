@@ -68,6 +68,7 @@ namespace Vitvor.HelthCare
                                   $"on DISEASES.id = des.diseaseid " +
                                   $"group by DISEASES.Name) checked " +
                                   $"where checked.COUNTER >= 2";
+                                  reader.Close();
                                   using (SqlDataReader searchDiseasis = search.ExecuteReader())
                                   {
                                       if (searchDiseasis.HasRows)
@@ -84,8 +85,10 @@ namespace Vitvor.HelthCare
                                       else
                                       {
                                           MessageBox.Show("Данных в базе недостаточно для выставления возможных диагнозов");
-                                      }
+                                      }                                   
                                   }
+                                  //дописать запрос на симптомы и имя-фамилия пациента
+                                  HideSearch();
                               }
                               else
                               {
@@ -96,6 +99,12 @@ namespace Vitvor.HelthCare
                       }));
             }
         }
+        private void HideSearch()
+        {
+            _narrowDoctorWindow.SearchPatient.Visibility = Visibility.Collapsed;
+            _narrowDoctorWindow.AddDiagnosis.Visibility = Visibility.Visible;
+        }
+
         public NarrowPatientViewModel(NarrowDoctorWindow narrowDoctorWindow, int doctorid)
         {
             _narrowDoctorWindow = narrowDoctorWindow;

@@ -317,7 +317,7 @@ namespace Vitvor.HelthCare
                                     $"and DOCTORS.Specialty = '{docinfo[3].Remove(0, 5)}' " +
                                     $"and DOCTORS.Direction like '%{docinfo[4]}%' " +
                                     $"and DOCTORS.MedicalInstitutionid = {idofMI}) " +
-                                    $"where TIMETABLE.date > SYSDATETIME() " +
+                                    $"where TIMETABLE.date >= CONVERT(date, GETDATE()) " +
                                     $"and TIMETABLE.patientid is null " +
                                     $"group by TIMETABLE.date";
                               using (SqlDataReader reader = searchDates.ExecuteReader())
@@ -372,7 +372,15 @@ namespace Vitvor.HelthCare
                                   {
                                       while (reader.Read())
                                       {
-                                          _doctorWindow.Times.Items.Add(reader.GetValue(0).ToString());
+                                          if ((DateTime)_doctorWindow.Dates.SelectedItem == DateTime.Now.Date)
+                                          {
+                                              if((TimeSpan)reader.GetValue(0) > DateTime.Now.TimeOfDay)
+                                              {
+                                                  _doctorWindow.Times.Items.Add(reader.GetValue(0).ToString());
+                                              }
+                                          }
+                                          else                                   
+                                            _doctorWindow.Times.Items.Add(reader.GetValue(0).ToString());
                                       }
                                   }
                                   else

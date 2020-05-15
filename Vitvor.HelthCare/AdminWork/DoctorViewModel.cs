@@ -245,6 +245,7 @@ namespace Vitvor.HelthCare
                           $"	where ADMINS.id=1 and " +
                           $"(DOCTORS.Direction = 'Узкое направление' " +
                           $"or DOCTORS.Direction = 'Общее направление')";
+                          _adminWindow.Doctors.Items.Clear();
                           using(SqlDataReader reader=searchDoctors.ExecuteReader())
                           {
                               while(reader.Read())

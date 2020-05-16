@@ -255,6 +255,7 @@ namespace Vitvor.HelthCare
                           }
                           _adminWindow.Timetable.Visibility = Visibility.Visible;
                           _adminWindow.Create.Visibility = Visibility.Visible;
+                          MessageBox.Show(Convert.ToString(_adminWindow.SelectedDate.IsEnabled));
                       }));
             }
         }

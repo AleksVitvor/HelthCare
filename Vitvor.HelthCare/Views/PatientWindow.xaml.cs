@@ -26,6 +26,7 @@ namespace Vitvor.HelthCare
             _mainWindow = mainWindow;
             _mainWindow.Hide();
             InitializeComponent();
+            Appointmentdate.DisplayDateStart = DateTime.Now;
             DataContext = new DiseasForUserViewModel(this, patinentid);
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

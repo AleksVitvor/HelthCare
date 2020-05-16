@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Vitvor.HelthCare" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:Vitvor.HelthCare" 
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="HealthCare" MinHeight="400" MinWidth="750" Width="800" Height="550" Closing="Window_Closing">
     <Window.Background>
@@ -46,25 +47,25 @@
             <Button Command="{Binding DeleteDoctor}" Style="{DynamicResource ButtonStyle}">Удалить врача</Button>
             <Button Command="{Binding LookAllWorkDoctors}" Style="{DynamicResource ButtonStyle}">Просмотреть в сети</Button>
         </WrapPanel>
-        <ScrollViewer Style="{DynamicResource ScrollViewerStyle}" Grid.Row="1" Grid.RowSpan="12" Grid.ColumnSpan="8" Grid.Column="1">
-        <StackPanel x:Name="Timetable" Orientation="Vertical" Visibility="Collapsed">
-            <Label Style="{DynamicResource LabelStyle}">Введите дату, до которой нужно сформировать расписание</Label>
-            <DatePicker x:Name="SelectedDate"></DatePicker>
-            <Label Style="{DynamicResource LabelStyle}">Выберите врачей</Label>
-            <xctk:CheckListBox x:Name="Doctors"></xctk:CheckListBox>
-            <Label Style="{DynamicResource LabelStyle}">Выберите смену</Label>
-            <ComboBox x:Name="SelectedTime" Style="{DynamicResource ComboBoxStyle}">
-                <Label Style="{DynamicResource LabelStyle}">Утренняя(10:00-14:00)</Label>
-                <Label Style="{DynamicResource LabelStyle}">Вечерняя(16:00-20:00)</Label>
-            </ComboBox>
-            <Label Style="{DynamicResource LabelStyle}">Выберите чётные или нечётные дни</Label>
-            <ComboBox x:Name="EvenOrNot" Style="{DynamicResource ComboBoxStyle}">
-                <Label Style="{DynamicResource LabelStyle}">Нечётные</Label>
-                <Label Style="{DynamicResource LabelStyle}">Чётные</Label>
-            </ComboBox>
-        </StackPanel>
+        <ScrollViewer Style="{DynamicResource ScrollViewerStyle}" Grid.Row="1" Grid.RowSpan="12" Grid.ColumnSpan="12" Grid.Column="0">
+            <StackPanel x:Name="Timetable" Visibility="Collapsed">
+                <Label Content="Введите дату, до которой нужно сформировать расписание"/>
+                <DatePicker x:Name="SelectedDate"/>
+                <Label Content="Выберите врачей"/>
+                <xctk:CheckListBox x:Name="Doctors"/>
+                <Label Content="Выберите смену"/>
+                <ComboBox x:Name="SelectedTime">
+                    <Label Content="Утренняя(10:00-14:00)"/>
+                    <Label Content="вечерняя(16:00-20:00)"/>
+                </ComboBox>
+                <Label Content="Выберите чётные или нечетные дни"/>
+                <ComboBox x:Name="EvenOrNot">
+                    <Label Content="Нечётные"/>
+                    <Label Content="Чётные"/>
+                </ComboBox>
+            </StackPanel>
         </ScrollViewer>
-        <Button x:Name="Create" Grid.Column="9" Grid.Row="12" Grid.ColumnSpan="2" Style="{DynamicResource ButtonStyle}" Visibility="Collapsed" Command="{Binding Create}">Сформировать</Button>
+        <Button x:Name="Create" Grid.Column="10" Grid.Row="12" Grid.ColumnSpan="2" Style="{DynamicResource ButtonStyle}" Visibility="Collapsed" Command="{Binding Create}">Сформировать</Button>
         <ScrollViewer Style="{DynamicResource ScrollViewerStyle}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="11" Grid.ColumnSpan="8">
             <StackPanel x:Name="DoctorDescription" Orientation="Vertical"  DataContext="{Binding SelectedDoctor}">
                 <StackPanel x:Name="BaseDescription" Visibility="Collapsed">

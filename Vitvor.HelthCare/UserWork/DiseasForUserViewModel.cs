@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Vitvor.HelthCare.UserWork
         private PatientWindow _patientWindow;
         private int _userid;
         private List<DiseaseForUser> diseaseForUsers = new List<DiseaseForUser>();
+        private ObservableCollection<TimeSpan> times = new ObservableCollection<TimeSpan>();
+        private Dictionary<string, int> map = new Dictionary<string, int>();
         private DiseaseForUser _disease;
         public DiseaseForUser Disease
         {
@@ -111,14 +114,143 @@ namespace Vitvor.HelthCare.UserWork
                     }));
             }
         }
+        private RelayCommand _showAndFindDoctors;
+        public RelayCommand ShowAndFindDoctors
+        {
+            get
+            {
+                return _showAndFindDoctors ??
+                    (_showAndFindDoctors = new RelayCommand(obj =>
+                      {
+                          SqlCommand searchDoctors = new SqlCommand();
+                          searchDoctors.Connection = SingletonForSqlConnection.SqlConnection;
+                          searchDoctors.CommandText = $"select DOCTORS.Surname, " +
+                          $"DOCTORS.Name, " +
+                          $"DOCTORS.Patronymic, " +
+                          $"DOCTORS.Specialty,  " +
+                          $"DOCTORS.Direction, " +
+                          $"DOCTORS.id " +
+                          $"from DOCTORS " +
+                          $"where DOCTORS.Direction like '%бщее направление%'";
+                          using (SqlDataReader reader = searchDoctors.ExecuteReader())
+                          {
+                              if (reader.HasRows)
+                              {
+                                  while (reader.Read())
+                                  {
+                                      _patientWindow.Doctors.Items.Add($"{reader.GetString(0)} {reader.GetString(1)} {reader.GetString(2)}, врач-{reader.GetString(3).ToLower()}, {reader.GetString(4)}");
+                                      map.Add($"{reader.GetString(0)} {reader.GetString(1)} {reader.GetString(2)}, врач-{reader.GetString(3).ToLower()}, {reader.GetString(4)}", reader.GetInt32(5));
+                                  }
+                                  ShowAppointment();
+                              }
+                              else
+                              {
+                                  MessageBox.Show("Ни в одном медучреждении нет зарегистрированных врачей");
+                              }
+                          }
+                      }));
+            }
+        }
+        private RelayCommand _doctorIsSelected;
+        public RelayCommand DoctorIsSelected
+        {
+            get
+            {
+                return _doctorIsSelected ??
+                    (_doctorIsSelected = new RelayCommand(obj =>
+                     {
+                         ShowCalendar();
+                     }));
+            }
+        }
+        private RelayCommand _dateIsSelected;
+        public RelayCommand DateIsSelected
+        {
+            get
+            {
+                return _dateIsSelected ??
+                    (_dateIsSelected = new RelayCommand(obj =>
+                      {
+                          int docid;
+                          map.TryGetValue($"{_patientWindow.Doctors.SelectedItem}", out docid);
+                          string selectTime = $"select TIMETABLE.time " +
+                          $"from TIMETABLE join DOCTORS " +
+                          $"on TIMETABLE.doctorid=DOCTORS.id " +
+                          $"where DOCTORS.id={docid} " +
+                          $"and TIMETABLE.date='{_patientWindow.Appointmentdate.SelectedDate}'";
+                          SqlCommand command = new SqlCommand(selectTime, SingletonForSqlConnection.SqlConnection);
+                          using (SqlDataReader reader = command.ExecuteReader())
+                          {
+                              if (reader.HasRows)
+                              {
+                                  while (reader.Read())
+                                  {
+                                      times.Add(reader.GetTimeSpan(0));
+                                  }
+                                  _patientWindow.Time.ItemsSource = times;
+                                  _patientWindow.Time.Visibility = Visibility.Visible;
+                              }
+                              else
+                              {
+                                  MessageBox.Show("Расписание для врача на данный день не сформировано");
+                              }
+                          }
+                      }));
+            }
+        }
+        private RelayCommand _create;
+        public RelayCommand Create
+        {
+            get
+            {
+                return _create ??
+                    (_create = new RelayCommand(obj =>
+                      {
+                          try
+                          {
+                              int doctorid;
+                              map.TryGetValue($"{_patientWindow.Doctors.SelectedItem}", out doctorid);
+                              string update = $"update TIMETABLE set " +
+                              $"TIMETABLE.patientid={_userid} where " +
+                              $"time='{_patientWindow.Time.SelectedItem}' " +
+                              $"and date='{_patientWindow.Appointmentdate.SelectedDate}' " +
+                              $"and doctorid={doctorid}";
+                              SqlCommand command = new SqlCommand(update, SingletonForSqlConnection.SqlConnection);
+                              command.ExecuteNonQuery();
+                              MessageBox.Show("Запись была выполнена успешно");
+                              Hide();
+                          }
+                          catch(Exception ex)
+                          {
+                              MessageBox.Show("Попытка записи не удалась");
+                          }
+                      }));
+            }
+        }
         private void Hide()
         {
             _patientWindow.Diagnosises.Visibility = Visibility.Collapsed;
+            _patientWindow.Appointment.Visibility = Visibility.Collapsed;
+        }
+        private void HideParts()
+        {
+            _patientWindow.Appointmentdate.Visibility = Visibility.Collapsed;
+            _patientWindow.Time.Visibility = Visibility.Collapsed;
         }
         private void ShowDiagnosises()
         {
             Hide();
             _patientWindow.Diagnosises.Visibility = Visibility.Visible;
+        }
+        private void ShowAppointment()
+        {
+            Hide();
+            HideParts();
+            _patientWindow.Appointment.Visibility = Visibility.Visible;
+        }
+        private void ShowCalendar()
+        {
+            _patientWindow.Appointmentdate.Visibility = Visibility.Visible;
         }
         public DiseasForUserViewModel(PatientWindow patientWindow, int userid)
         {

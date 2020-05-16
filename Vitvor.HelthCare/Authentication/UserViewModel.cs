@@ -52,7 +52,7 @@ namespace Vitvor.HelthCare
                                 sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
                                 using (SqlDataReader reader = sqlCommand.ExecuteReader())
                                 {
-                                    if (reader != null && reader.NextResult() == false)
+                                    if (reader.HasRows)
                                     {
                                         PatientWindow patientWindow = new PatientWindow(MainWindow, Convert.ToInt32(user.UserName));
                                         patientWindow.Show();

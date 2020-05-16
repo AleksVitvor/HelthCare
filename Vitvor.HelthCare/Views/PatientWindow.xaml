@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vitvor.HelthCare"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="HealthCare" Width="800" Height="450" Closing="Window_Closing">
     <Window.Background>
@@ -41,7 +42,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Button Content="Просмотреть историю болезней" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="5" Command="{Binding LookDiagnosises}"/>
-        <Button Content="Записаться к врачу" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="3"/>
+        <Button Content="Записаться к врачу" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="3" Command="{Binding ShowAndFindDoctors}"/>
         <Border x:Name="Diagnosises" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="12" Grid.RowSpan="10" Background="AliceBlue" BorderBrush="Bisque" BorderThickness="10" Visibility="Collapsed">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -80,6 +81,52 @@
                 <Button Grid.Row="9" Grid.Column="9" Command="{Binding NextDiagnosis}" CommandParameter="{Binding Disease}">
                     <Image Source="ic_arrow_forward.png"/>
                 </Button>
+            </Grid>
+        </Border>
+        <Border x:Name="Appointment" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="12" Grid.RowSpan="10" Background="AliceBlue" BorderBrush="Bisque" BorderThickness="10" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <ComboBox x:Name="Doctors" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="11">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding DoctorIsSelected}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+                <Calendar x:Name="Appointmentdate" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedDatesChanged">
+                            <i:InvokeCommandAction Command="{Binding DateIsSelected}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Calendar>
+                <ComboBox x:Name="Time" Grid.Row="3" Grid.Column="7" Grid.ColumnSpan="5"/>
+                <Button Grid.Row="8" Grid.Column="11" Grid.ColumnSpan="2" Content="Записаться" Command="{Binding Create}"/>
             </Grid>
         </Border>
     </Grid>

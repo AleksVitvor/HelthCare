@@ -26,7 +26,6 @@ namespace Vitvor.HelthCare
             _mainWindow = mainWindow;
             _mainWindow.Hide();
             DataContext = new NarrowPatientViewModel(this, doctorid);
-
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

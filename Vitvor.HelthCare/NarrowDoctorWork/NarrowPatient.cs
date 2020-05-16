@@ -10,6 +10,7 @@ namespace Vitvor.HelthCare
 {
     class NarrowPatient : INotifyPropertyChanged
     {
+        public List<int> diagnosis { get; set; } = new List<int>();
         private int _id;
         public int ID
         {
@@ -33,7 +34,7 @@ namespace Vitvor.HelthCare
             set
             {
                 _name = value;
-                OnPropertyChanged("ID");
+                OnPropertyChanged("Name");
             }
         }
         private string _patronymic;
@@ -46,7 +47,7 @@ namespace Vitvor.HelthCare
             set
             {
                 _patronymic = value;
-                OnPropertyChanged("ID");
+                OnPropertyChanged("Patronymic");
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;

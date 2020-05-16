@@ -40,7 +40,47 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Button Content="Просмотреть историю болезней" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="5"/>
+        <Button Content="Просмотреть историю болезней" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="5" Command="{Binding LookDiagnosises}"/>
         <Button Content="Записаться к врачу" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="3"/>
+        <Border x:Name="Diagnosises" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="12" Grid.RowSpan="10" Background="AliceBlue" BorderBrush="Bisque" BorderThickness="10" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalContentAlignment="Center" Content="Выставленный диагноз" FontSize="15"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="10" FontSize="15" DataContext="{Binding Disease, UpdateSourceTrigger=PropertyChanged}" Text="{Binding DiseaseName, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalContentAlignment="Center" Content="Дата выставления" FontSize="15"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="10" FontSize="15" DataContext="{Binding Disease, UpdateSourceTrigger=PropertyChanged}" Text="{Binding DateOfDiagnosis, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalContentAlignment="Center" Content="Дата закрытия" FontSize="15"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="10" FontSize="15" DataContext="{Binding Disease, UpdateSourceTrigger=PropertyChanged}" Text="{Binding DateOfClosing, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="9" Grid.Column="8" Command="{Binding PreviousDiagnosis}" CommandParameter="{Binding Disease}">
+                    <Image Source="ic_arrow_back.png"/>
+                </Button>
+                <Button Grid.Row="9" Grid.Column="9" Command="{Binding NextDiagnosis}" CommandParameter="{Binding Disease}">
+                    <Image Source="ic_arrow_forward.png"/>
+                </Button>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

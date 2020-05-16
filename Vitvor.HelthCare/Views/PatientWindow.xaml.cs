@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Vitvor.HelthCare.UserWork;
 
 namespace Vitvor.HelthCare
 {
@@ -20,11 +21,12 @@ namespace Vitvor.HelthCare
     public partial class PatientWindow : Window
     {
         MainWindow _mainWindow;
-        public PatientWindow(MainWindow mainWindow)
+        public PatientWindow(MainWindow mainWindow, int patinentid)
         {
             _mainWindow = mainWindow;
             _mainWindow.Hide();
             InitializeComponent();
+            DataContext = new DiseasForUserViewModel(this, patinentid);
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

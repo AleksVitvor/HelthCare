@@ -61,15 +61,18 @@ namespace Vitvor.HelthCare
                                           {
                                               checkSymptoms.Close();
                                               command.CommandText = $"insert into SYMPTOMS values ('{i.ToLower().TrimStart(' ')}')";
-                                              command.ExecuteNonQuery();
-                                              command.CommandText = $"select SYMPTOMS.id from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
-                                              using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                              if (i.ToLower().TrimStart(' ').Length < 50)
                                               {
-                                                  getSymptomId.Read();
-                                                  int symptomid = getSymptomId.GetInt32(0);
-                                                  getSymptomId.Close();
-                                                  command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{symptomid})";
                                                   command.ExecuteNonQuery();
+                                                  command.CommandText = $"select SYMPTOMS.id from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
+                                                  using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                                  {
+                                                      getSymptomId.Read();
+                                                      int symptomid = getSymptomId.GetInt32(0);
+                                                      getSymptomId.Close();
+                                                      command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{symptomid})";
+                                                      command.ExecuteNonQuery();
+                                                  }
                                               }
                                           }
                                       }
@@ -132,15 +135,18 @@ namespace Vitvor.HelthCare
                                               {
                                                   checkSymptoms.Close();
                                                   command.CommandText = $"insert into SYMPTOMS values ('{i.ToLower().TrimStart(' ')}')";
-                                                  command.ExecuteNonQuery();
-                                                  command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";  
-                                                  using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                                  if (i.ToLower().TrimStart(' ').Length < 50)
                                                   {
-                                                      getSymptomId.Read();
-                                                      int id = getSymptomId.GetInt32(0);
-                                                      getSymptomId.Close();
-                                                      command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{id})";
                                                       command.ExecuteNonQuery();
+                                                      command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
+                                                      using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                                      {
+                                                          getSymptomId.Read();
+                                                          int id = getSymptomId.GetInt32(0);
+                                                          getSymptomId.Close();
+                                                          command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{id})";
+                                                          command.ExecuteNonQuery();
+                                                      }
                                                   }
                                               }
                                           }

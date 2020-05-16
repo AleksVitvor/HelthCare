@@ -54,7 +54,7 @@ namespace Vitvor.HelthCare
                                 {
                                     if (reader != null && reader.NextResult() == false)
                                     {
-                                        PatientWindow patientWindow = new PatientWindow(MainWindow);
+                                        PatientWindow patientWindow = new PatientWindow(MainWindow, Convert.ToInt32(user.UserName));
                                         patientWindow.Show();
                                     }
                                     else

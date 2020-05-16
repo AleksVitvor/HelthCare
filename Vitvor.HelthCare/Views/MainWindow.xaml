@@ -36,7 +36,7 @@
         <Border BorderThickness="10" BorderBrush="Bisque" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="4" Grid.RowSpan="7">
         <StackPanel x:Name="AuthenticationAndRegistration" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="4" Grid.RowSpan="6" Background="#BCF2F2">
             <StackPanel x:Name="Authentication" MinWidth="100" DataContext="{Binding User}">
-                <Label HorizontalAlignment="Center">User</Label>
+                <Label HorizontalAlignment="Center">User/Card Number</Label>
                 <TextBox x:Name="UserNameBox" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <Label HorizontalAlignment="Center">Password</Label>
                 <PasswordBox x:Name="PassBox"></PasswordBox>

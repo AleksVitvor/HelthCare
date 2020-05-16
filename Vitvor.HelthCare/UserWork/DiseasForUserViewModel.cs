@@ -53,6 +53,7 @@ namespace Vitvor.HelthCare.UserWork
                           {
                               if (reader.HasRows)
                               {
+                                  diseaseForUsers.Clear();
                                   while (reader.Read())
                                   {
                                       DiseaseForUser disease = new DiseaseForUser();
@@ -136,6 +137,8 @@ namespace Vitvor.HelthCare.UserWork
                           {
                               if (reader.HasRows)
                               {
+                                  _patientWindow.Doctors.Items.Clear();
+                                  map.Clear();
                                   while (reader.Read())
                                   {
                                       _patientWindow.Doctors.Items.Add($"{reader.GetString(0)} {reader.GetString(1)} {reader.GetString(2)}, врач-{reader.GetString(3).ToLower()}, {reader.GetString(4)}");
@@ -181,8 +184,11 @@ namespace Vitvor.HelthCare.UserWork
                           SqlCommand command = new SqlCommand(selectTime, SingletonForSqlConnection.SqlConnection);
                           using (SqlDataReader reader = command.ExecuteReader())
                           {
+                              _patientWindow.Time.Visibility = Visibility.Collapsed;
+                              times.Clear();
                               if (reader.HasRows)
                               {
+                                  times.Clear();
                                   while (reader.Read())
                                   {
                                       times.Add(reader.GetTimeSpan(0));

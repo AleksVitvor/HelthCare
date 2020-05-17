@@ -4,8 +4,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -223,7 +226,9 @@ namespace Vitvor.HelthCare.UserWork
                               $"and doctorid={doctorid}";
                               SqlCommand command = new SqlCommand(update, SingletonForSqlConnection.SqlConnection);
                               command.ExecuteNonQuery();
-                              MessageBox.Show("Запись была выполнена успешно");
+                              string sub = "Запись на приём";
+                              string part = $"{_patientWindow.Doctors.SelectedItem}, дата {_patientWindow.Appointmentdate.SelectedDate.ToString().Replace(" 0:00:00","")}, время {_patientWindow.Time.SelectedItem.ToString().Remove(5,3)}.";
+                              SendEmailAsync(_userid, sub, part).GetAwaiter();
                               Hide();
                           }
                           catch(Exception ex)
@@ -231,6 +236,51 @@ namespace Vitvor.HelthCare.UserWork
                               MessageBox.Show("Попытка записи не удалась");
                           }
                       }));
+            }
+        }
+        private static async Task SendEmailAsync(int patid, string sub, string partAboutAppointment)
+        {
+            string find = $"select * from PATIENTS where id={patid}";
+            SqlCommand command = new SqlCommand(find, SingletonForSqlConnection.SqlConnection);
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                reader.Read();
+                string message = $"Уважаемый(-ая) {reader.GetString(2)} {reader.GetString(3)} вы записаны к врачу " + partAboutAppointment + " Благодарим вас за запись.";
+                MailAddress from = new MailAddress("healthcaresupbelstu@gmail.com", "Ministry of Health by BelSTU");
+                if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+                {
+                    MessageBox.Show("Отсутствует или ограниченно физическое подключение к сети\nПроверьте настройки вашего сетевого подключения");
+                }
+                else if (isValid(reader.GetString(6)))
+                {
+                    MailAddress to = new MailAddress(reader.GetString(6));
+                    MailMessage m = new MailMessage(from, to);
+                    m.Subject = sub;
+                    m.Body = message;
+                    SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                    smtp.Credentials = new NetworkCredential("healthcaresupbelstu@gmail.com", $"{Password.getInstance().myCredential.Password}");
+                    smtp.EnableSsl = true;
+
+                    await smtp.SendMailAsync(m);
+                }
+                else
+                {
+                    MessageBox.Show("Ваша запись была сформирована, отправка уведомления не удалась");
+                }
+            }
+        }
+        private static bool isValid(string email)
+        {
+            string pattern = "[.\\-_a-z0-9]+@([a-z0-9][\\-a-z0-9]+\\.)+[a-z]{2,6}";
+            Match isMatch = Regex.Match(email, pattern, RegexOptions.IgnoreCase);
+
+            if (isMatch.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private void Hide()

@@ -89,6 +89,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdminWork\UsersOnline.cs" />
+    <Compile Include="Services\LoadAndCloseControl.cs" />
     <Compile Include="UserWork\DiseasForUserViewModel.cs" />
     <Compile Include="UserWork\DiseaseForUser.cs" />
     <Compile Include="Views\AdminWindow.xaml.cs">

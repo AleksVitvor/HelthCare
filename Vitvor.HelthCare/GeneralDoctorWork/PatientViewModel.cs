@@ -445,7 +445,7 @@ namespace Vitvor.HelthCare
                                           doctor = _doctorWindow.Doctors.SelectedItem.ToString().Replace(", Общее направление", "");
                                       }
                                       message = $"Уважаемый(-ая) {reader.GetString(1)} {reader.GetString(2)}, благодарим вас за запись в наш медицинский центр.\n" +
-                                      $"Вы записаны к врачу {doctor}, дата: {_doctorWindow.Dates.SelectedItem.ToString()}, время: {_doctorWindow.Times.SelectedItem.ToString()}";
+                                      $"Вы записаны к врачу {doctor}, дата: {_doctorWindow.Dates.SelectedItem}, время: {_doctorWindow.Times.SelectedItem}";
                                       patient = new Patient(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
                                   }
                                   else
@@ -457,7 +457,7 @@ namespace Vitvor.HelthCare
                               SqlCommand updateAppointment = new SqlCommand();
                               updateAppointment.Connection = SingletonForSqlConnection.SqlConnection;
                               updateAppointment.CommandText = $"update TIMETABLE set patientid={_doctorWindow.PatientID.Text} where date='{_doctorWindow.Dates.SelectedItem.ToString()}' " +
-                              $"and time='{_doctorWindow.Times.SelectedItem.ToString()}'";
+                              $"and time='{_doctorWindow.Times.SelectedItem}'";
                               updateAppointment.ExecuteNonQuery();
                               SendEmailAsync(patient, message, sub).GetAwaiter();
                               Hide();

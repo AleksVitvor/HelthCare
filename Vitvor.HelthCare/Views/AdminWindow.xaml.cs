@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Vitvor.HelthCare.Services;
 
 namespace Vitvor.HelthCare
 {
@@ -19,7 +20,7 @@ namespace Vitvor.HelthCare
     /// </summary>
     public partial class AdminWindow : Window
     {
-        MainWindow _mainWindow;
+        private MainWindow _mainWindow;
         public AdminWindow(MainWindow mainWindow, int adminid)
         {
             _mainWindow = mainWindow;

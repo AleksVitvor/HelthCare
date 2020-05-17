@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
@@ -7,13 +8,28 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Vitvor.HelthCare.AdminWork;
 
 namespace Vitvor.HelthCare
 {
     class DoctorViewModel : INotifyPropertyChanged
     {
+        private ObservableCollection<UsersOnline> usersOnlines = new ObservableCollection<UsersOnline>();
         private int MedicalInstitutionId;
         private AdminWindow _adminWindow;
+        private UsersOnline _online;
+        public UsersOnline Online
+        {
+            get
+            {
+                return _online;
+            }
+            set
+            {
+                _online = value;
+                OnPropertyChanged("Online");
+            }
+        }
         private Doctor _doctor;
         public Doctor SelectedDoctor
         { 
@@ -27,6 +43,120 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("SelectedDoctor");
             }
         }
+        //просмотр работающих
+        private RelayCommand _lookOnline;
+        public RelayCommand LookOnline
+        {
+            get
+            {
+                return _lookOnline ??
+                    (_lookOnline = new RelayCommand(obj =>
+                     {
+                         string selectAll = $"select * from USERSONLINE where " +
+                         $"dateOfInfo='{DateTime.Now.Date}' and timeOfExit is null and (idOfMI is null or idOfMI={MedicalInstitutionId})";
+                         string selectNameP = $"select Name, Surname from PATIENTS where id=@id";
+                         string selectNameD = $"select Name, Surname from DOCTORS where id=@id";
+                         SqlCommand selectName = SingletonForSqlConnection.SqlConnection.CreateCommand();
+                         SqlCommand select = new SqlCommand(selectAll, SingletonForSqlConnection.SqlConnection);
+                         using(SqlDataReader reader=select.ExecuteReader())
+                         {
+                             if(reader.HasRows)
+                             {
+                                 while(reader.Read())
+                                 {
+                                     UsersOnline online = new UsersOnline();
+                                     online.Type = reader.GetString(1);
+                                     online.TimeOfEnter = reader.GetTimeSpan(3);
+                                     online.id = reader.GetInt32(0);
+                                     usersOnlines.Add(online);
+                                 }
+                                 reader.Close();
+                                 foreach(var i in usersOnlines)
+                                 {
+                                     SqlParameter parameter = new SqlParameter("@id", i.id);
+                                     selectName.Parameters.Add(parameter);
+                                     if (i.Type.Equals("doctor"))
+                                     {
+                                         selectName.CommandText = selectNameD;
+                                         using(SqlDataReader dataReader=selectName.ExecuteReader())
+                                         {
+                                             dataReader.Read();
+                                             i.Name = dataReader.GetString(0);
+                                             i.Surname = dataReader.GetString(1);
+                                         }
+                                     }
+                                     else
+                                     {
+                                         selectName.CommandText = selectNameP;
+                                         using (SqlDataReader dataReader = selectName.ExecuteReader())
+                                         {
+                                             dataReader.Read();
+                                             i.Name = dataReader.GetString(0);
+                                             i.Surname = dataReader.GetString(1);
+                                         }
+                                     }
+                                     selectName.Parameters.Clear();
+                                 }
+                                 ShowOnline();
+                                 Online = usersOnlines[0];
+                             }
+                             else
+                             {
+                                 MessageBox.Show("В сети никого(");
+                             }
+                         }
+                     }));
+            }
+        }
+        private void ShowOnline()
+        {
+            Hide();
+            _adminWindow.Online.Visibility = Visibility.Visible;
+        }
+        private RelayCommand _forward;
+        public RelayCommand Forward
+        {
+            get
+            {
+                return _forward ??
+                    (_forward = new RelayCommand(obj =>
+                      {
+                          UsersOnline User = obj as UsersOnline;
+                          int i = usersOnlines.IndexOf(User);
+                          if (i != usersOnlines.Count - 1)
+                          {
+                              Online = usersOnlines[i + 1];
+                          }
+                          else
+                          {
+                              
+                              Online= usersOnlines[0];
+                          }
+                      }));
+            }
+        }
+        private RelayCommand _back;
+        public RelayCommand Back
+        {
+            get
+            {
+                return _back ??
+                    (_back = new RelayCommand(obj =>
+                      {
+                          UsersOnline User = obj as UsersOnline;
+                          int i = usersOnlines.IndexOf(User);
+                          if (i != 0)
+                          {
+                              Online = usersOnlines[i - 1];
+                          }
+                          else
+                          {
+                              Online = usersOnlines[usersOnlines.Count - 1];
+                          }
+                      }));
+            }
+        }
+        //остальные команды
         private RelayCommand _addDoctor;
         public RelayCommand AddDoctor
         {
@@ -41,6 +171,13 @@ namespace Vitvor.HelthCare
                           _adminWindow.ConfirmAdd.Visibility = Visibility.Visible;
                       }));
             }
+        }
+        private void Show()
+        {
+            _adminWindow.BaseDescription.Visibility = Visibility.Visible;
+            _adminWindow.PasswordDescription.Visibility = Visibility.Visible;
+            _adminWindow.DoctorUsername.Visibility = Visibility.Visible;
+            _adminWindow.BackToMenu.Visibility = Visibility.Visible;
         }
         private RelayCommand _changeDoctor;
         public RelayCommand ChangeDoctor
@@ -58,13 +195,7 @@ namespace Vitvor.HelthCare
                       }));
             }
         }
-        private void Show()
-        {
-            _adminWindow.BaseDescription.Visibility = Visibility.Visible;
-            _adminWindow.PasswordDescription.Visibility = Visibility.Visible;
-            _adminWindow.DoctorUsername.Visibility = Visibility.Visible;
-            _adminWindow.BackToMenu.Visibility = Visibility.Visible;
-        }
+
         private RelayCommand _deleteDoctor;
         public RelayCommand DeleteDoctor
         {
@@ -78,18 +209,6 @@ namespace Vitvor.HelthCare
                           _adminWindow.BackToMenu.Visibility = Visibility.Visible;
                           _adminWindow.DoctorUsername.Visibility = Visibility.Visible;
                           _adminWindow.ConfirmDelete.Visibility = Visibility.Visible;
-                      }));
-            }
-        }
-        private RelayCommand _lookAllWorkDoctors;
-        public RelayCommand LookAllWorkDoctors
-        {
-            get
-            {
-                return _lookAllWorkDoctors ??
-                    (_lookAllWorkDoctors = new RelayCommand(obj =>
-                      {
-
                       }));
             }
         }
@@ -212,19 +331,6 @@ namespace Vitvor.HelthCare
             {
                 SelectedDoctor._direction = _adminWindow.Nurse.Content.ToString();
             }
-        }
-        private void Hide()
-        {
-            _adminWindow.BaseDescription.Visibility = Visibility.Collapsed;
-            _adminWindow.PasswordDescription.Visibility = Visibility.Collapsed;
-            _adminWindow.DoctorUsername.Visibility = Visibility.Collapsed;
-            _adminWindow.BackToMenu.Visibility = Visibility.Collapsed;
-            _adminWindow.ConfirmAdd.Visibility = Visibility.Collapsed;
-            _adminWindow.ConfirmChange.Visibility = Visibility.Collapsed;
-            _adminWindow.ConfirmDelete.Visibility = Visibility.Collapsed;
-            _adminWindow.Timetable.Visibility = Visibility.Collapsed;
-            _adminWindow.Create.Visibility = Visibility.Collapsed;
-            _adminWindow.PasswordBox.Clear();
         }
         private RelayCommand _createTimeTable;
         public RelayCommand CreateTimeTable
@@ -352,6 +458,20 @@ namespace Vitvor.HelthCare
 
                 }
             }
+        }
+        private void Hide()
+        {
+            _adminWindow.Online.Visibility = Visibility.Collapsed;
+            _adminWindow.BaseDescription.Visibility = Visibility.Collapsed;
+            _adminWindow.PasswordDescription.Visibility = Visibility.Collapsed;
+            _adminWindow.DoctorUsername.Visibility = Visibility.Collapsed;
+            _adminWindow.BackToMenu.Visibility = Visibility.Collapsed;
+            _adminWindow.ConfirmAdd.Visibility = Visibility.Collapsed;
+            _adminWindow.ConfirmChange.Visibility = Visibility.Collapsed;
+            _adminWindow.ConfirmDelete.Visibility = Visibility.Collapsed;
+            _adminWindow.Timetable.Visibility = Visibility.Collapsed;
+            _adminWindow.Create.Visibility = Visibility.Collapsed;
+            _adminWindow.PasswordBox.Clear();
         }
         public DoctorViewModel(AdminWindow adminWindow, int MIid)
         {

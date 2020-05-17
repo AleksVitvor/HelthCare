@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -77,11 +80,7 @@ namespace Vitvor.HelthCare
                                           {
                                               if (searchDiseasis.HasRows)
                                               {
-                                                  int k = _narrowDoctorWindow.Diagnoses.Items.Count;
-                                                  for (int i = 0; i < k - 1; i++)
-                                                  {
-                                                      _narrowDoctorWindow.Diagnoses.Items.RemoveAt(0);
-                                                  }
+                                                  _narrowDoctorWindow.Diagnoses.Items.Clear();
                                                   while (searchDiseasis.Read())
                                                   {
                                                       _narrowDoctorWindow.Diagnoses.Items.Insert(0, searchDiseasis.GetString(0));
@@ -150,6 +149,9 @@ namespace Vitvor.HelthCare
                          {
                              try
                              {
+                                 string message = $"Уважаемый(-ая) {NarrowPatient.Name} {NarrowPatient.Patronymic}, вы записаны к врачу ";
+                                 string message2 = $"дата {_narrowDoctorWindow.DateOfAppointment.SelectedDate.ToString().Replace(" 0:00:00", "")}, время {_narrowDoctorWindow.Times.SelectedItem.ToString().Remove(5, 3)}. Благодарим вас за посещение нашего центра";
+                                 string sub = "Повторный приём";
                                  string updateTimeTable = $"update TIMETABLE set patientid={NarrowPatient.ID} where date='{_narrowDoctorWindow.DateOfAppointment.SelectedDate}' " +
                                   $"and time='{_narrowDoctorWindow.Times.SelectedItem}' and doctorid={doctorid}";
                                  SqlCommand insert = SingletonForSqlConnection.SqlConnection.CreateCommand();
@@ -187,6 +189,7 @@ namespace Vitvor.HelthCare
                                      insert.Parameters.Clear();
                                  }
                                  transaction.Commit();
+                                 SendEmailAsync(doctorid, sub, message, message2, NarrowPatient.ID).GetAwaiter();
                                  MessageBox.Show("Диагнозы успешно добавлены");
                                  ShowSearch();
                              }
@@ -197,6 +200,57 @@ namespace Vitvor.HelthCare
 
                          }
                      }));
+            }
+        }
+        private static async Task SendEmailAsync(int docid, string sub, string partAboutPatient1, string part2, int patid)
+        {
+            string find = $"select * from DOCTORS where id={docid}";
+            SqlCommand command = new SqlCommand(find, SingletonForSqlConnection.SqlConnection);
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                reader.Read();
+                string message = partAboutPatient1 + $"{reader.GetString(3)} {reader.GetString(4)} " + part2;
+                reader.Close();
+                string findemail = $"select * from PATIENTS where id={patid}";
+                SqlCommand sqlCommand = new SqlCommand(findemail, SingletonForSqlConnection.SqlConnection);
+                using (SqlDataReader dataReader = sqlCommand.ExecuteReader())
+                {
+                    MailAddress from = new MailAddress("healthcaresupbelstu@gmail.com", "Ministry of Health by BelSTU");
+                    if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+                    {
+                        MessageBox.Show("Отсутствует или ограниченно физическое подключение к сети\nПроверьте настройки вашего сетевого подключения");
+                    }
+                    else if (isValid(dataReader.GetString(6)))
+                    {
+                        MailAddress to = new MailAddress(reader.GetString(6));
+                        MailMessage m = new MailMessage(from, to);
+                        m.Subject = sub;
+                        m.Body = message;
+                        SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                        smtp.Credentials = new NetworkCredential("healthcaresupbelstu@gmail.com", $"{Password.getInstance().myCredential.Password}");
+                        smtp.EnableSsl = true;
+
+                        await smtp.SendMailAsync(m);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ваша запись была сформирована, отправка уведомления не удалась");
+                    }
+                }
+            }
+        }
+        private static bool isValid(string email)
+        {
+            string pattern = "[.\\-_a-z0-9]+@([a-z0-9][\\-a-z0-9]+\\.)+[a-z]{2,6}";
+            Match isMatch = Regex.Match(email, pattern, RegexOptions.IgnoreCase);
+
+            if (isMatch.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private RelayCommand _selectDate;

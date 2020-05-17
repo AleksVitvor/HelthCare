@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Vitvor.HelthCare.Services;
 
 namespace Vitvor.HelthCare
 {
@@ -20,16 +21,26 @@ namespace Vitvor.HelthCare
     public partial class GeneralDoctorWindow : Window
     {
         private MainWindow _mainWindow;
-        public GeneralDoctorWindow(MainWindow mainWindow, int idofMI)
+        private int _doctorid;
+        public delegate void WindowLoaded(string type, int id, int idOfMI);
+        public event WindowLoaded Load;
+        public delegate void WindowClosing(string type, int id);
+        public event WindowClosing CloseWindow;
+        public GeneralDoctorWindow(MainWindow mainWindow, int idofMI, int doctorid)
         {
             _mainWindow = mainWindow;
             _mainWindow.Hide();
+            _doctorid = doctorid;
             InitializeComponent();
+            Load += LoadAndCloseControl.Load;
+            CloseWindow += LoadAndCloseControl.Close;
+            Load.Invoke("doctor", doctorid, idofMI);
             DataContext = new PatientViewModel(this, idofMI);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            CloseWindow.Invoke("doctor", _doctorid);
             _mainWindow.Show();
         }
     }

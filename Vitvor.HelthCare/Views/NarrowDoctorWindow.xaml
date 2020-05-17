@@ -65,7 +65,6 @@
                 <Label x:Name="Symptoms" Style="{DynamicResource LabelStyle}"></Label>
                 <Label Style="{DynamicResource LabelStyle}">Возможные диагнозы</Label>
                 <xctk:CheckListBox x:Name="Diagnoses" Margin="0,5,0,0">
-                    <TextBox MinWidth="50" Style="{DynamicResource TextBoxStyle}"></TextBox>
                 </xctk:CheckListBox>
             </StackPanel>
             <StackPanel x:Name="DiagnosisNow" Visibility="Collapsed">

@@ -54,6 +54,7 @@ namespace Vitvor.HelthCare
                                 {
                                     if (reader.HasRows)
                                     {
+                                        reader.Close();
                                         PatientWindow patientWindow = new PatientWindow(MainWindow, Convert.ToInt32(user.UserName));
                                         patientWindow.Show();
                                     }
@@ -75,11 +76,13 @@ namespace Vitvor.HelthCare
                                         int id = reader.GetInt32(1);
                                         if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("main") && reader.NextResult() == false)
                                         {
+                                            reader.Close();
                                             MainAdminWindow mainAdminWindow = new MainAdminWindow(MainWindow);
                                             mainAdminWindow.Show();
                                         }
                                         else if (reader != null && Convert.ToString(reader.GetValue(0)).Equals("MI") && reader.NextResult() == false)
                                         {
+                                            reader.Close();
                                             AdminWindow adminWindow = new AdminWindow(MainWindow, id);
                                             adminWindow.Show();
                                         }
@@ -101,18 +104,22 @@ namespace Vitvor.HelthCare
                                     if (reader.HasRows)
                                     {
                                         reader.Read();
+                                        int doctorid = reader.GetInt32(4);
+                                        int idOfMI = reader.GetInt32(3);
                                         if (reader.GetString(2).Equals("Медсестра"))
                                         {
                                             MessageBox.Show("Вход как медсестра");
                                         }
                                         else if (reader.GetString(2).Equals("Узкое направление"))
                                         {
-                                            NarrowDoctorWindow narrowDoctorWindow = new NarrowDoctorWindow(_mainWindow, reader.GetInt32(4));
+                                            reader.Close();
+                                            NarrowDoctorWindow narrowDoctorWindow = new NarrowDoctorWindow(_mainWindow, doctorid, idOfMI);
                                             narrowDoctorWindow.Show();
                                         }
                                         else if (reader.GetString(2).Equals("Общее направление"))
                                         {
-                                            GeneralDoctorWindow generalDoctor = new GeneralDoctorWindow(_mainWindow, reader.GetInt32(3));
+                                            reader.Close();
+                                            GeneralDoctorWindow generalDoctor = new GeneralDoctorWindow(_mainWindow, idOfMI, doctorid);
                                             generalDoctor.Show();
                                         }
                                     }

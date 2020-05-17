@@ -45,7 +45,7 @@
             <Button Command="{Binding AddDoctor}" Style="{DynamicResource ButtonStyle}">Добавить врача</Button>
             <Button Command="{Binding ChangeDoctor}" Style="{DynamicResource ButtonStyle}">Изменить врача</Button>
             <Button Command="{Binding DeleteDoctor}" Style="{DynamicResource ButtonStyle}">Удалить врача</Button>
-            <Button Command="{Binding LookAllWorkDoctors}" Style="{DynamicResource ButtonStyle}">Просмотреть в сети</Button>
+            <Button Command="{Binding LookOnline}" Style="{DynamicResource ButtonStyle}">Просмотреть в сети</Button>
         </WrapPanel>
         <ScrollViewer Style="{DynamicResource ScrollViewerStyle}" Grid.Row="1" Grid.RowSpan="12" Grid.ColumnSpan="12" Grid.Column="0">
             <StackPanel x:Name="Timetable" Visibility="Collapsed">
@@ -100,6 +100,52 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
+        <Border x:Name="Online" Visibility="Collapsed" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="10" Grid.RowSpan="11" BorderThickness="5" BorderBrush="Bisque" Background="AliceBlue">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Имя" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="15"/>
+                <TextBlock DataContext="{Binding Online}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="10"/>
+                <Label Content="Фамилия" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" FontSize="15"/>
+                <TextBlock DataContext="{Binding Online}" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="10"/>
+                <Label Content="Тип пользователя" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" FontSize="15"/>
+                <TextBlock DataContext="{Binding Online}" Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="10"/>
+                <Label Content="Время входа" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" FontSize="15"/>
+                <TextBlock DataContext="{Binding Online}" Text="{Binding TimeOfEnter, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="10"/>
+                <Button Grid.Row="11" Grid.Column="10" Command="{Binding Back}" CommandParameter="{Binding Online}">
+                    <Image Source="ic_arrow_back.png"/>
+                </Button>
+                <Button Grid.Row="11" Grid.Column="11" Command="{Binding Forward}" CommandParameter="{Binding Online}">
+                    <Image Source="ic_arrow_forward.png"/>
+                </Button>
+            </Grid>
+        </Border>
         <WrapPanel Orientation="Horizontal" Grid.Row="1" Grid.RowSpan="12" Grid.Column="9" Grid.ColumnSpan="3" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button x:Name="ConfirmAdd" Visibility="Collapsed" Command="{Binding ConfirmAddDoctor}" Style="{DynamicResource ButtonStyle}">Подтвердить</Button>
             <Button x:Name="ConfirmChange" Visibility="Collapsed" Command="{Binding ConfirmChangeDoctor}" Style="{DynamicResource ButtonStyle}">Подтвердить</Button>

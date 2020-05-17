@@ -48,9 +48,8 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button x:Name="PatientExamination" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource ButtonStyle}" Command="{Binding Inspection}">Осмотр</Button>
-        <Button x:Name="Certificate" Grid.Column="12" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource ButtonStyle}">Справка</Button>
-        <Button x:Name="CloseDiagnosis" Grid.Column="7" Grid.Row="0" Grid.ColumnSpan="5" Content="Закрытие диагноза" Command="{Binding CloseDiagnosis}"/>
+        <Button x:Name="PatientExamination" Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="2" Style="{DynamicResource ButtonStyle}" Command="{Binding Inspection}">Осмотр</Button>
+        <Button x:Name="CloseDiagnosis" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="5" Content="Закрытие диагноза" Command="{Binding CloseDiagnosis}"/>
         <StackPanel x:Name="MainInfo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="17" Grid.RowSpan="15" DataContext="{Binding NarrowPatient}">
             <StackPanel x:Name="ID">
                 <Label Style="{DynamicResource LabelStyle}">ID</Label>

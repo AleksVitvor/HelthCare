@@ -40,10 +40,9 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="4">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="4">
             <Button Command="{Binding Inspection}">Осмотр</Button>
             <Button Command="{Binding Appointment}" Content="Запись"></Button>
-            <Button>Справка</Button>
         </StackPanel>
         <StackPanel x:Name="Appointment" Orientation="Vertical" Visibility="Collapsed" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="8" Grid.RowSpan="10">
             <StackPanel>

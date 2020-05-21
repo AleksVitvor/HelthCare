@@ -372,7 +372,7 @@ namespace Vitvor.HelthCare
                                   {
                                       while (reader.Read())
                                       {
-                                          if ((DateTime)_doctorWindow.Dates.SelectedItem == DateTime.Now.Date)
+                                          if (Convert.ToDateTime(_doctorWindow.Dates.SelectedItem) == DateTime.Now.Date)
                                           {
                                               if((TimeSpan)reader.GetValue(0) > DateTime.Now.TimeOfDay)
                                               {

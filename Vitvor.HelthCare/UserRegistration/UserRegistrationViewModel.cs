@@ -39,7 +39,15 @@ namespace Vitvor.HelthCare
                     (
                     _afterNameAndSurnameInfo = new RelayCommand(obj =>
                     {
-                        ShowSpecificInformation();
+                        if (_userRegistration.Surname != null && _userRegistration.Name != null && _userRegistration.Patronymic!=null && _registrationWindow.RegistrationPassword.Password!="")
+                        {
+                            _userRegistration.Password = _registrationWindow.RegistrationPassword.Password;
+                            ShowSpecificInformation();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Вы должны ввести фамилию, имя, отчество и пароль");
+                        }
                     }));
             }
         }
@@ -65,7 +73,24 @@ namespace Vitvor.HelthCare
                     (
                     _toContactInformation = new RelayCommand(obj =>
                       {
-                          ShowContackInformation();
+                          if (((bool)_registrationWindow.Male.IsChecked || (bool)_registrationWindow.Female.IsChecked) && _registrationWindow.DateOfBirth.SelectedDate < DateTime.Now.Date)
+                          {
+                              _userRegistration.DateOfBirth = (DateTime)_registrationWindow.DateOfBirth.SelectedDate;
+                              if ((bool)_registrationWindow.Male.IsChecked)
+                              {
+                                  _userRegistration.Gender = Convert.ToString(_registrationWindow.Male.Content);
+                              }
+                              else if ((bool)_registrationWindow.Female.IsChecked)
+                              {
+                                  _userRegistration.Gender = Convert.ToString(_registrationWindow.Female.Content);
+                              }
+                              _userRegistration.DateOfBirth = (DateTime)_registrationWindow.DateOfBirth.SelectedDate;
+                              ShowContackInformation();
+                          }
+                          else
+                          {
+                              MessageBox.Show("Вы должны выбрать пол и указать дату рождения");
+                          }
                       }));
             }
         }
@@ -106,38 +131,47 @@ namespace Vitvor.HelthCare
                     _ready = new RelayCommand(obj =>
                       {
                           UserRegistration userRegistration = obj as UserRegistration;
-                          userRegistration.DateOfBirth = (DateTime)_registrationWindow.DateOfBirth.SelectedDate;
-                          if((bool)_registrationWindow.Male.IsChecked)
+                          using (SqlTransaction transaction = SingletonForSqlConnection.SqlConnection.BeginTransaction())
                           {
-                              userRegistration.Gender = Convert.ToString(_registrationWindow.Male.Content);
-                          }
-                          else if((bool)_registrationWindow.Female.IsChecked)
-                          {
-                              userRegistration.Gender = Convert.ToString(_registrationWindow.Female.Content);
-                          }
-                          userRegistration.Password = _registrationWindow.RegistrationPassword.Password;
-                          SqlCommand sqlCommand = new SqlCommand();
-                          sqlCommand.CommandText = $"insert into PATIENTS values ('{userRegistration.Surname}'," +
-                          $"'{userRegistration.Name}','{userRegistration.Patronymic}','{userRegistration.DateOfBirth}'," +
-                          $"'{userRegistration.Gender}', '{userRegistration.Email}', '{userRegistration.PhoneNumber}', " +
-                          $"'{userRegistration.Password}')";
-                          sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
-                          sqlCommand.ExecuteNonQuery();
-                          sqlCommand.CommandText = $"select PATIENTS.id, PATIENTS.Name, PATIENTS.Patronymic from PATIENTS where PATIENTS.Name='{userRegistration.Name}' " +
-                          $"and PATIENTS.Surname='{userRegistration.Surname}' and " +
-                          $"PATIENTS.Patronymic='{userRegistration.Patronymic}' and PATIENTS.Password='{userRegistration.Password}'";
-                          using (SqlDataReader reader = sqlCommand.ExecuteReader())
-                          {
-                              if(reader.HasRows)
+                              try
                               {
-                                  reader.Read();
-                                  string message = $"Здравствуйте, {UserRegistration.Name} {UserRegistration.Patronymic}. Номер вашей карточки для входа: {reader.GetInt32(0)}. Для продолжения работы " +
-                                  $"вернитесь на начальный экран и произведите вход в систему";
-                                  string sub = "Регистрация";
-                                  SendEmailAsync(UserRegistration, message, sub).GetAwaiter();
+                                  SqlCommand sqlCommand = SingletonForSqlConnection.SqlConnection.CreateCommand();
+                                  sqlCommand.Transaction = transaction;
+                                  sqlCommand.CommandText = $"insert into PATIENTS values ('{userRegistration.Surname}'," +
+                                  $"'{userRegistration.Name}','{userRegistration.Patronymic}','{userRegistration.DateOfBirth}'," +
+                                  $"'{userRegistration.Gender}', '{userRegistration.Email}', '{userRegistration.PhoneNumber}', " +
+                                  $"'{userRegistration.Password}')";
+                                  sqlCommand.ExecuteNonQuery();
+                                  sqlCommand.CommandText = $"select PATIENTS.id, PATIENTS.Name, PATIENTS.Patronymic from PATIENTS where PATIENTS.Name='{userRegistration.Name}' " +
+                                  $"and PATIENTS.Surname='{userRegistration.Surname}' and " +
+                                  $"PATIENTS.Patronymic='{userRegistration.Patronymic}' and PATIENTS.Password='{userRegistration.Password}'";
+                                  using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                                  {
+                                      if (reader.HasRows)
+                                      {
+                                          reader.Read();
+                                          string message = $"Здравствуйте, {UserRegistration.Name} {UserRegistration.Patronymic}. Номер вашей карточки для входа: {reader.GetInt32(0)}. Для продолжения работы " +
+                                          $"вернитесь на начальный экран и произведите вход в систему";
+                                          string sub = "Регистрация";
+                                          if (isValid(userRegistration.Email))
+                                          {
+                                              SendEmailAsync(UserRegistration, message, sub).GetAwaiter();
+                                          }
+                                          else
+                                          {
+                                              MessageBox.Show("Проверьте введённую почту");
+                                              throw new Exception();
+                                          }
+                                      }
+                                  }
+                                  _registrationWindow.Close();
+                                  transaction.Commit();
+                              }
+                              catch(Exception ex)
+                              {
+                                  transaction.Rollback();
                               }
                           }
-                          _registrationWindow.Close();
                       }));
             }
         }

@@ -86,7 +86,7 @@
                     <Label>Отчество</Label>
                     <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Label>Email</Label>
-                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBox Text="{Binding Email}"></TextBox>
                 </StackPanel>
                 <Label>Симптомы</Label>
                 <TextBox Text="{Binding Symptoms, UpdateSourceTrigger=PropertyChanged}"></TextBox>

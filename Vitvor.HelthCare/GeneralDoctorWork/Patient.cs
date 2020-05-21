@@ -74,12 +74,33 @@ namespace Vitvor.HelthCare
             }
             set
             {
-                SqlCommand sqlCommand = new SqlCommand();
-                sqlCommand.CommandText = $"update PATIENTS set Email='{value}' where id={this.patientid}";
-                sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
-                sqlCommand.ExecuteNonQuery();
-                _email = value;
-                OnPropertyChanged("Email");
+                if (isValid(value))
+                {
+                    SqlCommand sqlCommand = new SqlCommand();
+                    sqlCommand.CommandText = $"update PATIENTS set Email='{value}' where id={this.patientid}";
+                    sqlCommand.Connection = SingletonForSqlConnection.SqlConnection;
+                    sqlCommand.ExecuteNonQuery();
+                    _email = value;
+                    OnPropertyChanged("Email");
+                }
+                else
+                {
+                    MessageBox.Show("Почта введена неверно");
+                }
+            }
+        }
+        private static bool isValid(string email)
+        {
+            string pattern = "[.\\-_a-z0-9]+@([a-z0-9][\\-a-z0-9]+\\.)+[a-z]{2,6}";
+            Match isMatch = Regex.Match(email, pattern, RegexOptions.IgnoreCase);
+
+            if (isMatch.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private string _symptoms;

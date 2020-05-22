@@ -183,7 +183,8 @@ namespace Vitvor.HelthCare.UserWork
                           $"from TIMETABLE join DOCTORS " +
                           $"on TIMETABLE.doctorid=DOCTORS.id " +
                           $"where DOCTORS.id={docid} " +
-                          $"and TIMETABLE.date='{_patientWindow.Appointmentdate.SelectedDate}'";
+                          $"and TIMETABLE.date='{_patientWindow.Appointmentdate.SelectedDate}' " +
+                          $"and  TIMETABLE.patientid is null";
                           SqlCommand command = new SqlCommand(selectTime, SingletonForSqlConnection.SqlConnection);
                           using (SqlDataReader reader = command.ExecuteReader())
                           {

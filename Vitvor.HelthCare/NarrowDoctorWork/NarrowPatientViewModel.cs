@@ -89,6 +89,7 @@ namespace Vitvor.HelthCare
                                               else
                                               {
                                                   MessageBox.Show("Данных в базе недостаточно для выставления возможных диагнозов");
+                                                  throw new Exception();
                                               }
                                           }
                                           HideSearch();

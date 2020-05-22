@@ -215,9 +215,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="iconforCP.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Themes\Metro\HowToApplyTheme.txt" />
   </ItemGroup>
   <ItemGroup>

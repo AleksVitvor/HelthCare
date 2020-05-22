@@ -76,6 +76,10 @@
   </Class>
   <Class Name="Vitvor.HelthCare.DiseaseViewModel" BaseTypeListCollapsed="true">
     <Position X="20.75" Y="8.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Events" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAIAAAABAMAAAAAAAiAQCAEAEAABAAAAEAAA=</HashCode>
       <FileName>Diseases\DiseaseViewModel.cs</FileName>
@@ -94,7 +98,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Vitvor.HelthCare.Patient" BaseTypeListCollapsed="true">
-    <Position X="26.25" Y="0.5" Width="1.5" />
+    <Position X="26.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAJCBAACAACAEAIAAAAAQAhgAAAAAAAAAAAAAEAAE=</HashCode>
       <FileName>GeneralDoctorWork\Patient.cs</FileName>
@@ -102,7 +106,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.PatientViewModel" BaseTypeListCollapsed="true">
-    <Position X="22.75" Y="0.5" Width="1.5" />
+    <Position X="22.75" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CBABAhBAAAAACAAAMAAQAAAAwwAIACBAgADABQBiAQQ=</HashCode>
       <FileName>GeneralDoctorWork\PatientViewModel.cs</FileName>
@@ -169,7 +173,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.UserRegistrationViewModel" BaseTypeListCollapsed="true">
-    <Position X="10.75" Y="9" Width="2.25" />
+    <Position X="10.75" Y="8.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>MAACARAAQAAQCEEAIACAgBAAgBQAQAADgAAIAQQgACA=</HashCode>
       <FileName>UserRegistration\UserRegistrationViewModel.cs</FileName>
@@ -200,7 +204,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.GeneralDoctorWindow" BaseTypeListCollapsed="true">
-    <Position X="19.25" Y="0.75" Width="2" />
+    <Position X="19.25" Y="1.25" Width="2" />
     <NestedTypes>
       <Delegate Name="Vitvor.HelthCare.GeneralDoctorWindow.WindowLoaded" Collapsed="true">
         <TypeIdentifier>

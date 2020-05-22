@@ -13,7 +13,19 @@ namespace Vitvor.HelthCare
 {
     class Patient : INotifyPropertyChanged
     {
-        public int patientid { get; set; }
+        private int patientid;
+        public int ID
+        {
+            get
+            {
+                return patientid;
+            }
+            set
+            {
+                patientid = value;
+                OnPropertyChanged("ID");
+            }
+        }
         private string _surname;
         public string Surname
         {

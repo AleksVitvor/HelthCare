@@ -100,7 +100,7 @@ namespace Vitvor.HelthCare
                           {
                               AddSymptoms(patient);
                               string message= $"Здравствуйте, {patient.Name} {patient.Patronymic}. Очень рады, что вы выбрали нашу сеть медицинских центров. Для дальнейшего полноценного использования всех " +
-                              $"возможностей приложения нашего центра введите свои данные при первом входе в приложение, перейдя по кнопке регистрация и выберите уточнение данных.\nНомер карточки для вас: {patient.patientid}";
+                              $"возможностей приложения нашего центра введите свои данные при первом входе в приложение, перейдя по кнопке регистрация и выберите уточнение данных.\nНомер карточки для вас: {patient.ID}";
                               string sub = "Первое посещение";
                               SendEmailAsync(patient, message, sub).GetAwaiter();
                               Hide();
@@ -182,14 +182,14 @@ namespace Vitvor.HelthCare
                             reader.Read();
                             int id = reader.GetInt32(0);
                             reader.Close();
-                            command.CommandText = $"select * from PATIENTSANDSYMPTOMS where PATIENTSANDSYMPTOMS.patientid='{patient.patientid}' and " +
+                            command.CommandText = $"select * from PATIENTSANDSYMPTOMS where PATIENTSANDSYMPTOMS.patientid='{patient.ID}' and " +
                                 $"PATIENTSANDSYMPTOMS.symptomid='{id}' and PATIENTSANDSYMPTOMS.dateofexhibiting='{DateTime.Today}'";
                             using (SqlDataReader checkdata = command.ExecuteReader())
                             {
                                 if (!checkdata.HasRows)
                                 {
                                     checkdata.Close();
-                                    command.CommandText = $"insert into PATIENTSANDSYMPTOMS values ({patient.patientid},{id},'{DateTime.Today}')";
+                                    command.CommandText = $"insert into PATIENTSANDSYMPTOMS values ({patient.ID},{id},'{DateTime.Today}')";
                                     command.ExecuteNonQuery();
                                 }
                                 else
@@ -224,7 +224,7 @@ namespace Vitvor.HelthCare
                               {
                                   reader.Read();
                                   SelectedPatient = new Patient(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(4));
-                                  SelectedPatient.patientid = reader.GetInt32(3);
+                                  SelectedPatient.ID = reader.GetInt32(3);
                                   _doctorWindow.AllInfo.Visibility = Visibility.Visible;
                                   _doctorWindow.OnlyID.Visibility = Visibility.Collapsed;
                                   _doctorWindow.SearchPatient.Visibility = Visibility.Collapsed;

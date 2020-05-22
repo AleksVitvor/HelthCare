@@ -93,7 +93,7 @@
             </StackPanel>
             <StackPanel x:Name="OnlyID" Visibility="Collapsed">
                 <Label>ID</Label>
-                <TextBox x:Name="PatientID"></TextBox>
+                <TextBox x:Name="PatientID" DataContext="{Binding SelectedPatient}" Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
         </StackPanel>
         <Button x:Name="SearchPatient" Visibility="Collapsed" Grid.Column="11" Grid.Row="11" Grid.ColumnSpan="2" Command="{Binding Search}">Поиск</Button>

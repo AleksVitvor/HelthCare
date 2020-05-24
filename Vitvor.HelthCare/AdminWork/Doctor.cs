@@ -29,7 +29,7 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("DateOfBirth");
             }
         }
-        private string _surname;
+        private string _surname = null;
         public string Surname
         {
             get
@@ -38,7 +38,7 @@ namespace Vitvor.HelthCare
             }
             set
             {
-                if(isChanging)
+                if(isChanging && value != "")
                 {
                     SqlCommand command = new SqlCommand();
                     command.CommandText = $"update DOCTORS set DOCTORS.Surname='{value}' where DOCTORS.Username='{Username}'";
@@ -49,7 +49,7 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Surname");
             }
         }
-        private string _name;
+        private string _name = null;
         public string Name
         {
             get
@@ -59,7 +59,7 @@ namespace Vitvor.HelthCare
             set
             {
                 _name = value;
-                if(isChanging)
+                if(isChanging && value != "")
                 {
                     SqlCommand command = new SqlCommand();
                     command.CommandText = $"update DOCTORS set DOCTORS.Name='{value}' where DOCTORS.Username='{Username}'";
@@ -69,7 +69,7 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Name");
             }
         }
-        private string _patronymic;
+        private string _patronymic = null;
         public string Patronymic
         {
             get
@@ -79,7 +79,7 @@ namespace Vitvor.HelthCare
             set
             {
                 _patronymic = value;
-                if(isChanging)
+                if(isChanging && value != "")
                 {
                     SqlCommand command = new SqlCommand();
                     command.CommandText = $"update DOCTORS set DOCTORS.Patronymic='{value}' where DOCTORS.Username='{Username}'";
@@ -89,7 +89,7 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Patronymic");
             }
         }
-        private string _specialty;
+        private string _specialty = null;
         public string Specialty
         {
             get
@@ -99,7 +99,7 @@ namespace Vitvor.HelthCare
             set
             {
                 _specialty = value;
-                if(isChanging)
+                if(isChanging && value!="")
                 {
                     SqlCommand command = new SqlCommand();
                     command.CommandText = $"update DOCTORS set DOCTORS.Specialty='{value}' where DOCTORS.Username='{Username}'";
@@ -109,7 +109,7 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Specialty");
             }
         }
-        private string _username;
+        private string _username = null;
         public string Username
         {
             get
@@ -122,7 +122,7 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("Username");
             }
         }
-        private string _phoneNumber;
+        private string _phoneNumber = null;
         public string PhoneNumber
         {
             get
@@ -132,7 +132,7 @@ namespace Vitvor.HelthCare
             set
             {
                 _phoneNumber = value;
-                if(isChanging)
+                if(isChanging && value != "")
                 {
                     SqlCommand command = new SqlCommand();
                     command.CommandText = $"update DOCTORS set DOCTORS.PhoneNumber='{value}' where DOCTORS.Username='{Username}'";
@@ -142,7 +142,7 @@ namespace Vitvor.HelthCare
                 OnPropertyChanged("PhoneNumber");
             }
         }
-        private string _password;
+        private string _password = null;
         public string Password
         {
             get
@@ -169,7 +169,7 @@ namespace Vitvor.HelthCare
 
         public Doctor(int MIid)
         {
-            this.isChanging = false;
+            isChanging = false;
             this.MIid = MIid;
         }
         public Doctor(int MIid, bool isChanging, string Surname, string Name, string Patronymic, string Specialty, string PhoneNumber, string Username)
@@ -182,6 +182,10 @@ namespace Vitvor.HelthCare
             _specialty = Specialty;
             _phoneNumber = PhoneNumber;
             this.Username = Username;
+        }
+        public bool Check()
+        {
+            return Surname != null && Name != null && Password != null && Username != null && Patronymic != null && PhoneNumber != null && Specialty != null;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

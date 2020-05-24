@@ -92,7 +92,7 @@
                 <TextBox Text="{Binding Symptoms, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             <StackPanel x:Name="OnlyID" Visibility="Collapsed">
-                <Label>ID</Label>
+                <Label>Номер карты пациента</Label>
                 <TextBox x:Name="PatientID" DataContext="{Binding SelectedPatient}" Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
         </StackPanel>

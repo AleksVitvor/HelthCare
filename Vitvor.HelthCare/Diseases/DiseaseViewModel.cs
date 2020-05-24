@@ -34,57 +34,62 @@ namespace Vitvor.HelthCare
                 return _changeDisease ??
                     (_changeDisease = new RelayCommand(obj =>
                       {
-                          SqlCommand command = new SqlCommand();
-                          command.Connection = SingletonForSqlConnection.SqlConnection;
-                          command.CommandText= $"select DISEASES.id from DISEASES where DISEASES.Name='{SelectedDisease.DiseaseName.ToLower()}'";
-                          using(SqlDataReader reader=command.ExecuteReader())
+                          if (SelectedDisease.Symptoms != null && SelectedDisease.DiseaseName != null && SelectedDisease.Symptoms != "" && SelectedDisease.DiseaseName != "")
                           {
-                              if(reader.HasRows)
+                              SqlCommand command = new SqlCommand();
+                              command.Connection = SingletonForSqlConnection.SqlConnection;
+                              command.CommandText = $"select DISEASES.id from DISEASES where DISEASES.Name='{SelectedDisease.DiseaseName.ToLower()}'";
+                              using (SqlDataReader reader = command.ExecuteReader())
                               {
-                                  reader.Read();
-                                  int diseaseid = reader.GetInt32(0);
-                                  reader.Close();
-                                  foreach(string i in SelectedDisease.Symptoms.Split(','))
+                                  if (reader.HasRows)
                                   {
-                                      command.CommandText = $"select SYMPTOMS.id from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
-                                      using(SqlDataReader checkSymptoms=command.ExecuteReader())
+                                      reader.Read();
+                                      int diseaseid = reader.GetInt32(0);
+                                      reader.Close();
+                                      foreach (string i in SelectedDisease.Symptoms.Split(','))
                                       {
-                                          if(checkSymptoms.HasRows)
+                                          command.CommandText = $"select SYMPTOMS.id from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
+                                          using (SqlDataReader checkSymptoms = command.ExecuteReader())
                                           {
-                                              checkSymptoms.Read();
-                                              int symptomid = checkSymptoms.GetInt32(0);
-                                              checkSymptoms.Close();
-                                              command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{symptomid})";
-                                              command.ExecuteNonQuery();
-                                          }
-                                          else
-                                          {
-                                              checkSymptoms.Close();
-                                              command.CommandText = $"insert into SYMPTOMS values ('{i.ToLower().TrimStart(' ')}')";
-                                              if (i.ToLower().TrimStart(' ').Length < 50)
+                                              if (checkSymptoms.HasRows)
                                               {
+                                                  checkSymptoms.Read();
+                                                  int symptomid = checkSymptoms.GetInt32(0);
+                                                  checkSymptoms.Close();
+                                                  command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{symptomid})";
                                                   command.ExecuteNonQuery();
-                                                  command.CommandText = $"select SYMPTOMS.id from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
-                                                  using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                              }
+                                              else
+                                              {
+                                                  checkSymptoms.Close();
+                                                  command.CommandText = $"insert into SYMPTOMS values ('{i.ToLower().TrimStart(' ')}')";
+                                                  if (i.ToLower().TrimStart(' ').Length < 50)
                                                   {
-                                                      getSymptomId.Read();
-                                                      int symptomid = getSymptomId.GetInt32(0);
-                                                      getSymptomId.Close();
-                                                      command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{symptomid})";
                                                       command.ExecuteNonQuery();
+                                                      command.CommandText = $"select SYMPTOMS.id from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
+                                                      using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                                      {
+                                                          getSymptomId.Read();
+                                                          int symptomid = getSymptomId.GetInt32(0);
+                                                          getSymptomId.Close();
+                                                          command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{symptomid})";
+                                                          command.ExecuteNonQuery();
+                                                      }
                                                   }
                                               }
                                           }
                                       }
-                                  }
 
-                              }
-                              else
-                              {
-                                  MessageBox.Show("Попытка изменения несуществующей болезни");
-                                  Hide();
+                                  }
+                                  else
+                                  {
+                                      MessageBox.Show("Попытка изменения несуществующей болезни");
+                                      Hide();
+                                  }
                               }
                           }
+                          else
+                              MessageBox.Show("Проверьте введённые данные");
                           Hide();
                       }));
             }
@@ -97,55 +102,58 @@ namespace Vitvor.HelthCare
                 return _addDisease ??
                     (_addDisease = new RelayCommand(obj =>
                       {
-                          SqlCommand command = new SqlCommand();
-                          command.Connection = SingletonForSqlConnection.SqlConnection;
-                          command.CommandText = $"select * from DISEASES where DISEASES.Name='{SelectedDisease.DiseaseName.ToLower()}'";
-                          using (SqlDataReader reader = command.ExecuteReader())
-                          { 
-                              if (reader.HasRows)
+                          if (SelectedDisease.Symptoms != null && SelectedDisease.DiseaseName!=null && SelectedDisease.Symptoms != "" && SelectedDisease.DiseaseName != "")
+                          {
+                              SqlCommand command = new SqlCommand();
+                              command.Connection = SingletonForSqlConnection.SqlConnection;
+                              command.CommandText = $"select * from DISEASES where DISEASES.Name='{SelectedDisease.DiseaseName.ToLower()}'";
+                              using (SqlDataReader reader = command.ExecuteReader())
                               {
-                                  MessageBox.Show("Попытка добавления уже существующей болезни");
-                                  Hide();
-                              }
-                              else
-                              {
-                                  reader.Close();
-                                  command.CommandText = $"insert into DISEASES values ('{SelectedDisease.DiseaseName.ToLower()}')";
-                                  command.ExecuteNonQuery();
-                                  command.CommandText = $"select DISEASES.id from DISEASES where DISEASES.Name='{SelectedDisease.DiseaseName.ToLower()}'";
-                                  using (SqlDataReader getDiseaseId = command.ExecuteReader())
+                                  if (reader.HasRows)
                                   {
-                                      getDiseaseId.Read();
-                                      int diseaseid = getDiseaseId.GetInt32(0);
-                                      foreach (string i in SelectedDisease.Symptoms.Split(','))
+                                      MessageBox.Show("Попытка добавления уже существующей болезни");
+                                      Hide();
+                                  }
+                                  else
+                                  {
+                                      reader.Close();
+                                      command.CommandText = $"insert into DISEASES values ('{SelectedDisease.DiseaseName.ToLower()}')";
+                                      command.ExecuteNonQuery();
+                                      command.CommandText = $"select DISEASES.id from DISEASES where DISEASES.Name='{SelectedDisease.DiseaseName.ToLower()}'";
+                                      using (SqlDataReader getDiseaseId = command.ExecuteReader())
                                       {
-                                          command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
-                                          getDiseaseId.Close();
-                                          using (SqlDataReader checkSymptoms = command.ExecuteReader())
+                                          getDiseaseId.Read();
+                                          int diseaseid = getDiseaseId.GetInt32(0);
+                                          foreach (string i in SelectedDisease.Symptoms.Split(','))
                                           {
-                                              if (checkSymptoms.HasRows)
+                                              command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
+                                              getDiseaseId.Close();
+                                              using (SqlDataReader checkSymptoms = command.ExecuteReader())
                                               {
-                                                  checkSymptoms.Read();
-                                                  int id = checkSymptoms.GetInt32(0);
-                                                  checkSymptoms.Close();
-                                                  command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{id})";
-                                                  command.ExecuteNonQuery();
-                                              }
-                                              else
-                                              {
-                                                  checkSymptoms.Close();
-                                                  command.CommandText = $"insert into SYMPTOMS values ('{i.ToLower().TrimStart(' ')}')";
-                                                  if (i.ToLower().TrimStart(' ').Length < 50)
+                                                  if (checkSymptoms.HasRows)
                                                   {
+                                                      checkSymptoms.Read();
+                                                      int id = checkSymptoms.GetInt32(0);
+                                                      checkSymptoms.Close();
+                                                      command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{id})";
                                                       command.ExecuteNonQuery();
-                                                      command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
-                                                      using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                                  }
+                                                  else
+                                                  {
+                                                      checkSymptoms.Close();
+                                                      command.CommandText = $"insert into SYMPTOMS values ('{i.ToLower().TrimStart(' ')}')";
+                                                      if (i.ToLower().TrimStart(' ').Length < 50)
                                                       {
-                                                          getSymptomId.Read();
-                                                          int id = getSymptomId.GetInt32(0);
-                                                          getSymptomId.Close();
-                                                          command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{id})";
                                                           command.ExecuteNonQuery();
+                                                          command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{i.ToLower().TrimStart(' ')}'";
+                                                          using (SqlDataReader getSymptomId = command.ExecuteReader())
+                                                          {
+                                                              getSymptomId.Read();
+                                                              int id = getSymptomId.GetInt32(0);
+                                                              getSymptomId.Close();
+                                                              command.CommandText = $"insert into DISEASESSYMPTOMS values ({diseaseid},{id})";
+                                                              command.ExecuteNonQuery();
+                                                          }
                                                       }
                                                   }
                                               }
@@ -154,6 +162,8 @@ namespace Vitvor.HelthCare
                                   }
                               }
                           }
+                          else
+                              MessageBox.Show("Проверьте введённые данные");
                           Hide();
                       }));
             }

@@ -217,7 +217,8 @@ namespace Vitvor.HelthCare
                       {
                           SqlCommand command = new SqlCommand();
                           command.Connection = SingletonForSqlConnection.SqlConnection;
-                          command.CommandText = $"select PATIENTS.Surname, PATIENTS.Name, PATIENTS.Patronymic, PATIENTS.id, PATIENTS.Email from PATIENTS where PATIENTS.id={_doctorWindow.PatientID.Text}";
+                          command.CommandText = $"select PATIENTS.Surname, PATIENTS.Name, PATIENTS.Patronymic, PATIENTS.id, PATIENTS.Email from PATIENTS, TIMETABLE" +
+                          $" where PATIENTS.id={_doctorWindow.PatientID.Text} and TIMETABLE.date='{DateTime.Now.Date}' and TIMETABLE.patientid ={_doctorWindow.PatientID.Text}";
                           using (SqlDataReader reader= command.ExecuteReader())
                           {
                               if (reader.HasRows)
@@ -232,7 +233,7 @@ namespace Vitvor.HelthCare
                               }
                               else
                               {
-                                  MessageBox.Show("Пациент с таким номером карты не зарегистрирован");
+                                  MessageBox.Show("Пациент с таким номером карты не зарегистрирован или у такого пациента нет записи на сегодня");
                               }
                           }
                       }));

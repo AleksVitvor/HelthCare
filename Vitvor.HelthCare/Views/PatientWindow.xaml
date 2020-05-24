@@ -126,7 +126,7 @@
                     </i:Interaction.Triggers>
                 </Calendar>
                 <ComboBox x:Name="Time" Grid.Row="3" Grid.Column="7" Grid.ColumnSpan="5"/>
-                <Button Grid.Row="8" Grid.Column="11" Grid.ColumnSpan="2" Content="Записаться" Command="{Binding Create}"/>
+                <Button Grid.Row="8" Grid.Column="11" Grid.ColumnSpan="2" Content="Записаться" Name="Create" Visibility="Collapsed" Command="{Binding Create}"/>
             </Grid>
         </Border>
     </Grid>

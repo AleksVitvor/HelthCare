@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -189,6 +187,7 @@ namespace Vitvor.HelthCare.UserWork
                           using (SqlDataReader reader = command.ExecuteReader())
                           {
                               _patientWindow.Time.Visibility = Visibility.Collapsed;
+                              _patientWindow.Create.Visibility = Visibility.Collapsed;
                               times.Clear();
                               if (reader.HasRows)
                               {
@@ -199,6 +198,7 @@ namespace Vitvor.HelthCare.UserWork
                                   }
                                   _patientWindow.Time.ItemsSource = times;
                                   _patientWindow.Time.Visibility = Visibility.Visible;
+                                  _patientWindow.Create.Visibility = Visibility.Visible;
                               }
                               else
                               {
@@ -218,19 +218,26 @@ namespace Vitvor.HelthCare.UserWork
                       {
                           try
                           {
-                              int doctorid;
-                              map.TryGetValue($"{_patientWindow.Doctors.SelectedItem}", out doctorid);
-                              string update = $"update TIMETABLE set " +
-                              $"TIMETABLE.patientid={_userid} where " +
-                              $"time='{_patientWindow.Time.SelectedItem}' " +
-                              $"and date='{_patientWindow.Appointmentdate.SelectedDate}' " +
-                              $"and doctorid={doctorid}";
-                              SqlCommand command = new SqlCommand(update, SingletonForSqlConnection.SqlConnection);
-                              command.ExecuteNonQuery();
-                              string sub = "Запись на приём";
-                              string part = $"{_patientWindow.Doctors.SelectedItem}, дата {_patientWindow.Appointmentdate.SelectedDate.ToString().Replace(" 0:00:00","")}, время {_patientWindow.Time.SelectedItem.ToString().Remove(5,3)}.";
-                              SendEmailAsync(_userid, sub, part).GetAwaiter();
-                              Hide();
+                              if (_patientWindow.Time.SelectedIndex != -1)
+                              {
+                                  int doctorid;
+                                  map.TryGetValue($"{_patientWindow.Doctors.SelectedItem}", out doctorid);
+                                  string update = $"update TIMETABLE set " +
+                                  $"TIMETABLE.patientid={_userid} where " +
+                                  $"time='{_patientWindow.Time.SelectedItem}' " +
+                                  $"and date='{_patientWindow.Appointmentdate.SelectedDate}' " +
+                                  $"and doctorid={doctorid}";
+                                  SqlCommand command = new SqlCommand(update, SingletonForSqlConnection.SqlConnection);
+                                  command.ExecuteNonQuery();
+                                  string sub = "Запись на приём";
+                                  string part = $"{_patientWindow.Doctors.SelectedItem}, дата {_patientWindow.Appointmentdate.SelectedDate.ToString().Replace(" 0:00:00", "")}, время {_patientWindow.Time.SelectedItem.ToString().Remove(5, 3)}.";
+                                  SendEmailAsync(_userid, sub, part).GetAwaiter();
+                                  Hide();
+                              }
+                              else
+                              {
+                                  throw new Exception();
+                              }
                           }
                           catch(Exception ex)
                           {

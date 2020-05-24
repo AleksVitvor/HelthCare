@@ -232,27 +232,47 @@ namespace Vitvor.HelthCare
                 return _confirmAddDoctor ??
                     (_confirmAddDoctor = new RelayCommand(obj =>
                       {
-                          SqlCommand command = new SqlCommand();
-                          command.Connection = SingletonForSqlConnection.SqlConnection;
-                          SelectedDoctorFinish();
-                          command.CommandText = $"select DOCTORS.id from DOCTORS where DOCTORS.Username='{SelectedDoctor.Username}'";
-                          using (SqlDataReader reader = command.ExecuteReader())
+                          using (SqlTransaction transaction = SingletonForSqlConnection.SqlConnection.BeginTransaction())
                           {
-                              if (reader.HasRows)
+                              try
                               {
-                                  MessageBox.Show("Данное имя пользователя занято");
+                                  SqlCommand command = SingletonForSqlConnection.SqlConnection.CreateCommand();
+                                  command.Transaction = transaction;
+                                  SelectedDoctorFinish();
+                                  command.CommandText = $"select DOCTORS.id from DOCTORS where DOCTORS.Username='{SelectedDoctor.Username}'";
+                                  using (SqlDataReader reader = command.ExecuteReader())
+                                  {
+                                      if (reader.HasRows)
+                                      {
+                                          MessageBox.Show("Данное имя пользователя занято");
+                                      }
+                                      else
+                                      {
+                                          
+                                          reader.Close();
+                                          if (SelectedDoctor.Check())
+                                          {
+                                              command.CommandText = $"insert into DOCTORS values ({SelectedDoctor.MIid}," +
+                                              $"'{SelectedDoctor.Surname}','{SelectedDoctor.Name}','{SelectedDoctor.Patronymic}'," +
+                                              $"'{SelectedDoctor.DateOfBirth}','{SelectedDoctor.Specialty}', '{SelectedDoctor._direction}'," +
+                                              $"'{SelectedDoctor.Username}','{SelectedDoctor.Password}', '{SelectedDoctor.PhoneNumber}')";
+                                              command.ExecuteNonQuery();
+                                          }
+                                          else
+                                          {
+                                              throw new Exception();
+                                          }
+                                      }
+                                  }
+                                  Hide();
+                                  transaction.Commit();
                               }
-                              else
+                              catch(Exception)
                               {
-                                  reader.Close();
-                                  command.CommandText = $"insert into DOCTORS values ({SelectedDoctor.MIid}," +
-                                  $"'{SelectedDoctor.Surname}','{SelectedDoctor.Name}','{SelectedDoctor.Patronymic}'," +
-                                  $"'{SelectedDoctor.DateOfBirth}','{SelectedDoctor.Specialty}', '{SelectedDoctor._direction}'," +
-                                  $"'{SelectedDoctor.Username}','{SelectedDoctor.Password}', '{SelectedDoctor.PhoneNumber}')";
-                                  command.ExecuteNonQuery();
+                                  transaction.Rollback();
+                                  MessageBox.Show("Вы ввели не все данные");
                               }
                           }
-                          Hide();
                       }));
             }
         }
@@ -274,6 +294,7 @@ namespace Vitvor.HelthCare
                                   reader.Read();
                                   SelectedDoctor = new Doctor(MedicalInstitutionId, true, reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(6),
                                       reader.GetString(10), reader.GetString(8));
+                                  Hide();
                                   _adminWindow.BaseDescription.Visibility = Visibility.Visible;
                                   _adminWindow.date.Visibility = Visibility.Collapsed;
                                   _adminWindow.direction.Visibility = Visibility.Collapsed;
@@ -281,10 +302,11 @@ namespace Vitvor.HelthCare
                               }
                               else
                               {
+                                  Hide();
                                   MessageBox.Show("Попытка изменения несуществующей учётной записи");
                               }
                           }
-                          Hide();
+
                       }));
             }
         }
@@ -361,7 +383,6 @@ namespace Vitvor.HelthCare
                           }
                           _adminWindow.Timetable.Visibility = Visibility.Visible;
                           _adminWindow.Create.Visibility = Visibility.Visible;
-                          MessageBox.Show(Convert.ToString(_adminWindow.SelectedDate.IsEnabled));
                       }));
             }
         }
@@ -383,80 +404,87 @@ namespace Vitvor.HelthCare
         }
         private void CreateTimetable()
         {
-            SqlCommand searchDoctors = new SqlCommand();
-            searchDoctors.Connection = SingletonForSqlConnection.SqlConnection;
-            string[] FIO;
-            foreach (var i in _adminWindow.Doctors.SelectedItems)
+            if (_adminWindow.SelectedTime.SelectedIndex != -1 && _adminWindow.EvenOrNot.SelectedIndex != -1)
             {
-                FIO = i.ToString().Split(' ');
-                searchDoctors.CommandText = $"select DOCTORS.id " +
-                $"from DOCTORS " +
-                $"where DOCTORS.Surname='{FIO[0]}' and " +
-                $"DOCTORS.Name='{FIO[1]}' and " +
-                $"DOCTORS.Patronymic='{FIO[2]}'";
-                int id = 0;
-                using (SqlDataReader reader = searchDoctors.ExecuteReader())
+                SqlCommand searchDoctors = new SqlCommand();
+                searchDoctors.Connection = SingletonForSqlConnection.SqlConnection;
+                string[] FIO;
+                foreach (var i in _adminWindow.Doctors.SelectedItems)
                 {
-                    reader.Read();
-                    id = reader.GetInt32(0);
-                }
-                SqlCommand searchLastDate = new SqlCommand();
-                searchLastDate.Connection = SingletonForSqlConnection.SqlConnection;
-                searchLastDate.CommandText = $"select top(1) TIMETABLE.date from TIMETABLE where TIMETABLE.doctorid={id} order by TIMETABLE.date desc";
-                DateTime date = new DateTime();
-                using (SqlDataReader reader1 = searchLastDate.ExecuteReader())
-                {
-                    if (reader1.HasRows)
+                    FIO = i.ToString().Split(' ');
+                    searchDoctors.CommandText = $"select DOCTORS.id " +
+                    $"from DOCTORS " +
+                    $"where DOCTORS.Surname='{FIO[0]}' and " +
+                    $"DOCTORS.Name='{FIO[1]}' and " +
+                    $"DOCTORS.Patronymic='{FIO[2]}'";
+                    int id = 0;
+                    using (SqlDataReader reader = searchDoctors.ExecuteReader())
                     {
-                        reader1.Read();
-                        date = reader1.GetDateTime(0);
+                        reader.Read();
+                        id = reader.GetInt32(0);
                     }
-                    else
+                    SqlCommand searchLastDate = new SqlCommand();
+                    searchLastDate.Connection = SingletonForSqlConnection.SqlConnection;
+                    searchLastDate.CommandText = $"select top(1) TIMETABLE.date from TIMETABLE where TIMETABLE.doctorid={id} order by TIMETABLE.date desc";
+                    DateTime date = new DateTime();
+                    using (SqlDataReader reader1 = searchLastDate.ExecuteReader())
                     {
-                        date = DateTime.Today;
-                    }
-                }
-                for (DateTime dateTime = date; dateTime < _adminWindow.SelectedDate.SelectedDate; dateTime = dateTime.AddDays(1))
-                {
-                    if (dateTime.DayOfWeek == DayOfWeek.Saturday || dateTime.DayOfWeek == DayOfWeek.Sunday)
-                    {
-                        continue;
-                    }
-                    DateTime endtime = new DateTime();
-                    string[] times = _adminWindow.SelectedTime.SelectedItem.ToString().Split('-');
-                    times[0] = times[0].Remove(0, 39).Trim('(', ')');
-                    times[1] = times[1].Trim('(', ')');
-                    SqlCommand addintoTimetable = new SqlCommand();
-                    addintoTimetable.Connection = SingletonForSqlConnection.SqlConnection;
-                    if ((dateTime.Date.Day % 2 == 0 && _adminWindow.EvenOrNot.SelectedIndex == 1) || (dateTime.Date.Day % 2 == 1 && _adminWindow.EvenOrNot.SelectedIndex == 0))
-                    {
-                        endtime = Convert.ToDateTime(times[1]);
-                        for (DateTime starttime = Convert.ToDateTime(times[0]); starttime < endtime; starttime = starttime.AddMinutes(15))
+                        if (reader1.HasRows)
                         {
-                            addintoTimetable.CommandText = $"insert into TIMETABLE values({id}, '{starttime}', '{dateTime}', NULL)";
-                            addintoTimetable.ExecuteNonQuery();
+                            reader1.Read();
+                            date = reader1.GetDateTime(0);
+                        }
+                        else
+                        {
+                            date = DateTime.Today;
                         }
                     }
-                    else if ((dateTime.Date.Day % 2 == 0 && _adminWindow.EvenOrNot.SelectedIndex == 0) || (dateTime.Date.Day % 2 == 1 && _adminWindow.EvenOrNot.SelectedIndex == 1))
+                    for (DateTime dateTime = date; dateTime < _adminWindow.SelectedDate.SelectedDate; dateTime = dateTime.AddDays(1))
                     {
-                        int save = _adminWindow.SelectedTime.SelectedIndex;
-                        if (_adminWindow.SelectedTime.SelectedIndex == 0)
-                            _adminWindow.SelectedTime.SelectedIndex = 1;
-                        else if (_adminWindow.SelectedTime.SelectedIndex == 1)
-                            _adminWindow.SelectedTime.SelectedIndex = 0;
-                        string[] times1 = _adminWindow.SelectedTime.SelectedItem.ToString().Split('-');
-                        times1[0] = times1[0].Remove(0, 39).Trim('(', ')');
-                        times1[1] = times1[1].Trim('(', ')');
-                        endtime = Convert.ToDateTime(times1[1]);
-                        for (DateTime starttime = Convert.ToDateTime(times1[0]); starttime < endtime; starttime = starttime.AddMinutes(15))
+                        if (dateTime.DayOfWeek == DayOfWeek.Saturday || dateTime.DayOfWeek == DayOfWeek.Sunday)
                         {
-                            addintoTimetable.CommandText = $"insert into TIMETABLE values({id}, '{starttime}', '{dateTime}', NULL)";
-                            addintoTimetable.ExecuteNonQuery();
+                            continue;
                         }
-                        _adminWindow.SelectedTime.SelectedIndex = save;
-                    }
+                        DateTime endtime = new DateTime();
+                        string[] times = _adminWindow.SelectedTime.SelectedItem.ToString().Split('-');
+                        times[0] = times[0].Remove(0, 39).Trim('(', ')');
+                        times[1] = times[1].Trim('(', ')');
+                        SqlCommand addintoTimetable = new SqlCommand();
+                        addintoTimetable.Connection = SingletonForSqlConnection.SqlConnection;
+                        if ((dateTime.Date.Day % 2 == 0 && _adminWindow.EvenOrNot.SelectedIndex == 1) || (dateTime.Date.Day % 2 == 1 && _adminWindow.EvenOrNot.SelectedIndex == 0))
+                        {
+                            endtime = Convert.ToDateTime(times[1]);
+                            for (DateTime starttime = Convert.ToDateTime(times[0]); starttime < endtime; starttime = starttime.AddMinutes(15))
+                            {
+                                addintoTimetable.CommandText = $"insert into TIMETABLE values({id}, '{starttime}', '{dateTime}', NULL)";
+                                addintoTimetable.ExecuteNonQuery();
+                            }
+                        }
+                        else if ((dateTime.Date.Day % 2 == 0 && _adminWindow.EvenOrNot.SelectedIndex == 0) || (dateTime.Date.Day % 2 == 1 && _adminWindow.EvenOrNot.SelectedIndex == 1))
+                        {
+                            int save = _adminWindow.SelectedTime.SelectedIndex;
+                            if (_adminWindow.SelectedTime.SelectedIndex == 0)
+                                _adminWindow.SelectedTime.SelectedIndex = 1;
+                            else if (_adminWindow.SelectedTime.SelectedIndex == 1)
+                                _adminWindow.SelectedTime.SelectedIndex = 0;
+                            string[] times1 = _adminWindow.SelectedTime.SelectedItem.ToString().Split('-');
+                            times1[0] = times1[0].Remove(0, 39).Trim('(', ')');
+                            times1[1] = times1[1].Trim('(', ')');
+                            endtime = Convert.ToDateTime(times1[1]);
+                            for (DateTime starttime = Convert.ToDateTime(times1[0]); starttime < endtime; starttime = starttime.AddMinutes(15))
+                            {
+                                addintoTimetable.CommandText = $"insert into TIMETABLE values({id}, '{starttime}', '{dateTime}', NULL)";
+                                addintoTimetable.ExecuteNonQuery();
+                            }
+                            _adminWindow.SelectedTime.SelectedIndex = save;
+                        }
 
+                    }
                 }
+            }
+            else
+            {
+                MessageBox.Show("Проверьте введённые данные");
             }
         }
         private void Hide()

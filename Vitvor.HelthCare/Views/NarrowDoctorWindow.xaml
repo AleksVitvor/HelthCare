@@ -52,7 +52,7 @@
         <Button x:Name="CloseDiagnosis" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="5" Content="Закрытие диагноза" Command="{Binding CloseDiagnosis}"/>
         <StackPanel x:Name="MainInfo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="17" Grid.RowSpan="15" DataContext="{Binding NarrowPatient}">
             <StackPanel x:Name="ID">
-                <Label Style="{DynamicResource LabelStyle}">ID</Label>
+                <Label Style="{DynamicResource LabelStyle}">Номер карты пациента</Label>
                 <TextBox Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}"></TextBox>
             </StackPanel>
             <StackPanel x:Name="NameAndPatronymicAndDiagnosis" Visibility="Collapsed">

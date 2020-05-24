@@ -35,7 +35,7 @@ namespace Vitvor.HelthCare
                     (_addMedicalInstitution = new RelayCommand(obj =>
                     {
                         MedicalInstitution medicalInstitution = obj as MedicalInstitution;
-                        if (medicalInstitution != null) 
+                        if (medicalInstitution != null && medicalInstitution.AdminUsername.Contains("Admin"))
                         {
                             SqlCommand sqlCommand = new SqlCommand();
                             medicalInstitution.AdminPassword = MainAdminWindow.MedicalInstitutionPassBox.Password;
@@ -45,6 +45,8 @@ namespace Vitvor.HelthCare
                             sqlCommand.ExecuteNonQuery();
                             Hide();
                         }
+                        else
+                            MessageBox.Show("Введены неверные данные");
                     }));
             }
         }
@@ -63,6 +65,7 @@ namespace Vitvor.HelthCare
                               medicalInstitution.AdminPassword = MainAdminWindow.MedicalInstitutionPassBox.Password;
                               sqlCommand.CommandText = $"delete from ADMINS where ADMINS.AdminPassword='{medicalInstitution.AdminPassword}' and" +
                               $"ADMINS.Name='{medicalInstitution.MedicalInstitutionName}' and ADMINS.AdminUsername='{medicalInstitution.AdminUsername}'";
+                              sqlCommand.ExecuteNonQuery();
                               Hide();
                           }
                       }));

@@ -96,15 +96,16 @@ namespace Vitvor.HelthCare
                     (_sendEmail = new RelayCommand(obj =>
                       {
                           Patient patient = obj as Patient;
-                          if (patient != null)
+                          if (patient != null && patient.Email != null && patient.Name != null && patient.Patronymic != null && patient.Surname != null && patient.Symptoms != null)
                           {
                               AddSymptoms(patient);
-                              string message= $"Здравствуйте, {patient.Name} {patient.Patronymic}. Очень рады, что вы выбрали нашу сеть медицинских центров. Для дальнейшего полноценного использования всех " +
+                              string message = $"Здравствуйте, {patient.Name} {patient.Patronymic}. Очень рады, что вы выбрали нашу сеть медицинских центров. Для дальнейшего полноценного использования всех " +
                               $"возможностей приложения нашего центра введите свои данные при первом входе в приложение, перейдя по кнопке регистрация и выберите уточнение данных.\nНомер карточки для вас: {patient.ID}";
                               string sub = "Первое посещение";
                               SendEmailAsync(patient, message, sub).GetAwaiter();
-                              Hide();
                           }
+                          else
+                              MessageBox.Show("Проверьте все введённые данные");
                       }));
             }
         }
@@ -166,46 +167,51 @@ namespace Vitvor.HelthCare
         }
         private void AddSymptoms(Patient patient)
         {
-            SqlCommand command = new SqlCommand();
-            command.Connection = SingletonForSqlConnection.SqlConnection;
-            string[] symptoms = patient.Symptoms.Split(',');
-            foreach (var i in symptoms)
+            if (patient.Symptoms != null && patient.Symptoms != "")
             {
-                string s = i.Trim(' ').ToLower();
-                if (!s.Equals(""))
+                SqlCommand command = new SqlCommand();
+                command.Connection = SingletonForSqlConnection.SqlConnection;
+                string[] symptoms = patient.Symptoms.Split(',');
+                foreach (var i in symptoms)
                 {
-                    command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{s}'";
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    string s = i.Trim(' ').ToLower();
+                    if (!s.Equals(""))
                     {
-                        if (reader.HasRows)
+                        command.CommandText = $"select * from SYMPTOMS where SYMPTOMS.Name='{s}'";
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            reader.Read();
-                            int id = reader.GetInt32(0);
-                            reader.Close();
-                            command.CommandText = $"select * from PATIENTSANDSYMPTOMS where PATIENTSANDSYMPTOMS.patientid='{patient.ID}' and " +
-                                $"PATIENTSANDSYMPTOMS.symptomid='{id}' and PATIENTSANDSYMPTOMS.dateofexhibiting='{DateTime.Today}'";
-                            using (SqlDataReader checkdata = command.ExecuteReader())
+                            if (reader.HasRows)
                             {
-                                if (!checkdata.HasRows)
+                                reader.Read();
+                                int id = reader.GetInt32(0);
+                                reader.Close();
+                                command.CommandText = $"select * from PATIENTSANDSYMPTOMS where PATIENTSANDSYMPTOMS.patientid='{patient.ID}' and " +
+                                    $"PATIENTSANDSYMPTOMS.symptomid='{id}' and PATIENTSANDSYMPTOMS.dateofexhibiting='{DateTime.Today}'";
+                                using (SqlDataReader checkdata = command.ExecuteReader())
                                 {
-                                    checkdata.Close();
-                                    command.CommandText = $"insert into PATIENTSANDSYMPTOMS values ({patient.ID},{id},'{DateTime.Today}')";
-                                    command.ExecuteNonQuery();
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Такие данные уже добавлены");
+                                    if (!checkdata.HasRows)
+                                    {
+                                        checkdata.Close();
+                                        command.CommandText = $"insert into PATIENTSANDSYMPTOMS values ({patient.ID},{id},'{DateTime.Today}')";
+                                        command.ExecuteNonQuery();
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Такие данные уже добавлены");
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Данный симптом будет добавлен позже");
+                            else
+                            {
+                                MessageBox.Show("Данный симптом будет добавлен позже");
+                            }
                         }
                     }
                 }
+                Hide();
             }
-            Hide();
+            else
+                MessageBox.Show("Введите симптомы");
         }
         private RelayCommand _search;
         public RelayCommand Search

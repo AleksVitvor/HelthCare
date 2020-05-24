@@ -1,15 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Vitvor.HelthCare.Doctor" BaseTypeListCollapsed="true">
-    <Position X="17.25" Y="9.75" Width="1.5" />
+    <Position X="13.5" Y="5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAQBJCAAAAQAAAARIQAAQAQAhAASAAACAAMIAAAUAAA=</HashCode>
+      <HashCode>AAQBJCgAAAQAAAARIQAAQAQAhAASAAACAAMIAAAUAAA=</HashCode>
       <FileName>AdminWork\Doctor.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.DoctorViewModel" BaseTypeListCollapsed="true">
-    <Position X="13.5" Y="6.75" Width="1.5" />
+    <Position X="11.5" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>B0AQAJBYQABAAAACMUJAUAgBgJiEBEAAAGAAAAgAAgI=</HashCode>
       <FileName>AdminWork\DoctorViewModel.cs</FileName>
@@ -28,7 +34,10 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Vitvor.HelthCare.User" BaseTypeListCollapsed="true">
-    <Position X="6.75" Y="0.75" Width="1.5" />
+    <Position X="5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAIAAAAAAAgAAAAAACAQMAAAAAAAA=</HashCode>
       <FileName>Authentication\User.cs</FileName>
@@ -36,7 +45,10 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.UserViewModel" BaseTypeListCollapsed="true">
-    <Position X="9.25" Y="2" Width="1.5" />
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAAAAIAQFAAAAgAAEAIAABAAAAAgAAAA=</HashCode>
       <FileName>Authentication\UserViewModel.cs</FileName>
@@ -56,7 +68,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.ViewModelControl" BaseTypeListCollapsed="true">
-    <Position X="15.25" Y="7.5" Width="1.75" />
+    <Position X="15.75" Y="4" Width="1.75" />
     <TypeIdentifier>
       <HashCode>QAAAAAAAABAAAAJAYAACAAAAiAAAAEAABAAAAAAAAAA=</HashCode>
       <FileName>ControlOfVMFormainAdministrator\ViewModelControl.cs</FileName>
@@ -67,7 +79,10 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.Disease" BaseTypeListCollapsed="true">
-    <Position X="23.5" Y="8" Width="1.5" />
+    <Position X="23.5" Y="5.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAABAAAAAAMAAIAAAAAAAggAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Diseases\Disease.cs</FileName>
@@ -75,7 +90,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.DiseaseViewModel" BaseTypeListCollapsed="true">
-    <Position X="20.75" Y="8.5" Width="1.75" />
+    <Position X="20.5" Y="5.25" Width="1.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Events" Collapsed="true" />
@@ -98,15 +113,21 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Vitvor.HelthCare.Patient" BaseTypeListCollapsed="true">
-    <Position X="26.25" Y="0.75" Width="1.5" />
+    <Position X="30.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAJCBAACAACAEAIAAAAAQAhgAAAAAAAAAAAAAEAAE=</HashCode>
+      <HashCode>AAAAJCBAACAAiAEAIAAAAAQAhgAAAAAAAAAAAAAEAAE=</HashCode>
       <FileName>GeneralDoctorWork\Patient.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.PatientViewModel" BaseTypeListCollapsed="true">
-    <Position X="22.75" Y="0.75" Width="1.5" />
+    <Position X="27.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>CBABAhBAAAAACAAAMAAQAAAAwwAIACBAgADABQBiAQQ=</HashCode>
       <FileName>GeneralDoctorWork\PatientViewModel.cs</FileName>
@@ -118,7 +139,10 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.MedicalInstitution" BaseTypeListCollapsed="true">
-    <Position X="23.5" Y="12.75" Width="2" />
+    <Position X="18.25" Y="7.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAAQAgAACAAAAIAAQAAAAgAAAAAAAAgEAAEAAAAA=</HashCode>
       <FileName>MedicalInstitutions\MedicalInstitution.cs</FileName>
@@ -126,7 +150,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.MedicalInstitutionViewModel" BaseTypeListCollapsed="true">
-    <Position X="19" Y="12.25" Width="2.25" />
+    <Position X="18" Y="3.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AEAAAAQAAAAAAAAAMAAgAAAAgAAAAEAAAAAAAQAAIwA=</HashCode>
       <FileName>MedicalInstitutions\MedicalInstitutionViewModel.cs</FileName>
@@ -138,7 +162,10 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.NarrowPatient" BaseTypeListCollapsed="true">
-    <Position X="24.5" Y="3.75" Width="1.5" />
+    <Position X="30.75" Y="5.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAJCAAAAAAgAAAIABQAAQAgAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>NarrowDoctorWork\NarrowPatient.cs</FileName>
@@ -146,7 +173,10 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.NarrowPatientViewModel" BaseTypeListCollapsed="true">
-    <Position X="25.75" Y="8.25" Width="2" />
+    <Position X="25.5" Y="3.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>IAAAABAAgQIQDAiANAAEAAAAgQAKAhQBgACAAQAgAIA=</HashCode>
       <FileName>NarrowDoctorWork\NarrowPatientViewModel.cs</FileName>
@@ -165,15 +195,21 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Vitvor.HelthCare.UserRegistration" BaseTypeListCollapsed="true">
-    <Position X="7.75" Y="9.25" Width="1.5" />
+    <Position X="5.25" Y="5.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAQBNCAAACAAAACEIAQAQAQAxAAQAAACAAEAAAIUAgE=</HashCode>
+      <HashCode>AAQBNCAAACAAAACEIARAQAQAxAAQAAACAAEAAAIUAgE=</HashCode>
       <FileName>UserRegistration\UserRegistration.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.UserRegistrationViewModel" BaseTypeListCollapsed="true">
-    <Position X="10.75" Y="8.75" Width="2.25" />
+    <Position X="8.75" Y="4.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>MAACARAAQAAQCEEAIACAgBAAgBQAQAADgAAIAQQgACA=</HashCode>
       <FileName>UserRegistration\UserRegistrationViewModel.cs</FileName>
@@ -185,7 +221,10 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.DiseaseForUser" BaseTypeListCollapsed="true">
-    <Position X="2.75" Y="4.25" Width="1.5" />
+    <Position X="0.5" Y="4.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAIAAMAAoAAIAAAAgAAAAAAAAAAAAQAAAAA=</HashCode>
       <FileName>UserWork\DiseaseForUser.cs</FileName>
@@ -193,7 +232,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.AdminWindow" BaseTypeListCollapsed="true">
-    <Position X="13.75" Y="4.5" Width="1.5" />
+    <Position X="13.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Views\AdminWindow.xaml.cs</FileName>
@@ -204,7 +243,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.GeneralDoctorWindow" BaseTypeListCollapsed="true">
-    <Position X="19.25" Y="1.25" Width="2" />
+    <Position X="24.25" Y="0.5" Width="2" />
     <NestedTypes>
       <Delegate Name="Vitvor.HelthCare.GeneralDoctorWindow.WindowLoaded" Collapsed="true">
         <TypeIdentifier>
@@ -227,7 +266,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.MainAdminWindow" BaseTypeListCollapsed="true">
-    <Position X="16" Y="5" Width="1.75" />
+    <Position X="15.75" Y="2" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Views\MainAdminWindow.xaml.cs</FileName>
@@ -238,7 +277,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="14" Y="2.5" Width="1.5" />
+    <Position X="15.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Views\MainWindow.xaml.cs</FileName>
@@ -246,7 +285,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.NarrowDoctorWindow" BaseTypeListCollapsed="true">
-    <Position X="20.5" Y="4.75" Width="1.75" />
+    <Position X="20.75" Y="2.25" Width="1.75" />
     <NestedTypes>
       <Delegate Name="Vitvor.HelthCare.NarrowDoctorWindow.WindowLoaded" Collapsed="true">
         <TypeIdentifier>
@@ -269,7 +308,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.PatientWindow" BaseTypeListCollapsed="true">
-    <Position X="11.5" Y="4" Width="1.5" />
+    <Position X="7" Y="3.5" Width="1.5" />
     <NestedTypes>
       <Delegate Name="Vitvor.HelthCare.PatientWindow.WindowLoaded" Collapsed="true">
         <TypeIdentifier>
@@ -292,7 +331,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Vitvor.HelthCare.RegistrationWindow" BaseTypeListCollapsed="true">
-    <Position X="10.75" Y="7" Width="1.75" />
+    <Position X="11.5" Y="3" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Views\RegistrationWindow.xaml.cs</FileName>
@@ -330,7 +369,10 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Vitvor.HelthCare.UserWork.DiseasForUserViewModel" BaseTypeListCollapsed="true">
-    <Position X="5.5" Y="4" Width="2" />
+    <Position X="3" Y="4.25" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>CAAAEAAEAARESAABMAAAARhQggACAUAIAAAAQQAAhAA=</HashCode>
       <FileName>UserWork\DiseasForUserViewModel.cs</FileName>

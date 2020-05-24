@@ -38,7 +38,7 @@
         <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" Grid.RowSpan="9" DataContext="{Binding UserRegistration}">
             <StackPanel x:Name="CardNumber" Visibility="Collapsed">
                 <Label >Номер карты</Label>
-                <TextBox x:Name="CardNumberInfo"></TextBox>
+                <TextBox x:Name="CardNumberInfo" Text="{Binding id, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             <StackPanel x:Name="Check" Visibility="Collapsed">
                 <Label>Строка из Email</Label>

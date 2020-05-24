@@ -169,6 +169,7 @@ namespace Vitvor.HelthCare
                               }
                               catch(Exception ex)
                               {
+                                  MessageBox.Show("Проверьте введённые данные");
                                   transaction.Rollback();
                               }
                           }

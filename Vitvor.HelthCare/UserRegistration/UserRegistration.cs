@@ -13,8 +13,19 @@ namespace Vitvor.HelthCare
 {
     class UserRegistration : INotifyPropertyChanged
     {
-        
-        public int id { get; private set; } = -1;
+        private int _id = -1;
+        public int id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+                OnPropertyChanged("id");
+            }
+        }
         public bool isUpdating { get; private set; } = false;
         private string _gender;
         public string Gender 

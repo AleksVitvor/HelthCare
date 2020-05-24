@@ -82,7 +82,13 @@
                     <Label>Фамилия</Label>
                     <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Label>Имя</Label>
-                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="KeyDown">
+                                <i:InvokeCommandAction Command="{Binding NameChange}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
                     <Label>Отчество</Label>
                     <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Label>Email</Label>

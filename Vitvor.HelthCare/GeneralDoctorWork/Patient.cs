@@ -142,6 +142,19 @@ namespace Vitvor.HelthCare
             _patronymic = patronymic;
             _email = email;
         }
+        private RelayCommand _nameChange;
+        public RelayCommand NameChange
+        {
+            get
+            {
+                return _nameChange ??
+                    (_nameChange = new RelayCommand(obj =>
+                    {
+                        if(Name.Equals("Имя"))
+                            Name = "";
+                    }));
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

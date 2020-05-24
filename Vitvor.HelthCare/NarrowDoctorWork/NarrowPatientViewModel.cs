@@ -171,7 +171,7 @@ namespace Vitvor.HelthCare
                                      appoinid = reader.GetInt32(0);
                                  }
                                  string insertDiagnosis = $"insert into DIAGNOSES values(@ID, " +
-                                 $"{appoinid}, '{DateTime.Now.Date}', 0)";
+                                 $"{appoinid}, '{DateTime.Now.Date}', 0, null)";
                                  string selectDiseaseId = "select id from DISEASES where Name=@Disease";
                                  foreach(var i in _narrowDoctorWindow.Diagnoses.SelectedItems)
                                  {
@@ -196,6 +196,7 @@ namespace Vitvor.HelthCare
                              }
                              catch(Exception ex)
                              {
+                                 MessageBox.Show("Проверьте введённые данные");
                                  transaction.Rollback();
                              }
 
@@ -217,13 +218,14 @@ namespace Vitvor.HelthCare
                 using (SqlDataReader dataReader = sqlCommand.ExecuteReader())
                 {
                     MailAddress from = new MailAddress("healthcaresupbelstu@gmail.com", "Ministry of Health by BelSTU");
+                    dataReader.Read();
                     if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
                     {
                         MessageBox.Show("Отсутствует или ограниченно физическое подключение к сети\nПроверьте настройки вашего сетевого подключения");
                     }
                     else if (isValid(dataReader.GetString(6)))
                     {
-                        MailAddress to = new MailAddress(reader.GetString(6));
+                        MailAddress to = new MailAddress(dataReader.GetString(6));
                         MailMessage m = new MailMessage(from, to);
                         m.Subject = sub;
                         m.Body = message;
@@ -266,7 +268,7 @@ namespace Vitvor.HelthCare
                           {
                               _narrowDoctorWindow.Times.Items.Clear();
                               _narrowDoctorWindow.Times.Visibility = Visibility.Collapsed;
-                              string selectTime = $"select TIMETABLE.time from TIMETABLE where TIMETABLE.date='{_narrowDoctorWindow.DateOfAppointment.SelectedDate}' and TIMETABLE.doctorid={doctorid}";
+                              string selectTime = $"select TIMETABLE.time from TIMETABLE where TIMETABLE.date='{_narrowDoctorWindow.DateOfAppointment.SelectedDate}' and TIMETABLE.doctorid={doctorid} and TIMETABLE.patientid is null";
                               SqlCommand searchTime = new SqlCommand(selectTime, SingletonForSqlConnection.SqlConnection);
                               using (SqlDataReader reader = searchTime.ExecuteReader())
                               {
@@ -299,7 +301,6 @@ namespace Vitvor.HelthCare
                 return _chooseAppointment ??
                     (_chooseAppointment = new RelayCommand(obj =>
                       {
-                          NarrowPatient = new NarrowPatient();
                           ShowSelectionForAppointment();
                       }));
             }
